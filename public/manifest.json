@@ -1,0 +1,14 @@
+{
+  "name": "Dokan · دكان",
+  "short_name": "Dokan",
+  "description": "QR Ordering for Bahrain Restaurants",
+  "start_url": "/ar",
+  "display": "standalone",
+  "background_color": "#0f0e0c",
+  "theme_color": "#0f0e0c",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
