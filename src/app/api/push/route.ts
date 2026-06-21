@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
         );
 
         await Promise.allSettled(
-          subs.map((sub) =>
+          subs.map((sub: { endpoint: string; p256dh: string; auth_key: string }) =>
             webpush.default.sendNotification(
               {
                 endpoint: sub.endpoint,

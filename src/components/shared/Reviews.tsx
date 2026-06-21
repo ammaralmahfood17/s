@@ -383,7 +383,7 @@ export function ReviewsDashboard({
               </div>
               <div className="flex gap-1 flex-shrink-0">
                 <button
-                  onClick={() => togglePublic(review.id, review.is_public)}
+                  onClick={() => togglePublic(review.id, review.is_public ?? false)}
                   className="text-xs text-[#57534e] hover:text-[#a8a29e] px-2 py-1
                              bg-[#0f0e0c] border border-[#2a2825] rounded-lg transition-colors"
                 >

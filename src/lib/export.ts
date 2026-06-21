@@ -64,7 +64,7 @@ export async function exportOrdersCSV(
   // Flatten orders × items into rows
   const rows: Record<string, unknown>[] = [];
 
-  for (const order of orders as (Order & {
+  for (const order of (orders as unknown) as (Order & {
     table?: { name_en: string; name_ar: string };
     order_items?: (OrderItem & { addons: { name_en: string; price: number }[] })[];
   })[]) {

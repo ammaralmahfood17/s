@@ -39,7 +39,7 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
         .neq('role', 'owner');
 
       const staffRestaurants = (staffed ?? [])
-        .map((s: { restaurants: Restaurant }) => s.restaurants)
+        .flatMap((s: { restaurants: any }) => s.restaurants ?? [])
         .filter(Boolean);
 
       const all = [
