@@ -36,8 +36,8 @@ export default function LoginPage({
     }
 
     toast.success(t('loginSuccess'));
-    router.push(`/${locale}/dashboard`);
-    router.refresh();
+    // Full page navigation to ensure server reads the auth cookie
+    window.location.href = `/${locale}/dashboard`;
   };
 
   return (
