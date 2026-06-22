@@ -104,9 +104,7 @@ export interface Addon {
 
 export type OrderStatus =
   | 'pending'
-  | 'confirmed'
   | 'preparing'
-  | 'ready'
   | 'completed'
   | 'cancelled';
 
@@ -303,9 +301,7 @@ export const ORDER_STATUS_CONFIG: Record<
   { en: string; ar: string; color: string; bg: string }
 > = {
   pending:   { en: 'Pending',    ar: 'في الانتظار',     color: '#a8a29e', bg: '#1c1917' },
-  confirmed: { en: 'Confirmed',  ar: 'تم التأكيد',      color: '#86efac', bg: '#1a2e1a' },
   preparing: { en: 'Preparing',  ar: 'يتم التحضير',     color: '#fcd34d', bg: '#1c1406' },
-  ready:     { en: 'Ready',      ar: 'جاهز للاستلام',   color: '#5eead4', bg: '#0f2d2d' },
   completed: { en: 'Completed',  ar: 'مكتمل',           color: '#a5b4fc', bg: '#1a1a2e' },
   cancelled: { en: 'Cancelled',  ar: 'ملغى',            color: '#fca5a5', bg: '#2a1010' },
 };

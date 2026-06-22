@@ -75,13 +75,25 @@ export function formatRelativeTime(dateStr: string, locale: Locale = 'ar'): stri
 }
 
 // ── Slug generation ────────────────────────────────────────
+const ARABIC_TO_LATIN: Record<string, string> = {
+  'ا':'a','أ':'a','إ':'a','آ':'a','ب':'b','ت':'t','ث':'th',
+  'ج':'j','ح':'h','خ':'kh','د':'d','ذ':'dh','ر':'r','ز':'z',
+  'س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'z','ع':'a',
+  'غ':'gh','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n',
+  'ه':'h','ة':'t','و':'w','ي':'y','ئ':'i','ؤ':'u','ى':'a',
+  ' ': '-', '(':'', ')':'',
+};
+
 export function generateSlug(name: string): string {
   return name
     .toLowerCase()
-    .replace(/[\u0600-\u06FF]/g, '') // strip Arabic for slug
-    .replace(/[^a-z0-9]+/g, '-')
+    .split('')
+    .map(ch => ARABIC_TO_LATIN[ch] ?? ch)
+    .join('')
+    .replace(/[^a-z0-9-]+/g, '')
+    .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .slice(0, 50);
+    .slice(0, 50) || 'restaurant';
 }
 
 // ── Phone formatting for Bahrain ──────────────────────────
@@ -96,22 +108,18 @@ export function formatPhone(phone: string): string {
 // ── Order status utilities ─────────────────────────────────
 export function getNextStatus(
   current: string
-): 'confirmed' | 'preparing' | 'ready' | 'completed' | null {
+): 'preparing' | 'completed' | null {
   const flow = {
-    pending:   'confirmed',
-    confirmed: 'preparing',
-    preparing: 'ready',
-    ready:     'completed',
+    pending:   'preparing',
+    preparing: 'completed',
   } as const;
-  return (flow as Record<string, 'confirmed' | 'preparing' | 'ready' | 'completed'>)[current] ?? null;
+  return (flow as Record<string, 'preparing' | 'completed'>)[current] ?? null;
 }
 
 export function getNextStatusLabel(current: string, locale: Locale): string {
   const labels: Record<string, { en: string; ar: string }> = {
     pending:   { en: 'Accept Order',     ar: 'قبول الطلب' },
-    confirmed: { en: 'Start Preparing',  ar: 'بدء التحضير' },
-    preparing: { en: 'Mark Ready',       ar: 'تحديد كجاهز' },
-    ready:     { en: 'Mark Completed',   ar: 'تحديد كمكتمل' },
+    preparing: { en: 'Deliver Order',    ar: 'تسليم الطلب' },
   };
   return labels[current]?.[locale] ?? '';
 }

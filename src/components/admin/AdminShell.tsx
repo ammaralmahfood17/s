@@ -4,28 +4,26 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, Store, CreditCard, Users,
-  Menu, X, QrCode, LogOut, Shield
+  LayoutDashboard, Store, CreditCard,
+  Menu, X, LogOut, Shield
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 interface Props {
-  locale: string;
   userEmail: string;
   children: React.ReactNode;
 }
 
-const navItems = (locale: string) => [
-  { href: `/${locale}/admin`,               icon: LayoutDashboard, en: 'Overview',      ar: 'نظرة عامة' },
-  { href: `/${locale}/admin/restaurants`,   icon: Store,           en: 'Restaurants',   ar: 'العربات' },
-  { href: `/${locale}/admin/subscriptions`, icon: CreditCard,      en: 'Subscriptions', ar: 'الاشتراكات' },
-  { href: `/${locale}/admin/payments`,      icon: CreditCard,      en: 'Payments',      ar: 'المدفوعات' },
+const navItems = [
+  { href: '/admin',               icon: LayoutDashboard, label: 'نظرة عامة' },
+  { href: '/admin/restaurants',   icon: Store,           label: 'العربات' },
+  { href: '/admin/subscriptions', icon: CreditCard,      label: 'الاشتراكات' },
+  { href: '/admin/payments',      icon: CreditCard,      label: 'المدفوعات' },
 ];
 
-export default function AdminShell({ locale, userEmail, children }: Props) {
-  const isAr = locale === 'ar';
+export default function AdminShell({ userEmail, children }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -33,8 +31,8 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success('Logged out');
-    router.push(`/${locale}/login`);
+    toast.success('تم تسجيل الخروج');
+    router.push('/login');
   };
 
   const Sidebar = () => (
@@ -46,7 +44,7 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
             <Shield size={16} className="text-white" />
           </div>
           <div>
-            <div className="font-bold text-[#fafaf9] text-sm">Dokan Admin</div>
+            <div className="font-bold text-[#fafaf9] text-sm">لوحة الإدارة</div>
             <div className="text-xs text-[#57534e]">Super Admin Panel</div>
           </div>
         </div>
@@ -54,10 +52,10 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems(locale).map((item) => {
+        {navItems.map((item) => {
           const isActive =
             pathname === item.href ||
-            (item.href !== `/${locale}/admin` && pathname.startsWith(item.href));
+            (item.href !== '/admin' && pathname.startsWith(item.href));
           return (
             <Link
               key={item.href}
@@ -66,7 +64,7 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
               className={cn(isActive ? 'sidebar-link-active' : 'sidebar-link')}
             >
               <item.icon size={18} />
-              <span>{isAr ? item.ar : item.en}</span>
+              <span>{item.label}</span>
             </Link>
           );
         })}
@@ -75,13 +73,9 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
       {/* Bottom */}
       <div className="px-3 py-4 border-t border-[#1a1916] space-y-1">
         <div className="px-3 py-2 text-xs text-[#57534e] truncate">{userEmail}</div>
-        <Link href={`/${locale}/dashboard`} className="sidebar-link">
-          <QrCode size={18} />
-          <span>{isAr ? 'لوحة المطعم' : 'Restaurant Dashboard'}</span>
-        </Link>
         <button onClick={handleLogout} className="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-950/40">
           <LogOut size={18} />
-          <span>{isAr ? 'تسجيل الخروج' : 'Log out'}</span>
+          <span>تسجيل الخروج</span>
         </button>
       </div>
     </div>
@@ -122,7 +116,7 @@ export default function AdminShell({ locale, userEmail, children }: Props) {
           </button>
           <div className="flex items-center gap-2 min-w-0">
             <Shield size={16} className="text-red-400 flex-shrink-0" />
-            <span className="font-bold text-[#fafaf9] text-sm truncate">Dokan Admin</span>
+            <span className="font-bold text-[#fafaf9] text-sm truncate">لوحة الإدارة</span>
           </div>
         </header>
         <main className="flex-1 overflow-y-auto safe-bottom">{children}</main>

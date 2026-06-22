@@ -1,68 +1,92 @@
-import { createServerClient, type SetAllCookies } from '@supabase/ssr';
+import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
 
-const intlMiddleware = createMiddleware({
-  locales: ['en', 'ar'],
-  defaultLocale: 'ar',
-  localePrefix: 'always',
-});
-
-const protectedRoutes = ['/dashboard', '/admin'];
+const protectedPrefixes = ['/admin'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Strip locale prefix to check route type
-  const pathnameWithoutLocale = pathname.replace(/^\/(en|ar)/, '');
+  // Check if the route is /{slug}/dashboard — always protected
+  const slugDashboardMatch = pathname.match(/^\/([^/]+)\/dashboard(\/.*)?$/);
 
-  // Check if route needs auth
-  const isProtected = protectedRoutes.some((r) =>
-    pathnameWithoutLocale.startsWith(r)
-  );
+  const isProtected =
+    protectedPrefixes.some((p) => pathname.startsWith(p)) ||
+    !!slugDashboardMatch;
 
-  if (isProtected) {
-    let supabaseResponse = NextResponse.next({ request });
-
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
+  if (!isProtected) {
+    // Handle /setup — redirect logged-in users with a restaurant to their dashboard
+    if (pathname === '/setup') {
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll();
+            },
+            setAll() {},
           },
-          setAll(cookiesToSet: Parameters<SetAllCookies>[0]) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value)
-            );
-            supabaseResponse = NextResponse.next({ request });
-            cookiesToSet.forEach(({ name, value, options }) =>
-              supabaseResponse.cookies.set(name, value, options)
-            );
-          },
-        },
+        }
+      );
+
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        const loginUrl = new URL('/login', request.url);
+        loginUrl.searchParams.set('redirectTo', '/setup');
+        return NextResponse.redirect(loginUrl);
       }
-    );
 
-    const { data: { user } } = await supabase.auth.getUser();
+      // User is logged in — check if they already have a restaurant
+      const { data: restaurant } = await supabase
+        .from('restaurants')
+        .select('slug')
+        .eq('owner_id', user.id)
+        .single();
 
-    if (!user) {
-      // Detect locale from pathname
-      const locale = pathname.startsWith('/ar') ? 'ar' : 'en';
-      const loginUrl = new URL(`/${locale}/login`, request.url);
-      loginUrl.searchParams.set('redirectTo', pathname);
-      return NextResponse.redirect(loginUrl);
+      if (restaurant?.slug) {
+        // Already has a restaurant → redirect to their dashboard
+        return NextResponse.redirect(new URL(`/${restaurant.slug}/dashboard`, request.url));
+      }
+
+      // No restaurant yet → allow setup page
+      return NextResponse.next();
     }
 
-    return supabaseResponse;
+    return NextResponse.next();
   }
 
-  return intlMiddleware(request);
+  // Protected route auth check
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirectTo', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

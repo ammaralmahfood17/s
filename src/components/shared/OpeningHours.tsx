@@ -48,21 +48,19 @@ export function isOpenNow(hours: WeekHours): boolean {
   return currentTime >= day.open && currentTime <= day.close;
 }
 
-export function getOpeningHoursText(hours: WeekHours, dayKey: string, locale: 'en' | 'ar'): string {
+export function getOpeningHoursText(hours: WeekHours, dayKey: string): string {
   const day = hours[dayKey];
   if (!day) return '';
-  if (day.closed) return locale === 'ar' ? 'مغلق' : 'Closed';
+  if (day.closed) return 'مغلق';
   return `${day.open} – ${day.close}`;
 }
 
 interface Props {
   value: WeekHours;
   onChange: (hours: WeekHours) => void;
-  locale: string;
 }
 
-export function OpeningHoursEditor({ value, onChange, locale }: Props) {
-  const isAr = locale === 'ar';
+export function OpeningHoursEditor({ value, onChange }: Props) {
   const hours = parseHours(value);
 
   const update = (dayKey: string, field: keyof DayHours, val: string | boolean) => {
@@ -82,7 +80,7 @@ export function OpeningHoursEditor({ value, onChange, locale }: Props) {
       <div className="flex items-center gap-2 mb-3">
         <Clock size={16} className="text-brand-400" />
         <span className="text-sm font-medium text-[#fafaf9]">
-          {isAr ? 'ساعات العمل' : 'Opening Hours'}
+          ساعات العمل
         </span>
       </div>
 
@@ -98,7 +96,7 @@ export function OpeningHoursEditor({ value, onChange, locale }: Props) {
             {/* Row 1: day name + closed toggle */}
             <div className="flex items-center justify-between">
               <span className="text-sm text-[#a8a29e] font-medium">
-                {isAr ? day.ar : day.en}
+                {day.ar}
               </span>
               <button
                 type="button"
@@ -110,7 +108,7 @@ export function OpeningHoursEditor({ value, onChange, locale }: Props) {
                     : 'bg-green-950 border-green-900 text-green-400'
                 )}
               >
-                {dh.closed ? (isAr ? 'مغلق' : 'Closed') : (isAr ? 'مفتوح' : 'Open')}
+                {dh.closed ? 'مغلق' : 'مفتوح'}
               </button>
             </div>
 
@@ -138,7 +136,7 @@ export function OpeningHoursEditor({ value, onChange, locale }: Props) {
                     className="w-9 h-9 flex-shrink-0 flex items-center justify-center
                                text-[#57534e] active:text-[#a8a29e] active:bg-[#1a1916]
                                rounded-lg touch-manipulation"
-                    title={isAr ? 'نسخ من اليوم السابق' : 'Copy from previous day'}
+                    title="نسخ من اليوم السابق"
                   >
                     ↑
                   </button>
@@ -155,12 +153,9 @@ export function OpeningHoursEditor({ value, onChange, locale }: Props) {
 // ── Display component for customer-facing pages ────────────
 export function OpeningHoursDisplay({
   hours,
-  locale,
 }: {
   hours: WeekHours;
-  locale: string;
 }) {
-  const isAr = locale === 'ar';
   const [expanded, setExpanded] = useState(false);
   const todayIdx = new Date().getDay();
   const todayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][todayIdx];
@@ -175,7 +170,7 @@ export function OpeningHoursDisplay({
       >
         <Clock size={12} />
         <span className={open ? 'text-green-400' : 'text-red-400'}>
-          {open ? (isAr ? 'مفتوح الآن' : 'Open Now') : (isAr ? 'مغلق الآن' : 'Closed Now')}
+          {open ? 'مفتوح الآن' : 'مغلق الآن'}
         </span>
         {todayHours && !todayHours.closed && (
           <span className="text-[#57534e]">
@@ -198,10 +193,10 @@ export function OpeningHoursDisplay({
                 )}
               >
                 <span className={isToday ? 'text-brand-400' : 'text-[#57534e]'}>
-                  {isAr ? day.ar : day.en}
+                  {day.ar}
                 </span>
                 <span className={dh?.closed ? 'text-red-500' : (isToday ? 'text-brand-400' : 'text-[#a8a29e]')}>
-                  {getOpeningHoursText(hours, day.key, isAr ? 'ar' : 'en')}
+                  {getOpeningHoursText(hours, day.key)}
                 </span>
               </div>
             );

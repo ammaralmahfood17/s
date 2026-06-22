@@ -7,12 +7,11 @@ import { CreditCard, AlertCircle } from 'lucide-react';
 
 interface Props {
   restaurantId: string;
-  locale: string;
+  slug: string;
   children: React.ReactNode;
 }
 
-export function SubscriptionGate({ restaurantId, locale, children }: Props) {
-  const isAr = locale === 'ar';
+export function SubscriptionGate({ restaurantId, slug, children }: Props) {
   const supabase = createClient();
   const [status, setStatus] = useState<string | null>(null);
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
@@ -52,15 +51,13 @@ export function SubscriptionGate({ restaurantId, locale, children }: Props) {
             <CreditCard size={32} className="text-red-400" />
           </div>
           <h1 className="text-xl font-bold text-[#fafaf9]">
-            {isAr ? 'الاشتراك منتهي' : 'Subscription Expired'}
+            الاشتراك منتهي
           </h1>
           <p className="text-sm text-[#a8a29e]">
-            {isAr
-              ? 'انتهى اشتراكك في دكان. يرجى التواصل معنا لتجديد الاشتراك.'
-              : 'Your Dokan subscription has expired. Please contact us to renew.'}
+            انتهى اشتراكك في دكان. يرجى التواصل معنا لتجديد الاشتراك.
           </p>
           <div className="bg-[#1a1916] border border-[#2a2825] rounded-xl p-4 text-sm text-[#a8a29e]">
-            <p>{isAr ? 'للتجديد تواصل معنا:' : 'To renew, contact us:'}</p>
+            <p>للتجديد تواصل معنا:</p>
             <p className="text-brand-400 font-medium mt-1 font-cairo">
               +973 XXXX XXXX
             </p>
@@ -84,15 +81,13 @@ export function SubscriptionGate({ restaurantId, locale, children }: Props) {
           <AlertCircle size={16} className="text-orange-400 flex-shrink-0" />
           <span className="text-orange-300">
             {status === 'past_due'
-              ? (isAr ? 'اشتراكك متأخر — يرجى التجديد قريباً' : 'Subscription past due — please renew soon')
-              : (isAr
-                  ? `ينتهي اشتراكك خلال ${daysLeft} يوم`
-                  : `Your subscription expires in ${daysLeft} day(s)`)
+              ? 'اشتراكك متأخر — يرجى التجديد قريباً'
+              : `ينتهي اشتراكك خلال ${daysLeft} يوم`
             }
           </span>
-          <Link href={`/${locale}/dashboard/settings`}
+          <Link href={`/${slug}/dashboard/settings`}
             className="ms-auto text-xs text-orange-400 hover:text-orange-300 whitespace-nowrap">
-            {isAr ? 'تجديد' : 'Renew'} →
+            تجديد →
           </Link>
         </div>
       )}

@@ -47,15 +47,12 @@ function StarPicker({
 export function ReviewForm({
   restaurantId,
   orderId,
-  locale,
   onSubmitted,
 }: {
   restaurantId: string;
   orderId: string;
-  locale: string;
   onSubmitted: () => void;
 }) {
-  const isAr = locale === 'ar';
   const supabase = createClient();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -65,7 +62,7 @@ export function ReviewForm({
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      toast.error(isAr ? 'يرجى اختيار تقييم' : 'Please select a rating');
+      toast.error('يرجى اختيار تقييم');
       return;
     }
     setSubmitting(true);
@@ -82,9 +79,9 @@ export function ReviewForm({
     if (!error) {
       setSubmitted(true);
       onSubmitted();
-      toast.success(isAr ? 'شكراً على تقييمك! ⭐' : 'Thank you for your review! ⭐');
+      toast.success('شكراً على تقييمك! ⭐');
     } else {
-      toast.error(isAr ? 'حدث خطأ' : 'Something went wrong');
+      toast.error('حدث خطأ');
     }
     setSubmitting(false);
   };
@@ -94,10 +91,10 @@ export function ReviewForm({
       <div className="text-center py-6">
         <div className="text-4xl mb-2">🌟</div>
         <p className="font-bold text-[#fafaf9]">
-          {isAr ? 'شكراً جزيلاً!' : 'Thank you!'}
+          شكراً جزيلاً!
         </p>
         <p className="text-sm text-[#a8a29e] mt-1">
-          {isAr ? 'تقييمك يهمنا كثيراً' : 'Your feedback means a lot to us'}
+          تقييمك يهمنا كثيراً
         </p>
       </div>
     );
@@ -107,10 +104,10 @@ export function ReviewForm({
     <div className="space-y-4">
       <div className="text-center">
         <h3 className="font-bold text-[#fafaf9] text-lg mb-1">
-          {isAr ? 'كيف كانت تجربتك؟' : 'How was your experience?'}
+          كيف كانت تجربتك؟
         </h3>
         <p className="text-sm text-[#57534e]">
-          {isAr ? 'رأيك يساعدنا على التحسين' : 'Your feedback helps us improve'}
+          رأيك يساعدنا على التحسين
         </p>
       </div>
 
@@ -120,35 +117,35 @@ export function ReviewForm({
 
       {rating > 0 && (
         <div className="text-center text-sm text-brand-400 font-medium">
-          {rating === 5 ? (isAr ? 'ممتاز! 🎉' : 'Excellent! 🎉') :
-           rating === 4 ? (isAr ? 'جيد جداً 👍' : 'Very Good 👍') :
-           rating === 3 ? (isAr ? 'مقبول 👌' : 'OK 👌') :
-           rating === 2 ? (isAr ? 'يحتاج تحسين 😕' : 'Needs improvement 😕') :
-           (isAr ? 'سيء 😞' : 'Poor 😞')}
+          {rating === 5 ? 'ممتاز! 🎉' :
+           rating === 4 ? 'جيد جداً 👍' :
+           rating === 3 ? 'مقبول 👌' :
+           rating === 2 ? 'يحتاج تحسين 😕' :
+           'سيء 😞'}
         </div>
       )}
 
       <div>
-        <label className="label">{isAr ? 'اسمك (اختياري)' : 'Your name (optional)'}</label>
+        <label className="label">اسمك (اختياري)</label>
         <input
           className="input text-sm"
-          dir={isAr ? 'rtl' : 'ltr'}
+          dir="rtl"
           value={name}
           onChange={e => setName(e.target.value)}
-          placeholder={isAr ? 'محمد' : 'Mohammed'}
+          placeholder="محمد"
         />
       </div>
 
       <div>
         <label className="label">
-          {isAr ? 'تعليقك (اختياري)' : 'Comment (optional)'}
+          تعليقك (اختياري)
         </label>
         <textarea
           className="input resize-none h-20 text-sm"
-          dir={isAr ? 'rtl' : 'ltr'}
+          dir="rtl"
           value={comment}
           onChange={e => setComment(e.target.value)}
-          placeholder={isAr ? 'أخبرنا عن تجربتك...' : 'Tell us about your experience...'}
+          placeholder="أخبرنا عن تجربتك..."
         />
       </div>
 
@@ -157,7 +154,7 @@ export function ReviewForm({
         disabled={submitting || rating === 0}
         className="btn-primary w-full"
       >
-        {submitting ? '...' : (isAr ? 'إرسال التقييم ⭐' : 'Submit Review ⭐')}
+        {submitting ? '...' : 'إرسال التقييم ⭐'}
       </button>
     </div>
   );
@@ -166,14 +163,11 @@ export function ReviewForm({
 // ── Reviews display (storefront + dashboard) ───────────────
 export function ReviewsList({
   restaurantId,
-  locale,
   limit = 5,
 }: {
   restaurantId: string;
-  locale: string;
   limit?: number;
 }) {
-  const isAr = locale === 'ar';
   const supabase = createClient();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState({ avg: 0, total: 0 });
@@ -231,7 +225,7 @@ export function ReviewsList({
             ))}
           </div>
           <div className="text-xs text-[#57534e] mt-0.5">
-            {stats.total} {isAr ? 'تقييم' : 'reviews'}
+            {stats.total} تقييم
           </div>
         </div>
       </div>
@@ -264,11 +258,11 @@ export function ReviewsList({
             </div>
             <div className="flex items-center gap-2 mt-2">
               <span className="text-xs text-[#57534e]">
-                {(review as Review & { reviewer_name?: string }).reviewer_name || (isAr ? 'عميل' : 'Customer')}
+                {(review as Review & { reviewer_name?: string }).reviewer_name || 'عميل'}
               </span>
               <span className="text-[#3a3835]">·</span>
               <span className="text-xs text-[#3a3835]">
-                {formatDate(review.created_at, locale as 'en' | 'ar')}
+                {formatDate(review.created_at, 'ar')}
               </span>
             </div>
           </div>
@@ -281,12 +275,9 @@ export function ReviewsList({
 // ── Dashboard reviews management ───────────────────────────
 export function ReviewsDashboard({
   restaurantId,
-  locale,
 }: {
   restaurantId: string;
-  locale: string;
 }) {
-  const isAr = locale === 'ar';
   const supabase = createClient();
   const [reviews, setReviews] = useState<(Review & { reviewer_name?: string })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -309,7 +300,7 @@ export function ReviewsDashboard({
   };
 
   const deleteReview = async (id: string) => {
-    if (!confirm(isAr ? 'حذف التقييم؟' : 'Delete review?')) return;
+    if (!confirm('حذف التقييم؟')) return;
     await supabase.from('reviews').delete().eq('id', id);
     load();
   };
@@ -328,12 +319,12 @@ export function ReviewsDashboard({
           <div className="stat-card flex-1">
             <div className="flex items-center gap-1.5 mb-1">
               <Star size={14} className="text-yellow-400 fill-yellow-400" />
-              <span className="stat-label">{isAr ? 'متوسط التقييم' : 'Avg Rating'}</span>
+              <span className="stat-label">متوسط التقييم</span>
             </div>
             <div className="stat-value text-yellow-400">{avg.toFixed(1)}</div>
           </div>
           <div className="stat-card flex-1">
-            <div className="stat-label mb-1">{isAr ? 'إجمالي التقييمات' : 'Total Reviews'}</div>
+            <div className="stat-label mb-1">إجمالي التقييمات</div>
             <div className="stat-value">{reviews.length}</div>
           </div>
         </div>
@@ -344,7 +335,7 @@ export function ReviewsDashboard({
         <div className="card text-center py-12">
           <Star size={40} className="text-[#3a3835] mx-auto mb-3" />
           <p className="text-[#a8a29e]">
-            {isAr ? 'لا توجد تقييمات بعد' : 'No reviews yet'}
+            لا توجد تقييمات بعد
           </p>
         </div>
       ) : (
@@ -366,11 +357,11 @@ export function ReviewsDashboard({
                     ))}
                   </div>
                   <span className="text-xs text-[#57534e]">
-                    {review.reviewer_name || (isAr ? 'عميل' : 'Customer')}
+                    {review.reviewer_name || 'عميل'}
                   </span>
                   {!review.is_public && (
                     <span className="text-xs bg-[#2a2825] text-[#57534e] px-1.5 py-0.5 rounded">
-                      {isAr ? 'مخفي' : 'Hidden'}
+                      مخفي
                     </span>
                   )}
                 </div>
@@ -378,7 +369,7 @@ export function ReviewsDashboard({
                   <p className="text-sm text-[#a8a29e]">{review.comment}</p>
                 )}
                 <p className="text-xs text-[#3a3835] mt-1">
-                  {formatDate(review.created_at, locale as 'en' | 'ar')}
+                  {formatDate(review.created_at, 'ar')}
                 </p>
               </div>
               <div className="flex gap-1 flex-shrink-0">
@@ -387,14 +378,14 @@ export function ReviewsDashboard({
                   className="text-xs text-[#57534e] hover:text-[#a8a29e] px-2 py-1
                              bg-[#0f0e0c] border border-[#2a2825] rounded-lg transition-colors"
                 >
-                  {review.is_public ? (isAr ? 'إخفاء' : 'Hide') : (isAr ? 'إظهار' : 'Show')}
+                  {review.is_public ? 'إخفاء' : 'إظهار'}
                 </button>
                 <button
                   onClick={() => deleteReview(review.id)}
                   className="text-xs text-red-400 hover:text-red-300 px-2 py-1
                              bg-red-950/30 border border-red-900/30 rounded-lg transition-colors"
                 >
-                  {isAr ? 'حذف' : 'Del'}
+                  حذف
                 </button>
               </div>
             </div>

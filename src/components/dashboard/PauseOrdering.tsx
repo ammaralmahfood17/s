@@ -11,7 +11,6 @@ interface Props {
   isPaused: boolean;
   pauseReasonEn?: string | null;
   pauseReasonAr?: string | null;
-  locale: string;
   onUpdate: () => void;
 }
 
@@ -20,10 +19,8 @@ export function PauseOrderingControl({
   isPaused,
   pauseReasonEn,
   pauseReasonAr,
-  locale,
   onUpdate,
 }: Props) {
-  const isAr = locale === 'ar';
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [showReasonModal, setShowReasonModal] = useState(false);
@@ -46,7 +43,7 @@ export function PauseOrderingControl({
       .eq('id', restaurantId);
 
     if (!error) {
-      toast.success(isAr ? 'تم إيقاف الطلبات مؤقتاً' : 'Ordering paused');
+      toast.success('تم إيقاف الطلبات مؤقتاً');
       setShowReasonModal(false);
       onUpdate();
     }
@@ -65,7 +62,7 @@ export function PauseOrderingControl({
       .eq('id', restaurantId);
 
     if (!error) {
-      toast.success(isAr ? 'تم استئناف الطلبات' : 'Ordering resumed');
+      toast.success('تم استئناف الطلبات');
       onUpdate();
     }
     setLoading(false);
@@ -79,7 +76,7 @@ export function PauseOrderingControl({
           <div className="flex items-center gap-2 bg-orange-950/60 border border-orange-800
                           rounded-xl px-3 py-2 text-sm text-orange-400">
             <PauseCircle size={16} className="animate-pulse" />
-            {isAr ? 'الطلبات موقوفة' : 'Ordering Paused'}
+            الطلبات موقوفة
           </div>
           <button
             onClick={handleResume}
@@ -89,7 +86,7 @@ export function PauseOrderingControl({
                        text-sm px-3 py-2 rounded-xl transition-all"
           >
             <PlayCircle size={16} />
-            {isAr ? 'استئناف' : 'Resume'}
+            استئناف
           </button>
         </div>
       ) : (
@@ -101,7 +98,7 @@ export function PauseOrderingControl({
                      text-sm px-3 py-2 rounded-xl transition-all"
         >
           <PauseCircle size={16} />
-          {isAr ? 'إيقاف الطلبات مؤقتاً' : 'Pause Ordering'}
+          إيقاف الطلبات مؤقتاً
         </button>
       )}
 
@@ -117,19 +114,17 @@ export function PauseOrderingControl({
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle size={20} className="text-orange-400" />
               <h2 className="font-bold text-[#fafaf9]">
-                {isAr ? 'سبب الإيقاف' : 'Reason for pausing'}
+                سبب الإيقاف
               </h2>
             </div>
 
             <p className="text-xs text-[#57534e] mb-4">
-              {isAr
-                ? 'سيظهر هذا للعملاء عند محاولة الطلب'
-                : 'This will be shown to customers when they try to order'}
+              سيظهر هذا للعملاء عند محاولة الطلب
             </p>
 
             <div className="space-y-3">
               <div>
-                <label className="label">{isAr ? 'السبب (عربي)' : 'Reason (Arabic)'}</label>
+                <label className="label">السبب (عربي)</label>
                 <input
                   className="input text-right font-cairo text-sm"
                   dir="rtl"
@@ -139,7 +134,7 @@ export function PauseOrderingControl({
                 />
               </div>
               <div>
-                <label className="label">{isAr ? 'السبب (إنجليزي)' : 'Reason (English)'}</label>
+                <label className="label">السبب (إنجليزي)</label>
                 <input
                   className="input text-sm"
                   value={reasonEn}
@@ -154,7 +149,7 @@ export function PauseOrderingControl({
                 onClick={() => setShowReasonModal(false)}
                 className="btn-secondary flex-1 text-sm"
               >
-                {isAr ? 'إلغاء' : 'Cancel'}
+                إلغاء
               </button>
               <button
                 onClick={confirmPause}
@@ -163,7 +158,7 @@ export function PauseOrderingControl({
                            bg-orange-900 hover:bg-orange-800 text-orange-300
                            border border-orange-800 transition-all"
               >
-                {loading ? '...' : (isAr ? 'إيقاف الطلبات' : 'Pause Ordering')}
+                {loading ? '...' : 'إيقاف الطلبات'}
               </button>
             </div>
           </div>
@@ -177,14 +172,11 @@ export function PauseOrderingControl({
 export function PausedBanner({
   reasonEn,
   reasonAr,
-  locale,
 }: {
   reasonEn?: string | null;
   reasonAr?: string | null;
-  locale: string;
 }) {
-  const isAr = locale === 'ar';
-  const reason = isAr ? reasonAr : reasonEn;
+  const reason = reasonAr || reasonEn;
 
   return (
     <div className="mx-4 mb-4 bg-orange-950/60 border border-orange-800
@@ -192,13 +184,13 @@ export function PausedBanner({
       <PauseCircle size={20} className="text-orange-400 flex-shrink-0 mt-0.5" />
       <div>
         <p className="text-sm font-semibold text-orange-400">
-          {isAr ? 'الطلبات متوقفة مؤقتاً' : 'Ordering temporarily paused'}
+          الطلبات متوقفة مؤقتاً
         </p>
         {reason && (
           <p className="text-xs text-orange-600 mt-0.5">{reason}</p>
         )}
         <p className="text-xs text-orange-700 mt-1">
-          {isAr ? 'يرجى المحاولة مرة أخرى قريباً' : 'Please try again shortly'}
+          يرجى المحاولة مرة أخرى قريباً
         </p>
       </div>
     </div>
