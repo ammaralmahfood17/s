@@ -106,22 +106,31 @@ export function formatPhone(phone: string): string {
 }
 
 // ── Order status utilities ─────────────────────────────────
+// Full flow: pending → confirmed → preparing → ready → delivered
 export function getNextStatus(
   current: string
-): 'preparing' | 'completed' | null {
-  const flow = {
-    pending:   'preparing',
-    preparing: 'completed',
-  } as const;
-  return (flow as Record<string, 'preparing' | 'completed'>)[current] ?? null;
+): 'confirmed' | 'preparing' | 'ready' | 'delivered' | null {
+  const flow: Record<string, 'confirmed' | 'preparing' | 'ready' | 'delivered'> = {
+    pending:   'confirmed',
+    confirmed: 'preparing',
+    preparing: 'ready',
+    ready:     'delivered',
+  };
+  return flow[current] ?? null;
 }
 
 export function getNextStatusLabel(current: string, locale: Locale): string {
   const labels: Record<string, { en: string; ar: string }> = {
-    pending:   { en: 'Accept Order',     ar: 'قبول الطلب' },
-    preparing: { en: 'Deliver Order',    ar: 'تسليم الطلب' },
+    pending:   { en: 'Accept Order',      ar: '✓ قبول' },
+    confirmed: { en: 'Start Preparing',   ar: '🍳 بدء التحضير' },
+    preparing: { en: 'Mark Ready',        ar: '🔔 جاهز' },
+    ready:     { en: 'Mark Delivered',    ar: '✅ تم التسليم' },
   };
   return labels[current]?.[locale] ?? '';
+}
+
+export function canCancel(status: string): boolean {
+  return ['pending', 'confirmed', 'preparing', 'ready'].includes(status);
 }
 
 // ── Image URL helpers ──────────────────────────────────────

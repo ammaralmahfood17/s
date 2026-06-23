@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   QrCode, LayoutDashboard, UtensilsCrossed, ClipboardList,
   ChefHat, Grid3x3, BarChart3, Settings, LogOut,
-  Menu, X, Shield
+  Menu, X, Shield, Hand
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import type { Restaurant } from '@/types';
@@ -43,6 +43,11 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
     { href: `/${slug}/dashboard/tables`,    icon: Grid3x3,         label: 'الطاولات' },
     { href: `/${slug}/dashboard/analytics`, icon: BarChart3,       label: 'التحليلات' },
     { href: `/${slug}/dashboard/settings`,  icon: Settings,        label: 'الإعدادات' },
+  ];
+
+  // Quick action for staff: manual order
+  const quickActions = [
+    { href: `/${slug}/dashboard/manual-order`, icon: Hand, label: 'طلب يدوي' },
   ];
 
   const Sidebar = () => (
@@ -123,6 +128,14 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
           <Link href={`/${restaurant.slug}`} target="_blank" className="sidebar-link">
             <QrCode size={18} />
             <span>الواجهة العامة</span>
+          </Link>
+        )}
+
+        {/* Manual order quick action */}
+        {restaurant && (
+          <Link href={`/${slug}/dashboard/manual-order`} className="sidebar-link text-brand-400">
+            <Hand size={18} />
+            <span>طلب يدوي</span>
           </Link>
         )}
 

@@ -14,7 +14,7 @@ export function useRealtimeOrders(restaurantId: string) {
       .from('orders')
       .select(`*, table:tables(*), order_items(*)`)
       .eq('restaurant_id', restaurantId)
-      .not('status', 'in', '("completed","cancelled")')
+      .not('status', 'in', '("delivered","cancelled")')
       .order('created_at', { ascending: true });
 
     if (!error && data) setOrders(data as OrderWithItems[]);
@@ -41,7 +41,7 @@ export function useRealtimeOrders(restaurantId: string) {
         } else if (payload.eventType === 'UPDATE') {
           const updated = payload.new as OrderWithItems;
           setOrders((prev) => {
-            if (['completed', 'cancelled'].includes(updated.status)) {
+            if (['delivered', 'cancelled'].includes(updated.status)) {
               return prev.filter((o) => o.id !== updated.id);
             }
             return prev.map((o) => o.id === updated.id ? { ...o, ...updated } : o);

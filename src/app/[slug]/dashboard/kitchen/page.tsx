@@ -9,20 +9,23 @@ import { cn } from '@/lib/utils';
 import type { OrderWithItems, OrderStatus } from '@/types';
 import toast from 'react-hot-toast';
 
-const KITCHEN_STATUSES = ['pending', 'preparing'];
+const KITCHEN_STATUSES = ['pending', 'confirmed', 'preparing'];
 
 const CARD_STYLES: Record<string, string> = {
   pending:   'border-[#3a3835] bg-[#0f0e0c]',
+  confirmed: 'border-blue-700 bg-[#0f1a2e]',
   preparing: 'border-yellow-700 bg-[#1a1200]',
 };
 
 const STATUS_ICONS: Record<string, React.ElementType> = {
   pending:   Clock,
+  confirmed: CheckCircle,
   preparing: ChefHat,
 };
 
 const STATUS_LABEL: Record<string, string> = {
   pending:   'جديد',
+  confirmed: 'مؤكد',
   preparing: 'يُجهز',
 };
 
@@ -152,37 +155,27 @@ function KitchenCard({
         </div>
       )}
 
-      {/* CTA — قبول/إلغاء for pending, تسليم for preparing */}
+      {/* CTA — accept for pending, start prep for confirmed, deliver for preparing */}
       {order.status === 'pending' ? (
         <div className="flex gap-2">
-          <button
-            onClick={handleAdvance}
-            disabled={updating}
-            className="flex-1 min-h-[44px] py-2.5 rounded-xl text-sm font-bold
-                       transition-all active:scale-[0.98] touch-manipulation
-                       bg-green-700 hover:bg-green-600 text-white"
-          >
-            {updating ? '...' : '✅ قبول الطلب'}
+          <button onClick={handleAdvance} disabled={updating}
+            className="flex-1 min-h-[44px] py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] touch-manipulation bg-green-700 hover:bg-green-600 text-white">
+            {updating ? '...' : '✓ قبول الطلب'}
           </button>
-          <button
-            onClick={handleCancel}
-            disabled={updating}
-            className="flex-1 min-h-[44px] py-2.5 rounded-xl text-sm font-bold
-                       transition-all active:scale-[0.98] touch-manipulation
-                       bg-red-900/60 hover:bg-red-800 text-red-300 border border-red-800/50"
-          >
-            {updating ? '...' : '❌ إلغاء'}
+          <button onClick={handleCancel} disabled={updating}
+            className="flex-1 min-h-[44px] py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] touch-manipulation bg-red-900/60 hover:bg-red-800 text-red-300 border border-red-800/50">
+            {updating ? '...' : '✕ إلغاء'}
           </button>
         </div>
+      ) : order.status === 'confirmed' ? (
+        <button onClick={handleAdvance} disabled={updating}
+          className="w-full min-h-[44px] py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] touch-manipulation bg-blue-700 hover:bg-blue-600 text-white">
+          {updating ? '...' : '🍳 بدء التحضير'}
+        </button>
       ) : order.status === 'preparing' && nextStatus ? (
-        <button
-          onClick={handleAdvance}
-          disabled={updating}
-          className="w-full min-h-[44px] py-2.5 rounded-xl text-sm font-bold
-                     transition-all active:scale-[0.98] touch-manipulation
-                     bg-teal-600 hover:bg-teal-500 text-white"
-        >
-          {updating ? '...' : '✅ تسليم الطلب'}
+        <button onClick={handleAdvance} disabled={updating}
+          className="w-full min-h-[44px] py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] touch-manipulation bg-teal-600 hover:bg-teal-500 text-white">
+          {updating ? '...' : '🔔 الطلب جاهز'}
         </button>
       ) : null}
     </div>

@@ -23,7 +23,7 @@ async function getAnalytics(restaurantId: string) {
       .from('orders')
       .select('id', { count: 'exact' })
       .eq('restaurant_id', restaurantId)
-      .in('status', ['pending', 'preparing']),
+      .in('status', ['pending', 'confirmed', 'preparing', 'ready']),
     supabase
       .from('orders')
       .select('total')
@@ -69,7 +69,7 @@ const STATUS_LABELS: Record<string, string> = {
   confirmed: 'تم التأكيد',
   preparing: 'يتم التحضير',
   ready:     'جاهز',
-  completed: 'مكتمل',
+  delivered: 'تم التسليم',
   cancelled: 'ملغى',
 };
 
