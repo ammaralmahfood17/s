@@ -151,3 +151,55 @@ export function calcLineTotal(
   const addonsTotal = addonPrices.reduce((sum, p) => sum + p, 0);
   return (unitPrice + addonsTotal) * quantity;
 }
+
+// ═══════════════════════════════════════════════════════════
+// SAFETY UTILITIES — Follow coding rules automatically
+// ═══════════════════════════════════════════════════════════
+
+/**
+ * Wrap any async operation with try/catch + console.error + fallback.
+ * Use this for ALL Supabase queries in callbacks/effects.
+ *
+ * @example
+ * const data = await tryCatch(
+ *   () => supabase.from('orders').select('*'),
+ *   { data: [], error: null } as PostgrestResponse<Order>,
+ *   'load orders'
+ * );
+ */
+export async function tryCatch<T>(
+  fn: () => Promise<T>,
+  fallback: T,
+  label = 'db'
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    console.error(`[${label}] error:`, err);
+    return fallback;
+  }
+}
+
+/**
+ * Safe .map() — never crashes on null/undefined.
+ *
+ * @example
+ * // Before: {items.map(item => ...)}  // CRASH if items is undefined
+ * // After:  {safeMap(items, item => ...)}
+ */
+export function safeMap<T, R>(
+  arr: T[] | null | undefined,
+  fn: (item: T, index: number) => R
+): R[] {
+  return (arr ?? []).map(fn);
+}
+
+/**
+ * Safe first element from array — no crash on null/undefined/empty.
+ *
+ * @example
+ * const first = safeFirst(items); // undefined instead of crash
+ */
+export function safeFirst<T>(arr: T[] | null | undefined): T | undefined {
+  return arr?.[0];
+}
