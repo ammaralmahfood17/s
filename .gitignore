@@ -1,7 +1,12 @@
 node_modules/
 .next/
 .env.local
+.env.vercel
+.env.vercel.prod
 *.tsbuildinfo
-.next/
 dist/
 .vercel
+design-mockout/
+design-mockup/
+tests/
+supabase/.temp/

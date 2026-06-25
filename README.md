@@ -16,7 +16,7 @@
 | Storage | Supabase Storage |
 | Realtime | Supabase Realtime |
 | Row Security | Supabase RLS |
-| i18n | next-intl (Arabic + English) |
+| Localization | Arabic (RTL) only |
 | State | Zustand (cart) |
 | QR Codes | qrcode + qrcode.react |
 | Hosting | Vercel |
