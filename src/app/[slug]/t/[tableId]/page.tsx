@@ -436,7 +436,7 @@ function CartDrawer({
                       </div>
                     )}
                     {ci.notes && (
-                      <div className="text-xs text-yellow-600 italic">"{ci.notes}"</div>
+                      <div className="text-xs text-yellow-600 italic">{'\u201C'}{ci.notes}{'\u201D'}</div>
                     )}
                     <div className="text-sm text-brand-400 font-semibold mt-0.5">
                       {formatBHD(ci.lineTotal, 'ar')}

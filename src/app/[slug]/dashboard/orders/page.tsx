@@ -129,7 +129,7 @@ function OrderCard({
                   {item.addons?.length > 0 && (
                     <div className="text-xs text-[#57534e]">+ {item.addons.map(a => a.name_ar).join(', ')}</div>
                   )}
-                  {item.notes && <div className="text-xs text-yellow-600 italic">"{item.notes}"</div>}
+                  {item.notes && <div className="text-xs text-yellow-600 italic">{'\u201C'}{item.notes}{'\u201D'}</div>}
                 </div>
               </div>
               <span className="text-[#a8a29e] text-xs flex-shrink-0">{formatBHD(item.line_total, 'ar')}</span>

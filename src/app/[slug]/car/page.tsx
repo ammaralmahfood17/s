@@ -384,7 +384,7 @@ function CartDrawer({
                     <div className="text-sm font-medium text-[#fafaf9]">{ci.item.name_ar}</div>
                     {ci.variation && <div className="text-xs text-[#57534e]">{ci.variation.name_ar}</div>}
                     {ci.addons.length > 0 && <div className="text-xs text-[#57534e]">+ {ci.addons.map(a => a.name_ar).join(', ')}</div>}
-                    {ci.notes && <div className="text-xs text-yellow-600 italic">"{ci.notes}"</div>}
+                    {ci.notes && <div className="text-xs text-yellow-600 italic">{'\u201C'}{ci.notes}{'\u201D'}</div>}
                     <div className="text-sm text-brand-400 font-semibold mt-0.5">{formatBHD(ci.lineTotal, 'ar')}</div>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
