@@ -91,7 +91,10 @@ export default function AdminRestaurantDetailPage({
 
   // Update subscription status manually
   const updateSubStatus = async (status: string) => {
-    if (!subscription) return;
+    if (!subscription) {
+      toast.error('لا يوجد اشتراك');
+      return;
+    }
     setSaving(true);
     try {
       const { error } = await supabase
@@ -113,7 +116,10 @@ export default function AdminRestaurantDetailPage({
 
   // Extend subscription
   const extendSubscription = async (months: number) => {
-    if (!subscription) return;
+    if (!subscription) {
+      toast.error('لا يوجد اشتراك لتمديده');
+      return;
+    }
     setSaving(true);
     try {
       const currentEnd = new Date(subscription.current_period_end);
@@ -131,6 +137,9 @@ export default function AdminRestaurantDetailPage({
       if (!error) {
         toast.success(`تم التمديد لمدة ${months} شهر`);
         load();
+      } else {
+        console.error('extend sub error:', error);
+        toast.error('خطأ في تمديد الاشتراك');
       }
     } catch (err) {
       console.error('extend subscription error:', err);
@@ -141,7 +150,10 @@ export default function AdminRestaurantDetailPage({
 
   // Set free plan (Estikaneh pilot)
   const setFreePlan = async () => {
-    if (!subscription) return;
+    if (!subscription) {
+      toast.error('لا يوجد اشتراك');
+      return;
+    }
     setSaving(true);
     try {
       const yearFromNow = new Date();
@@ -175,7 +187,10 @@ export default function AdminRestaurantDetailPage({
 
   // Record payment
   const recordPayment = async () => {
-    if (!subscription) return;
+    if (!subscription) {
+      toast.error('لا يوجد اشتراك. أنشئ اشتراكاً أولاً.');
+      return;
+    }
     setSaving(true);
 
     try {
