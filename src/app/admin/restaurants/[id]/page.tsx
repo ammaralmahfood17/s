@@ -29,7 +29,6 @@ interface PageRestaurant {
   phone: string | null;
   is_open: boolean;
   subscription_status: string;
-  subscriptions?: PageSubscription[];
 }
 
 const STATUS_BADGE: Record<string, string> = {
@@ -67,16 +66,16 @@ export default function AdminRestaurantDetailPage({
 
   const load = async () => {
     try {
-      const [restRes, plansRes, payRes] = await Promise.all([
-        supabase.from('restaurants').select(`
-          *, subscriptions(*, plans(*))
-        `).eq('id', id).single(),
+      const [restRes, subRes, plansRes, payRes] = await Promise.all([
+        supabase.from('restaurants').select('*').eq('id', id).single(),
+        supabase.from('subscriptions').select('*, plans(*)').eq('restaurant_id', id).order('created_at', { ascending: false }).limit(1),
         supabase.from('plans').select('*').eq('is_active', true),
         supabase.from('payments').select('*').eq('restaurant_id', id).order('paid_at', { ascending: false }),
       ]);
 
       setRestaurant(restRes.data as PageRestaurant | null);
-      setSubscription((restRes.data as PageRestaurant | null)?.subscriptions?.[0] ?? null);
+      const latestSub = subRes.data?.[0] ?? null;
+      setSubscription(latestSub as PageSubscription | null);
       setPlans((plansRes.data ?? []) as Plan[]);
       setPayments((payRes.data ?? []) as Payment[]);
     } catch (err) {
