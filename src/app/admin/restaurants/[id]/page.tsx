@@ -9,7 +9,28 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { formatBHD, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import type { Payment, Plan } from '@/types';
 import toast from 'react-hot-toast';
+
+interface PageSubscription {
+  id: string;
+  status: string;
+  plan_id: string;
+  current_period_end: string;
+  admin_notes: string | null;
+  plans?: Plan | null;
+}
+
+interface PageRestaurant {
+  id: string;
+  name_ar: string;
+  name_en: string;
+  slug: string;
+  phone: string | null;
+  is_open: boolean;
+  subscription_status: string;
+  subscriptions?: PageSubscription[];
+}
 
 const STATUS_BADGE: Record<string, string> = {
   active:    'badge-confirmed',
@@ -28,10 +49,10 @@ export default function AdminRestaurantDetailPage({
   const router = useRouter();
   const supabase = createClient();
 
-  const [restaurant, setRestaurant] = useState<any>(null);
-  const [subscription, setSubscription] = useState<any>(null);
-  const [payments, setPayments] = useState<any[]>([]);
-  const [plans, setPlans] = useState<any[]>([]);
+  const [restaurant, setRestaurant] = useState<PageRestaurant | null>(null);
+  const [subscription, setSubscription] = useState<PageSubscription | null>(null);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -45,19 +66,25 @@ export default function AdminRestaurantDetailPage({
   });
 
   const load = async () => {
-    const [restRes, plansRes, payRes] = await Promise.all([
-      supabase.from('restaurants').select(`
-        *, subscriptions(*, plans(*))
-      `).eq('id', id).single(),
-      supabase.from('plans').select('*').eq('is_active', true),
-      supabase.from('payments').select('*').eq('restaurant_id', id).order('paid_at', { ascending: false }),
-    ]);
+    try {
+      const [restRes, plansRes, payRes] = await Promise.all([
+        supabase.from('restaurants').select(`
+          *, subscriptions(*, plans(*))
+        `).eq('id', id).single(),
+        supabase.from('plans').select('*').eq('is_active', true),
+        supabase.from('payments').select('*').eq('restaurant_id', id).order('paid_at', { ascending: false }),
+      ]);
 
-    setRestaurant(restRes.data);
-    setSubscription(restRes.data?.subscriptions?.[0] ?? null);
-    setPlans(plansRes.data ?? []);
-    setPayments(payRes.data ?? []);
-    setLoading(false);
+      setRestaurant(restRes.data as PageRestaurant | null);
+      setSubscription((restRes.data as PageRestaurant | null)?.subscriptions?.[0] ?? null);
+      setPlans((plansRes.data ?? []) as Plan[]);
+      setPayments((payRes.data ?? []) as Payment[]);
+    } catch (err) {
+      console.error('admin restaurant detail - load error:', err);
+      toast.error('حدث خطأ في تحميل البيانات');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { load(); }, [id]);
@@ -66,15 +93,20 @@ export default function AdminRestaurantDetailPage({
   const updateSubStatus = async (status: string) => {
     if (!subscription) return;
     setSaving(true);
-    const { error } = await supabase
-      .from('subscriptions')
-      .update({ status })
-      .eq('id', subscription.id);
-    if (!error) {
-      toast.success('تم تحديث الحالة');
-      load();
-    } else {
-      toast.error('خطأ في تحديث الحالة');
+    try {
+      const { error } = await supabase
+        .from('subscriptions')
+        .update({ status })
+        .eq('id', subscription.id);
+      if (!error) {
+        toast.success('تم تحديث الحالة');
+        load();
+      } else {
+        toast.error('خطأ في تحديث الحالة');
+      }
+    } catch (err) {
+      console.error('update sub status error:', err);
+      toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
   };
@@ -83,21 +115,26 @@ export default function AdminRestaurantDetailPage({
   const extendSubscription = async (months: number) => {
     if (!subscription) return;
     setSaving(true);
-    const currentEnd = new Date(subscription.current_period_end);
-    const newEnd = new Date(currentEnd);
-    newEnd.setMonth(newEnd.getMonth() + months);
+    try {
+      const currentEnd = new Date(subscription.current_period_end);
+      const newEnd = new Date(currentEnd);
+      newEnd.setMonth(newEnd.getMonth() + months);
 
-    const { error } = await supabase
-      .from('subscriptions')
-      .update({
-        current_period_end: newEnd.toISOString(),
-        status: 'active',
-      })
-      .eq('id', subscription.id);
+      const { error } = await supabase
+        .from('subscriptions')
+        .update({
+          current_period_end: newEnd.toISOString(),
+          status: 'active',
+        })
+        .eq('id', subscription.id);
 
-    if (!error) {
-      toast.success(`تم التمديد لمدة ${months} شهر`);
-      load();
+      if (!error) {
+        toast.success(`تم التمديد لمدة ${months} شهر`);
+        load();
+      }
+    } catch (err) {
+      console.error('extend subscription error:', err);
+      toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
   };
@@ -106,27 +143,32 @@ export default function AdminRestaurantDetailPage({
   const setFreePlan = async () => {
     if (!subscription) return;
     setSaving(true);
-    const yearFromNow = new Date();
-    yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
+    try {
+      const yearFromNow = new Date();
+      yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
 
-    const freePlan = plans.find(p => p.price_bhd === 0);
+      const freePlan = plans.find(p => p.price_bhd === 0);
 
-    const { error } = await supabase
-      .from('subscriptions')
-      .update({
-        status: 'active',
-        plan_id: freePlan?.id ?? subscription.plan_id,
-        current_period_end: yearFromNow.toISOString(),
-        admin_notes: 'تجربة مجانية — شريك إستكانة',
-      })
-      .eq('id', subscription.id);
+      const { error } = await supabase
+        .from('subscriptions')
+        .update({
+          status: 'active',
+          plan_id: freePlan?.id ?? subscription.plan_id,
+          current_period_end: yearFromNow.toISOString(),
+          admin_notes: 'تجربة مجانية — شريك إستكانة',
+        })
+        .eq('id', subscription.id);
 
-    // Also update restaurant subscription_status
-    await supabase.from('restaurants').update({ subscription_status: 'free' }).eq('id', id);
+      // Also update restaurant subscription_status
+      await supabase.from('restaurants').update({ subscription_status: 'free' }).eq('id', id);
 
-    if (!error) {
-      toast.success('🎉 تم التعيين مجاناً لمدة سنة');
-      load();
+      if (!error) {
+        toast.success('🎉 تم التعيين مجاناً لمدة سنة');
+        load();
+      }
+    } catch (err) {
+      console.error('set free plan error:', err);
+      toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
   };
@@ -136,31 +178,36 @@ export default function AdminRestaurantDetailPage({
     if (!subscription) return;
     setSaving(true);
 
-    const periodFrom = new Date(subscription.current_period_end);
-    const periodTo = new Date(periodFrom);
-    periodTo.setMonth(periodTo.getMonth() + parseInt(payForm.period_months));
+    try {
+      const periodFrom = new Date(subscription.current_period_end);
+      const periodTo = new Date(periodFrom);
+      periodTo.setMonth(periodTo.getMonth() + parseInt(payForm.period_months));
 
-    const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
-    const { error: payError } = await supabase.from('payments').insert({
-      subscription_id: subscription.id,
-      restaurant_id: id,
-      amount_bhd: parseFloat(payForm.amount_bhd),
-      payment_method: payForm.payment_method,
-      reference: payForm.reference || null,
-      notes: payForm.notes || null,
-      period_from: periodFrom.toISOString(),
-      period_to: periodTo.toISOString(),
-      recorded_by: user?.id,
-    });
+      const { error: payError } = await supabase.from('payments').insert({
+        subscription_id: subscription.id,
+        restaurant_id: id,
+        amount_bhd: parseFloat(payForm.amount_bhd),
+        payment_method: payForm.payment_method,
+        reference: payForm.reference || null,
+        notes: payForm.notes || null,
+        period_from: periodFrom.toISOString(),
+        period_to: periodTo.toISOString(),
+        recorded_by: user?.id,
+      });
 
-    if (!payError) {
-      // Extend subscription
-      await extendSubscription(parseInt(payForm.period_months));
-      toast.success('✅ تم تسجيل الدفعة وتمديد الاشتراك');
-      setPayForm({ amount_bhd: '5.000', payment_method: 'cash', reference: '', notes: '', period_months: '1' });
-    } else {
-      toast.error('خطأ في تسجيل الدفعة');
+      if (!payError) {
+        // Extend subscription
+        await extendSubscription(parseInt(payForm.period_months));
+        toast.success('✅ تم تسجيل الدفعة وتمديد الاشتراك');
+        setPayForm({ amount_bhd: '5.000', payment_method: 'cash', reference: '', notes: '', period_months: '1' });
+      } else {
+        toast.error('خطأ في تسجيل الدفعة');
+      }
+    } catch (err) {
+      console.error('record payment error:', err);
+      toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
   };
@@ -346,7 +393,7 @@ export default function AdminRestaurantDetailPage({
           <p className="text-sm text-[#57534e] py-4 text-center">لا توجد دفعات مسجلة بعد</p>
         ) : (
           <div className="space-y-2 mt-2">
-            {payments.map((p: any) => (
+            {(payments ?? []).map((p: Payment) => (
               <div key={p.id} className="flex items-center gap-3 py-2 border-b border-[#1a1916]">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-[#fafaf9] font-medium">

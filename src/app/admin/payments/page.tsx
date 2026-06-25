@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { formatBHD } from '@/lib/utils';
 import { TrendingUp } from 'lucide-react';
+import type { Payment } from '@/types';
 
 export default async function AdminPaymentsPage() {
   const supabase = createClient();
@@ -20,10 +21,10 @@ export default async function AdminPaymentsPage() {
   const thisMonth = new Date();
   thisMonth.setDate(1); thisMonth.setHours(0,0,0,0);
   const monthlyTotal = rows
-    .filter((p: any) => new Date(p.paid_at) >= thisMonth)
-    .reduce((s: number, p: any) => s + Number(p.amount_bhd), 0);
+    .filter((p: Payment) => new Date(p.paid_at) >= thisMonth)
+    .reduce((s: number, p: Payment) => s + Number(p.amount_bhd), 0);
 
-  const allTimeTotal = rows.reduce((s: number, p: any) => s + Number(p.amount_bhd), 0);
+  const allTimeTotal = rows.reduce((s: number, p: Payment) => s + Number(p.amount_bhd), 0);
 
   const METHOD_BADGE: Record<string, string> = {
     cash:          'badge-confirmed',
@@ -73,7 +74,7 @@ export default async function AdminPaymentsPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((p: any) => (
+              {(rows ?? []).map((p: Payment) => (
                 <tr key={p.id} className="border-b border-[#1a1916] hover:bg-[#1a1916] transition-colors">
                   <td className="px-4 py-3 text-xs text-[#a8a29e] whitespace-nowrap">
                     {new Date(p.paid_at).toLocaleDateString('en-BH')}

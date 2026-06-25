@@ -711,61 +711,66 @@ export default function CustomerMenuPage({
 
   useEffect(() => {
     const load = async () => {
-      // Resolve table by qr_token
-      const { data: tableData } = await supabase
-        .from('tables')
-        .select('id, name_en, name_ar, restaurant_id, is_active')
-        .eq('qr_token', tableId)
-        .single();
+      try {
+        // Resolve table by qr_token
+        const { data: tableData } = await supabase
+          .from('tables')
+          .select('id, name_en, name_ar, restaurant_id, is_active')
+          .eq('qr_token', tableId)
+          .single();
 
-      if (!tableData || !tableData.is_active) {
+        if (!tableData || !tableData.is_active) {
+          setLoading(false);
+          return;
+        }
+        setTable(tableData);
+
+        const restaurantId = tableData.restaurant_id;
+
+        const [{ data: rest }, { data: cats }, { data: its }, { data: vars }, { data: adds }] =
+          await Promise.all([
+            supabase.from('restaurants').select('*').eq('id', restaurantId).single(),
+            supabase.from('categories').select('*').eq('restaurant_id', restaurantId)
+              .eq('is_visible', true).order('sort_order'),
+            supabase.from('items').select('*').eq('restaurant_id', restaurantId)
+              .eq('is_available', true).order('sort_order'),
+            supabase.from('variations').select('*').eq('restaurant_id', restaurantId)
+              .order('sort_order'),
+            supabase.from('addons').select('*').eq('restaurant_id', restaurantId)
+              .order('sort_order'),
+          ]);
+
+        // Redirect if slug doesn't match (prevents wrong slug in URL)
+        if (rest && rest.slug !== slug) {
+          router.replace(`/${rest.slug}/t/${tableId}`);
+          return;
+        }
+
+        setRestaurant(rest);
+        setCategories(cats ?? []);
+        setItems(its ?? []);
+
+        const varMap: Record<string, Variation[]> = {};
+        (vars ?? []).forEach((v: Variation) => {
+          if (!varMap[v.item_id]) varMap[v.item_id] = [];
+          varMap[v.item_id].push(v);
+        });
+        setVariations(varMap);
+
+        const addonMap: Record<string, Addon[]> = {};
+        (adds ?? []).forEach((a: Addon) => {
+          if (!addonMap[a.item_id]) addonMap[a.item_id] = [];
+          addonMap[a.item_id].push(a);
+        });
+        setAddons(addonMap);
+
+        if (cats?.length) setSelectedCategory(cats[0].id);
+        initCart(restaurantId, tableData.id);
+      } catch (err) {
+        console.error('table page - load error:', err);
+      } finally {
         setLoading(false);
-        return;
       }
-      setTable(tableData);
-
-      const restaurantId = tableData.restaurant_id;
-
-      const [{ data: rest }, { data: cats }, { data: its }, { data: vars }, { data: adds }] =
-        await Promise.all([
-          supabase.from('restaurants').select('*').eq('id', restaurantId).single(),
-          supabase.from('categories').select('*').eq('restaurant_id', restaurantId)
-            .eq('is_visible', true).order('sort_order'),
-          supabase.from('items').select('*').eq('restaurant_id', restaurantId)
-            .eq('is_available', true).order('sort_order'),
-          supabase.from('variations').select('*').eq('restaurant_id', restaurantId)
-            .order('sort_order'),
-          supabase.from('addons').select('*').eq('restaurant_id', restaurantId)
-            .order('sort_order'),
-        ]);
-
-      // Redirect if slug doesn't match (prevents wrong slug in URL)
-      if (rest && rest.slug !== slug) {
-        router.replace(`/${rest.slug}/t/${tableId}`);
-        return;
-      }
-
-      setRestaurant(rest);
-      setCategories(cats ?? []);
-      setItems(its ?? []);
-
-      const varMap: Record<string, Variation[]> = {};
-      (vars ?? []).forEach((v: Variation) => {
-        if (!varMap[v.item_id]) varMap[v.item_id] = [];
-        varMap[v.item_id].push(v);
-      });
-      setVariations(varMap);
-
-      const addonMap: Record<string, Addon[]> = {};
-      (adds ?? []).forEach((a: Addon) => {
-        if (!addonMap[a.item_id]) addonMap[a.item_id] = [];
-        addonMap[a.item_id].push(a);
-      });
-      setAddons(addonMap);
-
-      if (cats?.length) setSelectedCategory(cats[0].id);
-      initCart(restaurantId, tableData.id);
-      setLoading(false);
     };
 
     load();

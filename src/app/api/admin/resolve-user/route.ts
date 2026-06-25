@@ -12,7 +12,8 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.admin.listUsers();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('resolve-user error:', error.message);
+      return NextResponse.json({ error: 'Internal error' }, { status: 500 });
     }
 
     let user: { id: string; email?: string } | undefined;

@@ -485,56 +485,60 @@ export default function CarOrderPage({
 
   useEffect(() => {
     const load = async () => {
-      // Fetch restaurant by slug
-      const { data: rest } = await supabase
-        .from('restaurants')
-        .select('*')
-        .eq('slug', slug)
-        .single();
+      try {
+        // Fetch restaurant by slug
+        const { data: rest } = await supabase
+          .from('restaurants')
+          .select('*')
+          .eq('slug', slug)
+          .single();
 
-      if (!rest) {
+        if (!rest) {
+          setLoading(false);
+          return;
+        }
+        setRestaurant(rest);
+
+        // Find the Drive Thru table by qr_token
+        const { data: table } = await supabase
+          .from('tables')
+          .select('id, name_ar')
+          .eq('qr_token', qrToken)
+          .single();
+
+        if (table) {
+          setTableId(table.id);
+          setTableName(table.name_ar);
+        }
+
+        const [catsRes, itemsRes, varsRes, addonsRes] = await Promise.all([
+          supabase.from('categories').select('*').eq('restaurant_id', rest.id).eq('is_visible', true).eq('is_active', true).order('sort_order'),
+          supabase.from('items').select('*').eq('restaurant_id', rest.id).eq('is_available', true).order('sort_order'),
+          supabase.from('variations').select('*').eq('restaurant_id', rest.id).order('sort_order'),
+          supabase.from('addons').select('*').eq('restaurant_id', rest.id).order('sort_order'),
+        ]);
+
+        const cats = catsRes.data ?? [];
+        const its = itemsRes.data ?? [];
+        const vars = varsRes.data ?? [];
+        const adds = addonsRes.data ?? [];
+
+        setCategories(cats);
+        setItems(its);
+        if (cats.length > 0) setActiveCategory(cats[0].id);
+
+        const vMap: Record<string, Variation[]> = {};
+        vars.forEach(v => { if (!vMap[v.item_id]) vMap[v.item_id] = []; vMap[v.item_id].push(v); });
+        setVariationsMap(vMap);
+
+        const aMap: Record<string, Addon[]> = {};
+        adds.forEach(a => { if (!aMap[a.item_id]) aMap[a.item_id] = []; aMap[a.item_id].push(a); });
+        setAddonsMap(aMap);
+      } catch (err) {
+        console.error('car page - load error:', err);
+      } finally {
         setLoading(false);
-        return;
       }
-      setRestaurant(rest);
-
-      // Find the Drive Thru table by qr_token
-      const { data: table } = await supabase
-        .from('tables')
-        .select('id, name_ar')
-        .eq('qr_token', qrToken)
-        .single();
-
-      if (table) {
-        setTableId(table.id);
-        setTableName(table.name_ar);
-      }
-
-      const [catsRes, itemsRes, varsRes, addonsRes] = await Promise.all([
-        supabase.from('categories').select('*').eq('restaurant_id', rest.id).eq('is_visible', true).eq('is_active', true).order('sort_order'),
-        supabase.from('items').select('*').eq('restaurant_id', rest.id).eq('is_available', true).order('sort_order'),
-        supabase.from('variations').select('*').eq('restaurant_id', rest.id).order('sort_order'),
-        supabase.from('addons').select('*').eq('restaurant_id', rest.id).order('sort_order'),
-      ]);
-
-      const cats = catsRes.data ?? [];
-      const its = itemsRes.data ?? [];
-      const vars = varsRes.data ?? [];
-      const adds = addonsRes.data ?? [];
-
-      setCategories(cats);
-      setItems(its);
-      if (cats.length > 0) setActiveCategory(cats[0].id);
-
-      const vMap: Record<string, Variation[]> = {};
-      vars.forEach(v => { if (!vMap[v.item_id]) vMap[v.item_id] = []; vMap[v.item_id].push(v); });
-      setVariationsMap(vMap);
-
-      const aMap: Record<string, Addon[]> = {};
-      adds.forEach(a => { if (!aMap[a.item_id]) aMap[a.item_id] = []; aMap[a.item_id].push(a); });
-      setAddonsMap(aMap);
-
-      setLoading(false);
     };
     load();
   }, [slug, qrToken, supabase]);

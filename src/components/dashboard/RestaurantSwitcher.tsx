@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Plus, Store } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import type { Restaurant } from '@/types';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import type { Restaurant } from '@/types';
 
 interface Props {
   currentRestaurantId: string;
@@ -39,7 +39,7 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
         .neq('role', 'owner');
 
       const staffRestaurants = (staffed ?? [])
-        .flatMap((s: { restaurants: any }) => s.restaurants ?? [])
+        .flatMap((s: { restaurant_id: string; restaurants: Record<string, unknown>[] }) => s.restaurants ?? [])
         .filter(Boolean);
 
       const all = [

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { formatBHD } from '@/lib/utils';
 import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
+import type { Subscription } from '@/types';
 
 const STATUS_BADGE: Record<string, string> = {
   active:    'badge-confirmed',
@@ -86,7 +87,7 @@ export default async function AdminSubscriptionsPage({
               </tr>
             </thead>
             <tbody>
-              {rows.map((s: any) => {
+              {(rows ?? []).map((s: Subscription) => {
                 const r = s.restaurants;
                 const daysLeft = Math.ceil(
                   (new Date(s.current_period_end).getTime() - Date.now()) / 86400000
@@ -102,7 +103,7 @@ export default async function AdminSubscriptionsPage({
                     </td>
                     <td className="px-4 py-3 text-xs text-[#a8a29e]">
                       {s.plans?.name_ar ?? '—'}
-                      <div className="text-[#57534e]">{s.plans?.price_bhd === 0 ? 'مجاني' : `${formatBHD(s.plans?.price_bhd)}/شهر`}</div>
+                      <div className="text-[#57534e]">{s.plans?.price_bhd === 0 ? 'مجاني' : `${formatBHD(s.plans?.price_bhd ?? 0)}/شهر`}</div>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`badge ${STATUS_BADGE[s.status] ?? 'badge-pending'}`}>
