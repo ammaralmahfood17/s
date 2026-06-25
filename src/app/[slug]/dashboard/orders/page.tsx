@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRealtimeOrders } from '@/hooks/useRealtimeOrders';
-import { formatBHD, formatRelativeTime, cn } from '@/lib/utils';
-import { PageSkeleton } from '@/components/shared/Skeleton';
+import { formatBHD, formatRelativeTime } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import type { OrderWithItems, OrderStatus } from '@/types';
 import { ORDER_STATUS_CONFIG } from '@/types/constants';
 import toast from 'react-hot-toast';

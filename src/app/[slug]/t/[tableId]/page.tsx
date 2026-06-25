@@ -13,7 +13,6 @@ import type {
   Restaurant, Category, Item, Variation, Addon, PlaceOrderPayload
 } from '@/types';
 import toast from 'react-hot-toast';
-import { PageSkeleton } from '@/components/shared/Skeleton';
 import { useRouter } from 'next/navigation';
 import { OpeningHoursDisplay, parseHours, isOpenNow } from '@/components/shared/OpeningHours';
 import { PausedBanner } from '@/components/dashboard/PauseOrdering';
@@ -791,8 +790,8 @@ export default function CustomerMenuPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
-        <PageSkeleton />
+      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center">
+        <div className="text-[#57534e]">جار التحميل...</div>
       </div>
     );
   }

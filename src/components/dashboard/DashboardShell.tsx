@@ -50,15 +50,6 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
     { href: `/${slug}/dashboard/manual-order`, icon: Hand, label: 'طلب يدوي' },
   ];
 
-  // Mobile tabs — most-used pages only
-  const mobileTabs = [
-    { href: `/${slug}/dashboard`,         icon: LayoutDashboard, label: 'الرئيسية' },
-    { href: `/${slug}/dashboard/orders`,  icon: ClipboardList,   label: 'الطلبات' },
-    { href: `/${slug}/dashboard/kitchen`, icon: ChefHat,         label: 'المطبخ' },
-    { href: `/${slug}/dashboard/manual-order`, icon: Hand,       label: 'يدوي' },
-    { href: `/${slug}/dashboard/menu`,    icon: UtensilsCrossed, label: 'القائمة' },
-  ];
-
   const Sidebar = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
@@ -157,6 +148,14 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
       </div>
     </div>
   );
+
+  // Primary tabs shown in the mobile bottom bar — most-used pages only
+  const mobileTabs = [
+    { href: `/${slug}/dashboard`,         icon: LayoutDashboard, label: 'الرئيسية' },
+    { href: `/${slug}/dashboard/orders`,  icon: ClipboardList,   label: 'الطلبات' },
+    { href: `/${slug}/dashboard/kitchen`, icon: ChefHat,         label: 'المطبخ' },
+    { href: `/${slug}/dashboard/menu`,    icon: UtensilsCrossed, label: 'القائمة' },
+  ];
 
   return (
     <div className="min-h-screen bg-[#0f0e0c] flex">

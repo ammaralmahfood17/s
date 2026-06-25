@@ -5,13 +5,21 @@ import { BarChart3, TrendingUp, ShoppingBag, Clock, Download, Star } from 'lucid
 import { createClient } from '@/lib/supabase/client';
 import { formatBHD } from '@/lib/utils';
 import { exportOrdersCSV, exportItemsReportCSV } from '@/lib/export';
-import { PageSkeleton } from '@/components/shared/Skeleton';
 import { ReviewsDashboard } from '@/components/shared/Reviews';
 import toast from 'react-hot-toast';
-import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer,
-} from 'recharts';
+
+function MiniBar({ value, max, label }: { value: number; max: number; label: string }) {
+  const pct = max > 0 ? (value / max) * 100 : 0;
+  return (
+    <div className="flex items-center gap-2">
+      <div className="text-xs text-[#57534e] w-16 text-right flex-shrink-0">{label}</div>
+      <div className="flex-1 h-2 bg-[#1a1916] rounded-full overflow-hidden">
+        <div className="h-full bg-brand-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
+      </div>
+      <div className="text-xs text-[#a8a29e] w-16 flex-shrink-0 text-right">{value.toFixed(3)}</div>
+    </div>
+  );
+}
 
 const DAYS_S = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYS_A = ['أح','إث','ثل','أر','خم','جم','سب'];
@@ -83,6 +91,7 @@ export default function AnalyticsPage() {
     setExporting(false);
   };
 
+  const maxRevDay=Math.max(...revenueByDay.map(d=>d.total),0.001);
   const statCards=[
     {icon:TrendingUp,label:'إيرادات اليوم',value:formatBHD(stats.revenueToday,'ar'),color:'text-brand-400'},
     {icon:ShoppingBag,label:'طلبات اليوم',value:String(stats.ordersToday),color:'text-blue-400'},
@@ -90,7 +99,7 @@ export default function AnalyticsPage() {
     {icon:Clock,label:'متوسط الطلب',value:formatBHD(stats.avgOrder,'ar'),color:'text-teal-400'},
   ];
 
-  if(loading) return <PageSkeleton />;
+  if(loading) return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
 
   return (
     <div className="p-4 sm:p-6 max-w-5xl space-y-5 sm:space-y-6">
@@ -143,49 +152,10 @@ export default function AnalyticsPage() {
               {revenueByDay.every(d=>d.total===0)?(
                 <div className="text-center py-8 text-[#57534e] text-sm">لا توجد بيانات</div>
               ):(
-                <div className="mt-2" dir="ltr">
-                  <ResponsiveContainer width="100%" height={200}>
-                    <LineChart data={revenueByDay}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#2a2825" />
-                      <XAxis
-                        dataKey="date"
-                        tick={{ fill: '#a8a29e', fontSize: 11 }}
-                        tickLine={false}
-                        axisLine={{ stroke: '#2a2825' }}
-                        tickFormatter={(d) => DAYS_A[new Date(d).getDay()]}
-                      />
-                      <YAxis
-                        tick={{ fill: '#a8a29e', fontSize: 11 }}
-                        tickLine={false}
-                        axisLine={{ stroke: '#2a2825' }}
-                        tickFormatter={(v) => v.toFixed(2)}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: '#1a1916',
-                          border: '1px solid #2a2825',
-                          borderRadius: '12px',
-                          color: '#fafaf9',
-                          fontSize: '12px',
-                        }}
-                        formatter={(value: number) => [formatBHD(value, 'ar'), 'الإيراد']}
-                        labelFormatter={(d) => new Date(d).toLocaleDateString('ar-BH')}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="total"
-                        stroke="#f59e0b"
-                        strokeWidth={2}
-                        dot={{ fill: '#f59e0b', r: 3 }}
-                        activeDot={{ r: 5, fill: '#f59e0b' }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                  {/* Summary */}
-                  <div className="flex justify-between text-xs text-[#57534e] mt-2 px-1">
-                    <span>المجموع: {formatBHD(revenueByDay.reduce((s,d)=>s+d.total,0),'ar')}</span>
-                    <span>{revenueByDay.reduce((s,d)=>s+d.count,0)} طلب</span>
-                  </div>
+                <div className="space-y-2 mt-2">
+                  {revenueByDay.map(day=>(
+                    <MiniBar key={day.date} value={day.total} max={maxRevDay} label={DAYS_A[new Date(day.date).getDay()]} />
+                  ))}
                 </div>
               )}
             </div>
@@ -194,36 +164,17 @@ export default function AnalyticsPage() {
               {topItems.length===0?(
                 <div className="text-center py-8 text-[#57534e] text-sm">لا توجد بيانات</div>
               ):(
-                <div className="mt-2" dir="ltr">
-                  <ResponsiveContainer width="100%" height={Math.max(140, topItems.length * 32)}>
-                    <BarChart
-                      data={topItems.map(i => ({ ...i, name: i.name_ar }))}
-                      layout="vertical"
-                      margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#2a2825" horizontal={false} />
-                      <XAxis type="number" hide />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#fafaf9', fontSize: 11 }}
-                        tickLine={false}
-                        axisLine={false}
-                        width={100}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: '#1a1916',
-                          border: '1px solid #2a2825',
-                          borderRadius: '12px',
-                          color: '#fafaf9',
-                          fontSize: '12px',
-                        }}
-                        formatter={(value: number) => [formatBHD(value, 'ar'), 'الإيراد']}
-                      />
-                      <Bar dataKey="revenue" fill="#f59e0b" radius={[0, 4, 4, 0]} barSize={14} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="space-y-3 mt-2">
+                  {topItems.map((item,i)=>(
+                    <div key={item.name_en} className="flex items-center gap-3">
+                      <span className="text-sm w-5 flex-shrink-0">{i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-[#fafaf9] truncate">{item.name_ar}</div>
+                        <div className="text-xs text-[#57534e]">{item.qty} وحدة</div>
+                      </div>
+                      <div className="text-sm text-brand-400 font-semibold">{formatBHD(item.revenue,'ar')}</div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

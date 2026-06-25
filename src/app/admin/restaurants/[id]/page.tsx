@@ -10,7 +10,6 @@ import { createClient } from '@/lib/supabase/client';
 import { formatBHD, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Payment, Plan } from '@/types';
-import { PageSkeleton } from '@/components/shared/Skeleton';
 import toast from 'react-hot-toast';
 
 interface PageSubscription {
@@ -228,7 +227,7 @@ export default function AdminRestaurantDetailPage({
   };
 
   if (loading) {
-    return <PageSkeleton />;
+    return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
   }
 
   if (!restaurant) {
