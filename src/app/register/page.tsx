@@ -39,7 +39,7 @@ export default function RegisterPage() {
       return;
     }
 
-    toast.success('تم إنشاء الحساب! تحقق من بريدك الإلكتروني.');
+    toast.success('تم إنشاء الحساب! تحقق من بريدك الإلكتروني لتأكيد الحساب.');
     router.push('/login');
   };
 

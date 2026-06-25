@@ -80,7 +80,7 @@ export default async function DashboardPage({
 }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/${slug}/login`);
+  if (!user) redirect('/login');
 
   // Super admin without restaurant → redirect to admin panel
   const { data: adminRecord } = await supabase
@@ -96,7 +96,7 @@ export default async function DashboardPage({
     .single();
 
   if (adminRecord && !restaurant) {
-    redirect(`/${slug}/admin`);
+    redirect('/admin');
   }
 
   // No restaurant yet — show setup
@@ -113,7 +113,7 @@ export default async function DashboardPage({
         <p className="text-[#a8a29e] mb-6">
           أعد تهيئة مطعمك لبدء قبول الطلبات عبر QR
         </p>
-        <Link href={`/${slug}/dashboard/settings`} className="btn-primary">
+        <Link href="/setup" className="btn-primary">
           <Plus size={18} />
           إنشاء المطعم
         </Link>
