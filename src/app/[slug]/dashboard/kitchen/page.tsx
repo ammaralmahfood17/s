@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRealtimeOrders } from '@/hooks/useRealtimeOrders';
 import { formatRelativeTime, getNextStatus, getNextStatusLabel } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { PageSkeleton } from '@/components/shared/Skeleton';
 import type { OrderWithItems, OrderStatus } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -251,21 +252,26 @@ export default function KitchenPage() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="text-[#57534e]">جار التحميل...</div>
-        </div>
+        <PageSkeleton />
       ) : totalActive === 0 ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4 px-4">
-          <div className="w-20 h-20 rounded-full bg-[#1a1916] border border-[#2a2825]
-                          flex items-center justify-center">
-            <ChefHat size={40} className="text-[#3a3835]" />
-          </div>
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="20" width="100" height="80" rx="12" fill="#1a1916" stroke="#2a2825" strokeWidth="2"/>
+            <rect x="25" y="35" width="70" height="8" rx="4" fill="#3a3835"/>
+            <rect x="25" y="50" width="50" height="8" rx="4" fill="#3a3835"/>
+            <rect x="25" y="65" width="60" height="8" rx="4" fill="#3a3835"/>
+            <circle cx="85" cy="55" r="14" fill="#1a1916" stroke="#f59e0b" strokeWidth="2"/>
+            <path d="M80 55L85 60L91 50" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M35 28L45 15H75L85 28" fill="#1a1916" stroke="#2a2825" strokeWidth="2" strokeLinejoin="round"/>
+            <path d="M55 28V15" stroke="#2a2825" strokeWidth="2"/>
+            <path d="M65 28V15" stroke="#2a2825" strokeWidth="2"/>
+          </svg>
           <div className="text-center">
             <h2 className="text-xl font-bold text-[#a8a29e]">
               لا يوجد طلبات نشطة
             </h2>
             <p className="text-sm text-[#57534e] mt-1">
-              لا توجد طلبات نشطة الآن
+              ستظهر الطلبات هنا فور ورودها
             </p>
           </div>
         </div>

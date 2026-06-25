@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { generateSlug, getPublicImageUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import { Upload, Globe, Save, Plus, Clock, PauseCircle } from 'lucide-react';
+import { Upload, Globe, Save, Plus, Clock, PauseCircle, Info, MapPin, Phone } from 'lucide-react';
 import NextImage from 'next/image';
 import { GOVERNORATES, type GovernorateKey } from '@/types';
 import { OpeningHoursEditor, parseHours, type WeekHours } from '@/components/shared/OpeningHours';
 import { PauseOrderingControl } from '@/components/dashboard/PauseOrdering';
+import { PageSkeleton } from '@/components/shared/Skeleton';
 import type { Restaurant } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -114,7 +115,7 @@ export default function SettingsPage() {
     setSaving(false);
   };
 
-  if (loading) return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+  if (loading) return <PageSkeleton />;
 
   const sections = [
     { key: 'basic',    labelAr: 'معلومات أساسية' },
@@ -147,12 +148,17 @@ export default function SettingsPage() {
         </div>
       )}
 
-      {/* Section tabs */}
+      {/* Section tabs with icons */}
       <div className="flex gap-1">
         {sections.map(s => (
           <button key={s.key} onClick={() => setActiveSection(s.key as 'basic'|'hours'|'ordering')}
-            className={cn('flex-1 py-2 rounded-xl text-sm font-medium transition-all',
-              activeSection === s.key ? 'bg-brand-500 text-[#0f0e0c]' : 'text-[#a8a29e] hover:text-[#fafaf9] bg-[#1a1916]')}>
+            className={cn('flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-all',
+              activeSection === s.key
+                ? 'bg-brand-500 text-[#0f0e0c] shadow-sm'
+                : 'text-[#a8a29e] hover:text-[#fafaf9] bg-[#1a1916] hover:bg-[#2a2825]')}>
+            {s.key === 'basic' && <Info size={14} />}
+            {s.key === 'hours' && <Clock size={14} />}
+            {s.key === 'ordering' && <PauseCircle size={14} />}
             {s.labelAr}
           </button>
         ))}

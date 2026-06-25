@@ -1,17 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Search, Store, ExternalLink } from 'lucide-react';
-import type { Restaurant } from '@/types';
-
-interface RestaurantRow extends Restaurant {
-  subscriptions?: {
-    status: string;
-    current_period_end: string;
-    trial_ends_at: string | null;
-    plan_id: string;
-    plans?: { name_en: string; name_ar: string } | null;
-  }[];
-}
 
 const STATUS_BADGE: Record<string, string> = {
   active:    'badge-confirmed',
@@ -72,7 +61,7 @@ export default async function AdminRestaurantsPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r: RestaurantRow) => {
+              {rows.map((r: any) => {
                 const sub = r.subscriptions?.[0];
                 const plan = sub?.plans;
                 const expiresAt = sub?.current_period_end ?? sub?.trial_ends_at;
