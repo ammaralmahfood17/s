@@ -63,7 +63,10 @@ function ItemModal({
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      toast.error('لم يتم اختيار ملف');
+      return;
+    }
     setUploading(true);
     const ext = file.name.split('.').pop();
     const path = `${restaurantId}/${Date.now()}.${ext}`;
@@ -498,7 +501,11 @@ export default function MenuPage() {
     if (!restaurantId) return;
     const nameEn = prompt('اسم الصنف (إنجليزي):');
     const nameAr = prompt('اسم الصنف (عربي):');
-    if (!nameEn || !nameAr) return;
+    if (nameEn === null || nameAr === null) return; // user cancelled
+    if (!nameEn || !nameAr) {
+      toast.error('يرجى إدخال اسم الصنف بالعربي والإنجليزي');
+      return;
+    }
     const { error } = await supabase.from('categories').insert({
       restaurant_id: restaurantId,
       name_en: nameEn,

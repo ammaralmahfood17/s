@@ -544,7 +544,10 @@ export default function CarOrderPage({
   }, [slug, qrToken, supabase]);
 
   const addItemToCart = useCallback((item: Item, variation: Variation | null, addons: Addon[], qty: number, notes: string) => {
-    if (!restaurant) return;
+    if (!restaurant) {
+      toast.error('المطعم لم يتم تحميله بعد. انتظر قليلاً.');
+      return;
+    }
     useCartStore.getState().initCart(restaurant!.id, tableId);
     useCartStore.getState().addItem(item, variation, addons, qty, notes);
   }, [restaurant, tableId]);
