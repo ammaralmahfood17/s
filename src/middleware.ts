@@ -45,11 +45,9 @@ export async function middleware(request: NextRequest) {
         .single();
 
       if (restaurant?.slug) {
-        // Already has a restaurant → redirect to their dashboard
         return NextResponse.redirect(new URL(`/${restaurant.slug}/dashboard`, request.url));
       }
 
-      // No restaurant yet → allow setup page
       return NextResponse.next();
     }
 
@@ -80,6 +78,19 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirectTo', pathname);
     return NextResponse.redirect(loginUrl);
+  }
+
+  // Extra guard: /admin requires super_admin row
+  if (pathname.startsWith('/admin')) {
+    const { data: adminRow } = await supabase
+      .from('super_admins')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!adminRow) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   }
 
   return NextResponse.next();
