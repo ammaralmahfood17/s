@@ -60,6 +60,10 @@ export function useRealtimeOrders(restaurantId: string) {
       .update({ status })
       .eq('id', orderId);
 
+    if (error) {
+      console.error('SOPRANO_AUDIT_ERROR:', error);
+    }
+
     if (!error) {
       // Fire push notification async (non-blocking)
       fetch('/api/push', {
