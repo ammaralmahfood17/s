@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Review } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 // ── Star rating picker ─────────────────────────────────────
 function StarPicker({

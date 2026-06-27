@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Package, AlertCircle, RotateCcw } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import type { Item } from '@/types';
 
 interface Props {

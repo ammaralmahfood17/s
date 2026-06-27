@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client';
 import { formatBHD, getPublicImageUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Category, Item, Variation, Addon } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import NextImage from 'next/image';
 import { StockControl } from '@/components/dashboard/StockControl';
 

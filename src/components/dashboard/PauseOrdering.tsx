@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { PauseCircle, PlayCircle, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 interface Props {
   restaurantId: string;
@@ -78,28 +82,26 @@ export function PauseOrderingControl({
             <PauseCircle size={16} className="animate-pulse" />
             الطلبات موقوفة
           </div>
-          <button
+          <Button
             onClick={handleResume}
             disabled={loading}
-            className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800
-                       border border-green-700 text-green-400
-                       text-sm px-3 py-2 rounded-xl transition-all"
+            variant="outline"
+            className="border-green-700 text-green-400 hover:bg-green-900 hover:text-green-300"
           >
             <PlayCircle size={16} />
             استئناف
-          </button>
+          </Button>
         </div>
       ) : (
-        <button
+        <Button
           onClick={handlePause}
           disabled={loading}
-          className="flex items-center gap-1.5 bg-orange-950/40 hover:bg-orange-950/70
-                     border border-orange-900 text-orange-400
-                     text-sm px-3 py-2 rounded-xl transition-all"
+          variant="outline"
+          className="border-orange-900 text-orange-400 hover:bg-orange-950/70"
         >
           <PauseCircle size={16} />
           إيقاف الطلبات مؤقتاً
-        </button>
+        </Button>
       )}
 
       {/* Reason modal */}
@@ -109,59 +111,58 @@ export function PauseOrderingControl({
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setShowReasonModal(false)}
           />
-          <div className="relative bg-[#1a1916] border border-[#2a2825] rounded-2xl p-6
-                          w-full max-w-sm shadow-2xl animate-slide-up">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle size={20} className="text-orange-400" />
-              <h2 className="font-bold text-[#fafaf9]">
-                سبب الإيقاف
-              </h2>
-            </div>
-
-            <p className="text-xs text-[#57534e] mb-4">
-              سيظهر هذا للعملاء عند محاولة الطلب
-            </p>
-
-            <div className="space-y-3">
-              <div>
-                <label className="label">السبب (عربي)</label>
-                <input
-                  className="input text-right font-cairo text-sm"
-                  dir="rtl"
-                  value={reasonAr}
-                  onChange={e => setReasonAr(e.target.value)}
-                  placeholder="المطبخ مشغول مؤقتاً، شكراً لصبركم"
-                />
+          <Card className="relative w-full max-w-sm shadow-2xl animate-slide-up">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <AlertTriangle size={20} className="text-orange-400" />
+                <h2 className="font-bold text-[#fafaf9]">
+                  سبب الإيقاف
+                </h2>
               </div>
-              <div>
-                <label className="label">السبب (إنجليزي)</label>
-                <input
-                  className="input text-sm"
-                  value={reasonEn}
-                  onChange={e => setReasonEn(e.target.value)}
-                  placeholder="Kitchen is busy, please try again shortly"
-                />
-              </div>
-            </div>
 
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => setShowReasonModal(false)}
-                className="btn-secondary flex-1 text-sm"
-              >
-                إلغاء
-              </button>
-              <button
-                onClick={confirmPause}
-                disabled={loading}
-                className="flex-1 text-sm py-2.5 rounded-xl font-semibold
-                           bg-orange-900 hover:bg-orange-800 text-orange-300
-                           border border-orange-800 transition-all"
-              >
-                {loading ? '...' : 'إيقاف الطلبات'}
-              </button>
-            </div>
-          </div>
+              <p className="text-xs text-[#57534e] mb-4">
+                سيظهر هذا للعملاء عند محاولة الطلب
+              </p>
+
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label>السبب (عربي)</Label>
+                  <Input
+                    dir="rtl"
+                    value={reasonAr}
+                    onChange={e => setReasonAr(e.target.value)}
+                    placeholder="المطبخ مشغول مؤقتاً، شكراً لصبركم"
+                    className="font-cairo"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>السبب (إنجليزي)</Label>
+                  <Input
+                    value={reasonEn}
+                    onChange={e => setReasonEn(e.target.value)}
+                    placeholder="Kitchen is busy, please try again shortly"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-2 mt-4">
+                <Button
+                  variant="secondary"
+                  className="flex-1"
+                  onClick={() => setShowReasonModal(false)}
+                >
+                  إلغاء
+                </Button>
+                <Button
+                  onClick={confirmPause}
+                  disabled={loading}
+                  className="flex-1 bg-orange-900 hover:bg-orange-800 text-orange-300 border border-orange-800"
+                >
+                  {loading ? '...' : 'إيقاف الطلبات'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </>

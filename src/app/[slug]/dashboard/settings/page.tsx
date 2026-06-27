@@ -10,7 +10,7 @@ import { GOVERNORATES, type GovernorateKey } from '@/types';
 import { OpeningHoursEditor, parseHours, type WeekHours } from '@/components/shared/OpeningHours';
 import { PauseOrderingControl } from '@/components/dashboard/PauseOrdering';
 import type { Restaurant } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const supabase = createClient();

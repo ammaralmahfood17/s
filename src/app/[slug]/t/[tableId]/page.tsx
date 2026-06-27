@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import type {
   Restaurant, Category, Item, Variation, Addon, PlaceOrderPayload
 } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { OpeningHoursDisplay, parseHours, isOpenNow } from '@/components/shared/OpeningHours';
 import { PausedBanner } from '@/components/dashboard/PauseOrdering';

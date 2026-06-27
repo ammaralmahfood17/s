@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { formatBHD } from '@/lib/utils';
 import { exportOrdersCSV, exportItemsReportCSV } from '@/lib/export';
 import { ReviewsDashboard } from '@/components/shared/Reviews';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 function MiniBar({ value, max, label }: { value: number; max: number; label: string }) {
   const pct = max > 0 ? (value / max) * 100 : 0;

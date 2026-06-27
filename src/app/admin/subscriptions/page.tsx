@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { formatBHD } from '@/lib/utils';
 import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
+import { AdminQuickActions } from './AdminQuickActions';
 import type { Subscription } from '@/types';
 
 const STATUS_BADGE: Record<string, string> = {
@@ -126,10 +127,17 @@ export default async function AdminSubscriptionsPage({
                       {s.amount_bhd ? formatBHD(s.amount_bhd) : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/restaurants/${r?.id}`}
-                        className="text-xs text-brand-400 hover:text-brand-300">
-                        إدارة ←
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <Link href={`/admin/restaurants/${r?.id}`}
+                          className="text-xs text-brand-400 hover:text-brand-300">
+                          إدارة
+                        </Link>
+                        <AdminQuickActions
+                          subscriptionId={s.id}
+                          restaurantId={r?.id ?? ''}
+                          currentStatus={s.status}
+                        />
+                      </div>
                     </td>
                   </tr>
                 );

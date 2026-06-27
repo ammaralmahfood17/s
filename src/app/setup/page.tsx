@@ -6,7 +6,7 @@ import { QrCode, Store } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { generateSlug, getPublicImageUrl } from '@/lib/utils';
 import { GOVERNORATES, type GovernorateKey } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 export default function SetupPage() {
   const router = useRouter();

@@ -1,18 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  QrCode, LayoutDashboard, UtensilsCrossed, ClipboardList,
-  ChefHat, Grid3x3, BarChart3, Settings, LogOut,
-  Menu, X, Shield, Hand
-} from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { cn } from '@/lib/utils';
 import type { Restaurant } from '@/types';
 import type { User } from '@supabase/supabase-js';
-import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import {
+  LogOut,
+  QrCode, Search,
+} from 'lucide-react';
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarSeparator,
+  SidebarInset,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { CommandMenu } from '@/components/shared/CommandMenu';
+import { toast } from 'sonner';
+import { dashboardNav } from '@/lib/nav';
 
 interface Props {
   user: User;
@@ -24,9 +41,6 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // Extract slug from path: /{slug}/dashboard/...
   const slug = pathname.split('/')[1] ?? '';
 
   const handleLogout = async () => {
@@ -35,300 +49,149 @@ export default function DashboardShell({ user, restaurant, children }: Props) {
     router.push('/login');
   };
 
-  const navItems = [
-    { href: `/${slug}/dashboard`,           icon: LayoutDashboard,  label: 'لوحة التحكم' },
-    { href: `/${slug}/dashboard/orders`,    icon: ClipboardList,   label: 'الطلبات' },
-    { href: `/${slug}/dashboard/kitchen`,   icon: ChefHat,         label: 'المطبخ' },
-    { href: `/${slug}/dashboard/menu`,      icon: UtensilsCrossed, label: 'القائمة' },
-    { href: `/${slug}/dashboard/tables`,    icon: Grid3x3,         label: 'الطاولات' },
-    { href: `/${slug}/dashboard/analytics`, icon: BarChart3,       label: 'التحليلات' },
-    { href: `/${slug}/dashboard/settings`,  icon: Settings,        label: 'الإعدادات' },
-  ];
+  const isNavActive = (itemUrl: string) => {
+    const fullPath = `/${slug}/${itemUrl}`;
+    if (itemUrl === 'dashboard') {
+      return pathname === fullPath;
+    }
+    return pathname.startsWith(fullPath);
+  };
 
-  // Quick action for staff: manual order
-  const quickActions = [
-    { href: `/${slug}/dashboard/manual-order`, icon: Hand, label: 'طلب يدوي' },
-  ];
+  return (
+    <SidebarProvider defaultOpen={true}>
+      <div className="flex min-h-screen w-full bg-[#0f0e0c]">
+        {/* ── Desktop Sidebar ── */}
+        <Sidebar side="right" variant="sidebar" collapsible="icon">
+          <SidebarHeader>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-[#f59e0b] flex items-center justify-center flex-shrink-0">
+                <QrCode size={16} className="text-[#0f0e0c]" />
+              </div>
+              <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+                <div className="font-bold text-[#fafaf9] text-sm leading-none">دكان</div>
+                {restaurant && (
+                  <div className="text-xs text-[#57534e] truncate mt-0.5">
+                    {restaurant.name_ar}
+                  </div>
+                )}
+              </div>
+            </div>
+          </SidebarHeader>
 
-  const Sidebar = () => (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="flex items-center gap-2 px-4 py-5 border-b border-[#1a1916]">
-        <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center flex-shrink-0">
-          <QrCode size={16} className="text-[#0f0e0c]" />
-        </div>
-        <div className="min-w-0">
-          <div className="font-bold text-[#fafaf9] text-sm leading-none">دكان</div>
+          {/* Status badges */}
           {restaurant && (
-            <div className="text-xs text-[#57534e] truncate mt-0.5">
-              {restaurant.name_ar}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Open/closed toggle */}
-      {restaurant && (
-        <div className="px-4 py-3 border-b border-[#1a1916] space-y-1.5">
-          <div className={cn(
-            'flex items-center gap-2 text-xs font-medium px-2 py-1.5 rounded-lg',
-            restaurant.is_open
-              ? 'text-green-400 bg-green-950'
-              : 'text-red-400 bg-red-950'
-          )}>
-            <span className={cn(
-              'w-1.5 h-1.5 rounded-full',
-              restaurant.is_open ? 'bg-green-400' : 'bg-red-400'
-            )} />
-            {restaurant.is_open ? 'مفتوح' : 'مغلق'}
-          </div>
-          {restaurant.ordering_paused && (
-            <div className="flex items-center gap-2 text-xs font-medium px-2 py-1.5 rounded-lg
-                            text-orange-400 bg-orange-950/60">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-              الطلبات موقوفة مؤقتاً
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href ||
-            (item.href !== `/${slug}/dashboard` && pathname.startsWith(item.href));
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setSidebarOpen(false)}
-              className={cn(
-                isActive ? 'sidebar-link-active' : 'sidebar-link'
+            <div className="px-3 py-2 group-data-[collapsible=icon]:hidden border-b border-[#1a1916]">
+              <div className={cn(
+                'flex items-center gap-2 text-xs font-medium px-2 py-1.5 rounded-lg',
+                restaurant.is_open
+                  ? 'text-green-400 bg-green-950/60'
+                  : 'text-red-400 bg-red-950/60'
+              )}>
+                <span className={cn(
+                  'w-1.5 h-1.5 rounded-full',
+                  restaurant.is_open ? 'bg-green-400' : 'bg-red-400'
+                )} />
+                {restaurant.is_open ? 'مفتوح' : 'مغلق'}
+              </div>
+              {restaurant.ordering_paused && (
+                <div className="mt-1 flex items-center gap-2 text-xs font-medium px-2 py-1.5 rounded-lg text-orange-400 bg-orange-950/60">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                  الطلبات موقوفة مؤقتاً
+                </div>
               )}
-            >
-              <item.icon size={18} />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* Bottom */}
-      <div className="px-3 py-4 border-t border-[#1a1916] space-y-1">
-        {/* Subscription status pill */}
-        {restaurant && (
-          <AdminLinkOrSubStatus
-            restaurantId={restaurant.id}
-            slug={slug}
-          />
-        )}
-
-        {/* Storefront link */}
-        {restaurant && (
-          <Link href={`/${restaurant.slug}`} target="_blank" className="sidebar-link">
-            <QrCode size={18} />
-            <span>الواجهة العامة</span>
-          </Link>
-        )}
-
-        {/* Manual order quick action */}
-        {restaurant && (
-          <Link href={`/${slug}/dashboard/manual-order`} className="sidebar-link text-brand-400">
-            <Hand size={18} />
-            <span>طلب يدوي</span>
-          </Link>
-        )}
-
-        {/* Logout */}
-        <button onClick={handleLogout}
-          className="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-950/40">
-          <LogOut size={18} />
-          <span>تسجيل الخروج</span>
-        </button>
-      </div>
-    </div>
-  );
-
-  // Primary tabs shown in the mobile bottom bar — most-used pages only
-  const mobileTabs = [
-    { href: `/${slug}/dashboard`,         icon: LayoutDashboard, label: 'الرئيسية' },
-    { href: `/${slug}/dashboard/orders`,  icon: ClipboardList,   label: 'الطلبات' },
-    { href: `/${slug}/dashboard/kitchen`, icon: ChefHat,         label: 'المطبخ' },
-    { href: `/${slug}/dashboard/menu`,    icon: UtensilsCrossed, label: 'القائمة' },
-  ];
-
-  return (
-    <div className="min-h-screen bg-[#0f0e0c] flex">
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 flex-shrink-0
-                         bg-[#0a0a08] border-e border-[#1a1916]">
-        <Sidebar />
-      </aside>
-
-      {/* Mobile sidebar overlay (for secondary pages) */}
-      {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="relative w-64 max-w-[80vw] bg-[#0a0a08] border-e border-[#1a1916]
-                          flex flex-col z-10 safe-top safe-bottom">
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="absolute top-3 end-3 w-11 h-11 flex items-center justify-center
-                         text-[#57534e] hover:text-[#fafaf9] touch-manipulation"
-            >
-              <X size={20} />
-            </button>
-            <Sidebar />
-          </div>
-        </div>
-      )}
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar (mobile) */}
-        <header className="lg:hidden flex items-center gap-3 px-4 h-14
-                           border-b border-[#1a1916] bg-[#0a0a08]/95 backdrop-blur-sm
-                           sticky top-0 z-30 safe-top">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="w-11 h-11 -ms-2 flex items-center justify-center text-[#a8a29e]
-                       active:text-[#fafaf9] touch-manipulation flex-shrink-0"
-          >
-            <Menu size={22} />
-          </button>
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 rounded bg-brand-500 flex items-center justify-center flex-shrink-0">
-              <QrCode size={12} className="text-[#0f0e0c]" />
             </div>
-            <span className="font-bold text-[#fafaf9] text-sm flex-shrink-0">دكان</span>
-            {restaurant && (
-              <span className="text-xs text-[#57534e] truncate">
-                — {restaurant.name_ar}
-              </span>
-            )}
-          </div>
-        </header>
+          )}
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto pb-20 lg:pb-0">
-          {children}
-        </main>
+          <SidebarContent>
+            {dashboardNav.map((group, gi) => (
+              <SidebarGroup key={gi}>
+                <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
+                  {group.groupAr}
+                </SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.items.map((item) => {
+                      const href = `/${slug}/${item.url}`;
+                      return (
+                        <SidebarMenuItem key={item.url}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={isNavActive(item.url)}
+                            tooltip={item.titleAr}
+                          >
+                            <Link href={href}>
+                              <item.icon className="size-[1.1rem]" />
+                              <span>{item.titleAr}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+                {gi < dashboardNav.length - 1 && <SidebarSeparator />}
+              </SidebarGroup>
+            ))}
+          </SidebarContent>
 
-        {/* Mobile bottom tab bar */}
-        <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#0a0a08]/95 backdrop-blur-sm
-                        border-t border-[#1a1916] safe-bottom">
-          <div className="flex items-stretch">
-            {mobileTabs.map((tab) => {
-              const isActive = pathname === tab.href ||
-                (tab.href !== `/${slug}/dashboard` && pathname.startsWith(tab.href));
-              return (
-                <Link
-                  key={tab.href}
-                  href={tab.href}
-                  className={cn(
-                    'flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px]',
-                    'touch-manipulation transition-colors',
-                    isActive ? 'text-brand-400' : 'text-[#57534e] active:text-[#a8a29e]'
-                  )}
-                >
-                  <tab.icon size={20} />
-                  <span className="text-[10px] font-medium">{tab.label}</span>
-                </Link>
-              );
-            })}
-            {/* "More" opens the full sidebar drawer */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px]
-                         text-[#57534e] active:text-[#a8a29e] touch-manipulation transition-colors"
-            >
-              <Menu size={20} />
-              <span className="text-[10px] font-medium">أكثر</span>
-            </button>
+          <SidebarFooter>
+          <div className="group-data-[collapsible=icon]:hidden px-1 mb-1">
+            <div className="text-xs text-[#57534e] truncate px-2 py-1">{user.email}</div>
           </div>
-        </nav>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <div className="flex items-center justify-between px-2 py-1 group-data-[collapsible=icon]:hidden">
+                <span className="text-xs text-[#57534e]">الثيم</span>
+                <ThemeToggle />
+              </div>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="تسجيل الخروج"
+                onClick={handleLogout}
+                className="text-red-400 hover:text-red-300 hover:bg-red-950/40"
+              >
+                <LogOut className="size-[1.1rem]" />
+                <span>تسجيل الخروج</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+
+        {/* ── Main Content ── */}
+        <SidebarInset>
+          {/* Mobile header with sidebar trigger */}
+          <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-[#1a1916] bg-[#0a0a08]/95 backdrop-blur-sm sticky top-0 z-30 safe-top">
+            <SidebarTrigger />
+            <span className="font-bold text-[#fafaf9] text-sm truncate">
+              {restaurant?.name_ar || 'دكان'}
+            </span>
+            <div className="w-11" /> {/* spacer */}
+          </header>
+
+          {/* Keyboard shortcut hint */}
+          <div className="hidden md:flex items-center justify-end gap-2 px-6 py-2 border-b border-[#1a1916] bg-[#0a0a08]/40">
+            <span className="text-[10px] text-[#57534e] font-medium">⌘K للبحث</span>
+            <kbd className="inline-flex items-center gap-0.5 rounded border border-[#2a2825] bg-[#1a1916] px-1.5 py-0.5 text-[10px] font-medium text-[#57534e]">
+              <Search size={10} /> Ctrl+K
+            </kbd>
+            <span className="mx-1 text-[#2a2825]">·</span>
+            <span className="text-[10px] text-[#57534e] font-medium">⌘⇧B للشريط</span>
+          </div>
+
+          {/* Page */}
+          <main className="flex-1">
+            {children}
+          </main>
+        </SidebarInset>
+
+        {/* ── Command Palette (Ctrl+K) ── */}
+        <CommandMenu basePath={`/${slug}`} />
+
+        {/* ── Keyboard shortcut hint: close sidebar ── */}
+        <div className="hidden md:block" />
       </div>
-    </div>
-  );
-}
-
-// ── Shows Admin link for super admins, or subscription status for others ──
-function AdminLinkOrSubStatus({
-  restaurantId,
-  slug,
-}: {
-  restaurantId: string;
-  slug: string;
-}) {
-  const supabase = createClient();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [subStatus, setSubStatus] = useState<string | null>(null);
-  const [daysLeft, setDaysLeft] = useState<number | null>(null);
-
-  useEffect(() => {
-    const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const [adminRes, subRes] = await Promise.all([
-        supabase.from('super_admins').select('id').eq('user_id', user.id).single(),
-        supabase.from('subscriptions').select('status, current_period_end').eq('restaurant_id', restaurantId).single(),
-      ]);
-
-      setIsAdmin(!!adminRes.data);
-
-      if (subRes.data) {
-        setSubStatus(subRes.data.status);
-        const days = Math.ceil(
-          (new Date(subRes.data.current_period_end).getTime() - Date.now()) / 86400000
-        );
-        setDaysLeft(days);
-      }
-    };
-    load();
-  }, [restaurantId, supabase]);
-
-  if (isAdmin) {
-    return (
-      <Link href={`/admin`}
-        className="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
-        <Shield size={18} />
-        <span>لوحة الإدارة</span>
-      </Link>
-    );
-  }
-
-  if (!subStatus) return null;
-
-  const STATUS_COLOR: Record<string, string> = {
-    active:    'text-green-400 bg-green-950',
-    free:      'text-green-400 bg-green-950',
-    trialing:  'text-yellow-400 bg-yellow-950',
-    past_due:  'text-red-400 bg-red-950',
-    cancelled: 'text-red-400 bg-red-950',
-    paused:    'text-[#a8a29e] bg-[#1a1916]',
-  };
-
-  const STATUS_LABEL: Record<string, string> = {
-    active:    'نشط',
-    free:      'مجاني ✨',
-    trialing:  'تجريبي',
-    past_due:  'متأخر',
-    cancelled: 'منتهي',
-    paused:    'موقوف',
-  };
-
-  return (
-    <div className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium ${STATUS_COLOR[subStatus] ?? 'text-[#a8a29e] bg-[#1a1916]'}`}>
-      <span>{STATUS_LABEL[subStatus] ?? subStatus}</span>
-      {daysLeft !== null && subStatus !== 'free' && (
-        <span className="opacity-70">
-          {daysLeft > 0 ? `${daysLeft}d` : 'منتهي'}
-        </span>
-      )}
-    </div>
+    </SidebarProvider>
   );
 }

@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { QrCode, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -79,15 +83,15 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <div className="card">
+        <Card>
+          <CardContent className="p-6">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="label">البريد الإلكتروني</label>
-              <input
+              <Label>البريد الإلكتروني</Label>
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
                 placeholder="you@example.com"
                 required
                 autoComplete="email"
@@ -95,13 +99,13 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="label">كلمة المرور</label>
+              <Label>كلمة المرور</Label>
               <div className="relative">
-                <input
+                <Input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input pr-11"
+                  className="pr-11"
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
@@ -116,15 +120,16 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3"
+              className="w-full"
             >
               {loading ? 'جار التحميل...' : 'تسجيل الدخول'}
-            </button>
+            </Button>
           </form>
-        </div>
+          </CardContent>
+        </Card>
 
         <p className="text-center text-sm text-[#a8a29e] mt-6">
           ليس لديك حساب؟{' '}

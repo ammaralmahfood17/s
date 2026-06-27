@@ -1,13 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ChefHat, Clock, CheckCircle, Zap } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ChefHat, Clock, CheckCircle, Zap, Volume2, VolumeX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRealtimeOrders } from '@/hooks/useRealtimeOrders';
 import { formatRelativeTime, getNextStatus, getNextStatusLabel } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { OrderWithItems, OrderStatus } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import {
+  playOrderAlertSequence, playChime, ensureNotificationPermission,
+  notify, requestWakeLock, releaseWakeLock,
+} from '@/lib/notify';
 
 const KITCHEN_STATUSES = ['pending', 'confirmed', 'preparing'];
 
@@ -185,6 +189,9 @@ function KitchenCard({
 export default function KitchenPage() {
   const supabase = createClient();
   const [restaurantId, setRestaurantId] = useState<string | null>(null);
+  const [soundOn, setSoundOn] = useState(true);
+  const seenIds = useRef<Set<string>>(new Set());
+  const initLoaded = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -200,7 +207,47 @@ export default function KitchenPage() {
     load();
   }, [supabase]);
 
+  // ── WakeLock: keep screen on while kitchen page is open ────
+  useEffect(() => {
+    requestWakeLock();
+    const onVis = () => { if (document.visibilityState === 'visible') requestWakeLock(); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      releaseWakeLock();
+    };
+  }, []);
+
+  // ── Request notification permission on mount ──────────────
+  useEffect(() => { ensureNotificationPermission(); }, []);
+
   const { orders, loading, updateStatus } = useRealtimeOrders(restaurantId ?? '');
+
+  // ── Detect new orders & play alert ──────────────────────────
+  useEffect(() => {
+    if (!orders) return;
+    if (!initLoaded.current) {
+      for (const o of orders) seenIds.current.add(o.id);
+      initLoaded.current = true;
+      return;
+    }
+    for (const o of orders) {
+      if (!seenIds.current.has(o.id)) {
+        seenIds.current.add(o.id);
+        // Play sound sequence: 3 rising pings + vibrate
+        if (soundOn) {
+          playOrderAlertSequence();
+        }
+        // Show browser notification
+        const where = o.car_number
+          ? `🚗 طلب سيارة #${o.car_number}${o.customer_name ? ` — ${o.customer_name}` : ''}`
+          : o.table
+            ? `🪑 طاولة ${o.table.name_ar}`
+            : '📋 طلب جديد';
+        notify(`طلب جديد #${o.order_number}`, where, `order-${o.id}`);
+      }
+    }
+  }, [orders, soundOn]);
 
   const handleAdvance = async (id: string, status: OrderStatus) => {
     const ok = await updateStatus(id, status);
@@ -233,6 +280,19 @@ export default function KitchenPage() {
           </h1>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Sound toggle */}
+          <button
+            onClick={() => {
+              setSoundOn(!soundOn);
+              if (!soundOn) playChime();
+            }}
+            className="w-11 h-11 flex items-center justify-center rounded-xl
+                       text-[#57534e] hover:text-[#fafaf9] hover:bg-[#1a1916]
+                       transition-all touch-manipulation"
+            title={soundOn ? 'كتم الصوت' : 'تشغيل الصوت'}
+          >
+            {soundOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          </button>
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />

@@ -6,7 +6,7 @@ import QRCode from 'qrcode';
 import { createClient } from '@/lib/supabase/client';
 import type { Table } from '@/types';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 function QRModal({
   table,

@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { QrCode, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 export default function RegisterPage() {
   const router = useRouter();

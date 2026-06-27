@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { formatBHD } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Restaurant, Category, Item, Variation, Addon, OrderItem } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface CartLine {
   id: string;

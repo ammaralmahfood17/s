@@ -10,7 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 import { formatBHD, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Payment, Plan } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface PageSubscription {
   id: string;

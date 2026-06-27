@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Cairo } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from '@/components/shared/Toaster';
 import { ServiceWorkerRegister } from '@/components/shared/ServiceWorkerRegister';
 import QueryProvider from '@/components/shared/QueryProvider';
 
@@ -52,21 +52,7 @@ export default function RootLayout({
         <QueryProvider>
           <ServiceWorkerRegister />
           {children}
-          <Toaster
-            position="bottom-left"
-            toastOptions={{
-              style: {
-                background: '#1a1916',
-                color: '#fafaf9',
-                border: '1px solid #2a2825',
-                borderRadius: '12px',
-                fontFamily: "'Cairo', system-ui, sans-serif",
-              },
-              success: {
-                iconTheme: { primary: '#f59e0b', secondary: '#0f0e0c' },
-              },
-            }}
-          />
+          <Toaster />
         </QueryProvider>
       </body>
     </html>

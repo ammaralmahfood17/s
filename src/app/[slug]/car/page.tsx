@@ -16,7 +16,7 @@ import type {
   Restaurant, Category, Item, Variation, Addon,
   PlaceOrderPayload, OrderType
 } from '@/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { isPushSupported, subscribeToPush } from '@/lib/push';
 
 // ── Item Detail Modal (reusable) ────────────────────────────
