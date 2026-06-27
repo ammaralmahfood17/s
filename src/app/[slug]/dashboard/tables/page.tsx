@@ -142,7 +142,7 @@ export default function TablesPage() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const addTable = async () => {
     if (!restaurantId) return;

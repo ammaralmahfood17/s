@@ -63,7 +63,7 @@ export default function SettingsPage() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const uploadImage = async (file: File, bucket: string, field: 'logo_url'|'cover_url') => {
     const ext = file.name.split('.').pop();

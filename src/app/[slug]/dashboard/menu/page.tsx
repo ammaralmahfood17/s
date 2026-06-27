@@ -495,7 +495,7 @@ export default function MenuPage() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const addCategory = async () => {
     if (!restaurantId) return;
