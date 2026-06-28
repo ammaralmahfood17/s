@@ -40,12 +40,9 @@ export function useRealtimeOrders(restaurantId: string) {
           if (data) setOrders((prev) => [...prev, data as OrderWithItems]);
         } else if (payload.eventType === 'UPDATE') {
           const updated = payload.new as OrderWithItems;
-          setOrders((prev) => {
-            if (['delivered', 'cancelled'].includes(updated.status)) {
-              return prev.filter((o) => o.id !== updated.id);
-            }
-            return prev.map((o) => o.id === updated.id ? { ...o, ...updated } : o);
-          });
+          setOrders((prev) => 
+            prev.map((o) => o.id === updated.id ? { ...o, ...updated } : o)
+          );
         }
       })
       .subscribe();
