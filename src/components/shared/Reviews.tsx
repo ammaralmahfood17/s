@@ -34,7 +34,7 @@ function StarPicker({
               'transition-colors',
               (hover || value) >= n
                 ? 'text-yellow-400 fill-yellow-400'
-                : 'text-[#3a3835]'
+                : 'text-muted-foreground/80'
             )}
           />
         </button>
@@ -90,10 +90,10 @@ export function ReviewForm({
     return (
       <div className="text-center py-6">
         <div className="text-4xl mb-2">🌟</div>
-        <p className="font-bold text-[#fafaf9]">
+        <p className="font-bold text-foreground">
           شكراً جزيلاً!
         </p>
-        <p className="text-sm text-[#a8a29e] mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           تقييمك يهمنا كثيراً
         </p>
       </div>
@@ -103,10 +103,10 @@ export function ReviewForm({
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h3 className="font-bold text-[#fafaf9] text-lg mb-1">
+        <h3 className="font-bold text-foreground text-lg mb-1">
           كيف كانت تجربتك؟
         </h3>
-        <p className="text-sm text-[#57534e]">
+        <p className="text-sm text-muted-foreground">
           رأيك يساعدنا على التحسين
         </p>
       </div>
@@ -209,7 +209,7 @@ export function ReviewsList({
     <div className="space-y-3">
       {/* Summary */}
       <div className="flex items-center gap-3">
-        <div className="text-3xl font-black text-[#fafaf9]">{stats.avg}</div>
+        <div className="text-3xl font-black text-foreground">{stats.avg}</div>
         <div>
           <div className="flex gap-0.5">
             {[1, 2, 3, 4, 5].map(n => (
@@ -219,12 +219,12 @@ export function ReviewsList({
                 className={cn(
                   n <= Math.round(stats.avg)
                     ? 'text-yellow-400 fill-yellow-400'
-                    : 'text-[#3a3835]'
+                    : 'text-muted-foreground/80'
                 )}
               />
             ))}
           </div>
-          <div className="text-xs text-[#57534e] mt-0.5">
+          <div className="text-xs text-muted-foreground mt-0.5">
             {stats.total} تقييم
           </div>
         </div>
@@ -244,24 +244,24 @@ export function ReviewsList({
                       className={cn(
                         n <= review.rating
                           ? 'text-yellow-400 fill-yellow-400'
-                          : 'text-[#3a3835]'
+                          : 'text-muted-foreground/80'
                       )}
                     />
                   ))}
                 </div>
                 {review.comment && (
-                  <p className="text-sm text-[#a8a29e] leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {review.comment}
                   </p>
                 )}
               </div>
             </div>
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs text-[#57534e]">
+              <span className="text-xs text-muted-foreground">
                 {(review as Review & { reviewer_name?: string }).reviewer_name || 'عميل'}
               </span>
-              <span className="text-[#3a3835]">·</span>
-              <span className="text-xs text-[#3a3835]">
+              <span className="text-muted-foreground/80">·</span>
+              <span className="text-xs text-muted-foreground/80">
                 {formatDate(review.created_at, 'ar')}
               </span>
             </div>
@@ -305,7 +305,7 @@ export function ReviewsDashboard({
     load();
   };
 
-  if (loading) return <div className="text-[#57534e] text-sm">Loading...</div>;
+  if (loading) return <div className="text-muted-foreground text-sm">Loading...</div>;
 
   const avg = reviews.length
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
@@ -333,8 +333,8 @@ export function ReviewsDashboard({
       {/* Reviews list */}
       {reviews.length === 0 ? (
         <div className="card text-center py-12">
-          <Star size={40} className="text-[#3a3835] mx-auto mb-3" />
-          <p className="text-[#a8a29e]">
+          <Star size={40} className="text-muted-foreground/80 mx-auto mb-3" />
+          <p className="text-muted-foreground">
             لا توجد تقييمات بعد
           </p>
         </div>
@@ -352,31 +352,31 @@ export function ReviewsDashboard({
                       <Star key={n} size={12} className={cn(
                         n <= review.rating
                           ? 'text-yellow-400 fill-yellow-400'
-                          : 'text-[#3a3835]'
+                          : 'text-muted-foreground/80'
                       )} />
                     ))}
                   </div>
-                  <span className="text-xs text-[#57534e]">
+                  <span className="text-xs text-muted-foreground">
                     {review.reviewer_name || 'عميل'}
                   </span>
                   {!review.is_public && (
-                    <span className="text-xs bg-[#2a2825] text-[#57534e] px-1.5 py-0.5 rounded">
+                    <span className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
                       مخفي
                     </span>
                   )}
                 </div>
                 {review.comment && (
-                  <p className="text-sm text-[#a8a29e]">{review.comment}</p>
+                  <p className="text-sm text-muted-foreground">{review.comment}</p>
                 )}
-                <p className="text-xs text-[#3a3835] mt-1">
+                <p className="text-xs text-muted-foreground/80 mt-1">
                   {formatDate(review.created_at, 'ar')}
                 </p>
               </div>
               <div className="flex gap-1 flex-shrink-0">
                 <button
                   onClick={() => togglePublic(review.id, review.is_public ?? false)}
-                  className="text-xs text-[#57534e] hover:text-[#a8a29e] px-2 py-1
-                             bg-[#0f0e0c] border border-[#2a2825] rounded-lg transition-colors"
+                  className="text-xs text-muted-foreground hover:text-muted-foreground px-2 py-1
+                             bg-background border border-border rounded-lg transition-colors"
                 >
                   {review.is_public ? 'إخفاء' : 'إظهار'}
                 </button>

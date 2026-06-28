@@ -44,19 +44,19 @@ export function SubscriptionGate({ restaurantId, slug, children }: Props) {
 
   if (blocked) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="card max-w-md text-center space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-red-950/40 border border-red-900
                           flex items-center justify-center mx-auto">
             <CreditCard size={32} className="text-red-400" />
           </div>
-          <h1 className="text-xl font-bold text-[#fafaf9]">
+          <h1 className="text-xl font-bold text-foreground">
             الاشتراك منتهي
           </h1>
-          <p className="text-sm text-[#a8a29e]">
+          <p className="text-sm text-muted-foreground">
             انتهى اشتراكك في دكان. يرجى التواصل معنا لتجديد الاشتراك.
           </p>
-          <div className="bg-[#1a1916] border border-[#2a2825] rounded-xl p-4 text-sm text-[#a8a29e]">
+          <div className="bg-card border border-border rounded-xl p-4 text-sm text-muted-foreground">
             <p>للتجديد تواصل معنا:</p>
             <p className="text-brand-400 font-medium mt-1 font-cairo">
               +973 XXXX XXXX

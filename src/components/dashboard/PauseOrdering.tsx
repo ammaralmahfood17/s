@@ -115,12 +115,12 @@ export function PauseOrderingControl({
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <AlertTriangle size={20} className="text-orange-400" />
-                <h2 className="font-bold text-[#fafaf9]">
+                <h2 className="font-bold text-foreground">
                   سبب الإيقاف
                 </h2>
               </div>
 
-              <p className="text-xs text-[#57534e] mb-4">
+              <p className="text-xs text-muted-foreground mb-4">
                 سيظهر هذا للعملاء عند محاولة الطلب
               </p>
 

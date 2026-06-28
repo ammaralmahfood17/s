@@ -44,7 +44,13 @@ function KitchenCard({
 }) {
   const [elapsed, setElapsed] = useState(0);
   const [updating, setUpdating] = useState(false);
+  const isMountedRef = useRef(true);
   const nextStatus = getNextStatus(order.status);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => { isMountedRef.current = false; };
+  }, []);
 
   // Live elapsed time
   useEffect(() => {
@@ -64,14 +70,14 @@ function KitchenCard({
     if (!nextStatus) return;
     setUpdating(true);
     await onAdvance(order.id, nextStatus);
-    setUpdating(false);
+    if (isMountedRef.current) setUpdating(false);
   };
 
   const handleCancel = async () => {
     if (!confirm('تأكيد إلغاء الطلب؟')) return;
     setUpdating(true);
     await onCancel(order.id);
-    setUpdating(false);
+    if (isMountedRef.current) setUpdating(false);
   };
 
   return (
@@ -318,7 +324,7 @@ export default function KitchenPage() {
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4 px-4">
           <div className="w-20 h-20 rounded-full bg-card border border-border
                           flex items-center justify-center">
-            <ChefHat size={40} className="text-[#3a3835]" />
+            <ChefHat size={40} className="text-muted-foreground/80" />
           </div>
           <div className="text-center">
             <h2 className="text-xl font-bold text-muted-foreground">
@@ -354,7 +360,7 @@ export default function KitchenPage() {
                   {col.orders.length === 0 ? (
                     <div className="border-2 border-dashed border-border rounded-2xl h-20
                                     flex items-center justify-center">
-                      <span className="text-xs text-[#3a3835]">فارغ</span>
+                      <span className="text-xs text-muted-foreground/80">فارغ</span>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -392,7 +398,7 @@ export default function KitchenPage() {
                   {col.orders.length === 0 ? (
                     <div className="border-2 border-dashed border-border rounded-2xl h-20
                                     flex items-center justify-center">
-                      <span className="text-xs text-[#3a3835]">
+                      <span className="text-xs text-muted-foreground/80">
                         فارغ
                       </span>
                     </div>

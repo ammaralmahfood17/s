@@ -84,7 +84,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center">
-              <QrCode size={18} className="text-[#0f0e0c]" />
+              <QrCode size={18} className="text-primary-foreground" />
             </div>
             <span className="font-bold text-foreground text-lg">
               دكان

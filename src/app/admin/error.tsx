@@ -22,13 +22,13 @@ export default function AdminError({
           <AlertTriangle size={24} className="text-red-400" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">خطأ في لوحة الإدارة</h2>
-        <p className="text-[#a8a29e] text-sm mb-6">حدث خطأ غير متوقع.</p>
+        <p className="text-muted-foreground text-sm mb-6">حدث خطأ غير متوقع.</p>
         <button onClick={reset} className="btn-primary">
           <RefreshCw size={15} />
           حاول مجدداً
         </button>
         {error.digest && (
-          <p className="text-xs text-[#57534e] mt-5 font-mono">ref: {error.digest}</p>
+          <p className="text-xs text-muted-foreground mt-5 font-mono">ref: {error.digest}</p>
         )}
       </div>
     </div>

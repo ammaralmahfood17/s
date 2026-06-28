@@ -154,7 +154,7 @@ export function CommandMenu({ basePath = '' }: CommandMenuProps) {
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="ابحث عن صفحة... / Search pages..." />
         <CommandList>
-          <CommandEmpty className="py-8 text-center text-sm text-[#a8a29e]">
+          <CommandEmpty className="py-8 text-center text-sm text-muted-foreground">
             <Search className="mx-auto mb-2 h-5 w-5 opacity-50" />
             لا توجد نتائج — No results found
           </CommandEmpty>
@@ -166,14 +166,14 @@ export function CommandMenu({ basePath = '' }: CommandMenuProps) {
                 onSelect={() => handleSelect(page.href)}
                 className="flex items-center gap-3 px-3 py-2.5 cursor-pointer"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1a1916] text-[#a8a29e]">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-card text-muted-foreground">
                   <page.icon className="h-4 w-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-[#fafaf9]">
+                  <span className="text-sm font-medium text-foreground">
                     {page.label}
                   </span>
-                  <span className="text-xs text-[#57534e]">
+                  <span className="text-xs text-muted-foreground">
                     {page.description}
                   </span>
                 </div>

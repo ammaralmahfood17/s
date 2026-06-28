@@ -24,7 +24,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     const reg = await navigator.serviceWorker.register('/sw.js');
     return reg;
   } catch (err) {
-
+    console.error('[Dokan:push] Service worker registration failed', err);
     return null;
   }
 }
@@ -35,7 +35,7 @@ export async function subscribeToPush(
   restaurantId: string
 ): Promise<boolean> {
   if (!VAPID_PUBLIC_KEY) {
-
+    console.warn('[Dokan:push] VAPID_PUBLIC_KEY not set — push disabled');
     return false;
   }
   if (!('Notification' in window) || !('PushManager' in window)) return false;
@@ -65,7 +65,7 @@ export async function subscribeToPush(
 
     return true;
   } catch (err) {
-
+    console.error('[Dokan:push] Push subscription failed', err);
     return false;
   }
 }

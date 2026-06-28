@@ -36,7 +36,7 @@ export default async function AdminPaymentsPage() {
   return (
     <div className="p-4 sm:p-6 max-w-6xl space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-[#fafaf9]">
+        <h1 className="text-xl font-bold text-foreground">
           سجل المدفوعات
         </h1>
       </div>
@@ -65,9 +65,9 @@ export default async function AdminPaymentsPage() {
         <div className="overflow-x-auto table-scroll">
           <table className="w-full text-sm min-w-[640px]">
             <thead>
-              <tr className="border-b border-[#2a2825]">
+              <tr className="border-b border-border">
                 {['التاريخ', 'العربة', 'المبلغ', 'طريقة الدفع', 'المرجع', 'الفترة', 'ملاحظات'].map(h => (
-                  <th key={h} className="text-start text-xs font-semibold text-[#57534e] px-4 py-3 whitespace-nowrap">
+                  <th key={h} className="text-start text-xs font-semibold text-muted-foreground px-4 py-3 whitespace-nowrap">
                     {h}
                   </th>
                 ))}
@@ -75,13 +75,13 @@ export default async function AdminPaymentsPage() {
             </thead>
             <tbody>
               {(rows ?? []).map((p: Payment) => (
-                <tr key={p.id} className="border-b border-[#1a1916] hover:bg-[#1a1916] transition-colors">
-                  <td className="px-4 py-3 text-xs text-[#a8a29e] whitespace-nowrap">
+                <tr key={p.id} className="border-b border-border hover:bg-card transition-colors">
+                  <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                     {new Date(p.paid_at).toLocaleDateString('en-BH')}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-[#fafaf9] text-sm">{p.restaurants?.name_ar ?? '—'}</div>
-                    <div className="text-xs text-[#57534e] font-mono">{p.restaurants?.slug}</div>
+                    <div className="font-medium text-foreground text-sm">{p.restaurants?.name_ar ?? '—'}</div>
+                    <div className="text-xs text-muted-foreground font-mono">{p.restaurants?.slug}</div>
                   </td>
                   <td className="px-4 py-3 font-bold text-brand-400">
                     {formatBHD(p.amount_bhd)}
@@ -93,14 +93,14 @@ export default async function AdminPaymentsPage() {
                        p.payment_method === 'benefit' ? 'بنفت' : p.payment_method}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#57534e] font-mono">
+                  <td className="px-4 py-3 text-xs text-muted-foreground font-mono">
                     {p.reference ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#57534e] whitespace-nowrap">
+                  <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                     {new Date(p.period_from).toLocaleDateString('en-BH')} →{' '}
                     {new Date(p.period_to).toLocaleDateString('en-BH')}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#57534e] max-w-[120px] truncate">
+                  <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">
                     {p.notes ?? '—'}
                   </td>
                 </tr>
@@ -109,7 +109,7 @@ export default async function AdminPaymentsPage() {
           </table>
 
           {rows.length === 0 && (
-            <div className="text-center py-16 text-[#57534e]">
+            <div className="text-center py-16 text-muted-foreground">
               <p>لا توجد مدفوعات بعد</p>
             </div>
           )}

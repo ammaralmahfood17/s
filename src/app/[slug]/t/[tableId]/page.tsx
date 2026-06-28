@@ -136,7 +136,7 @@ function ItemModal({
                         'p-3 rounded-xl border text-start transition-all',
                         isSelected
                           ? 'border-primary bg-primary/10'
-                          : 'border-border bg-background hover:border-[#3a3835]'
+                          : 'border-border bg-background hover:border-muted-foreground/30'
                       )}
                     >
                       <div className={`text-sm font-medium ${isSelected ? 'text-primary' : 'text-foreground'}`}>
@@ -169,13 +169,13 @@ function ItemModal({
                         'w-full flex items-center justify-between p-3 rounded-xl border transition-all',
                         isSelected
                           ? 'border-primary bg-primary/10'
-                          : 'border-border bg-background hover:border-[#3a3835]'
+                          : 'border-border bg-background hover:border-muted-foreground/30'
                       )}
                     >
                       <div className="flex items-center gap-2">
                         <div className={cn(
                           'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
-                          isSelected ? 'border-primary bg-primary' : 'border-[#3a3835]'
+                          isSelected ? 'border-primary bg-primary' : 'border-muted-foreground/30'
                         )}>
                           {isSelected && <span className="text-primary-foreground text-xs font-bold">✓</span>}
                         </div>
@@ -398,7 +398,7 @@ function CartDrawer({
                           max-h-[88dvh] flex flex-col shadow-2xl animate-slide-up overscroll-contain">
             {/* Handle */}
             <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-              <div className="w-10 h-1 bg-[#3a3835] rounded-full" />
+              <div className="w-10 h-1 bg-muted-foreground/20 rounded-full" />
             </div>
 
             <div className="px-5 py-3 flex items-center justify-between border-b border-border flex-shrink-0">
@@ -588,7 +588,7 @@ function OrderTracker({
         <button
           onClick={onDismiss}
           className="absolute top-3 end-3 w-8 h-8 flex items-center justify-center
-                     rounded-full bg-[#2a2825] active:bg-[#3a3835] text-muted-foreground
+                     rounded-full bg-muted active:bg-muted-foreground/20 text-muted-foreground
                      hover:text-foreground transition-colors touch-manipulation"
           aria-label={'إغلاق'}
         >
@@ -627,7 +627,7 @@ function OrderTracker({
                 <div className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0',
                   isDone    ? 'bg-primary text-primary-foreground' :
-                  isCurrent ? 'bg-[#2a2825] border-2 border-primary animate-pulse' :
+                  isCurrent ? 'bg-muted border-2 border-primary animate-pulse' :
                               'bg-card border border-border'
                 )}>
                   {isDone ? '✓' : info.icon}
@@ -636,7 +636,7 @@ function OrderTracker({
                   <div className={cn(
                     'text-sm font-medium',
                     isCurrent ? 'text-primary' :
-                    isDone    ? 'text-muted-foreground' : 'text-[#3a3835]'
+                    isDone    ? 'text-muted-foreground' : 'text-muted-foreground/80'
                   )}>
                     {info.ar}
                   </div>
@@ -676,7 +676,7 @@ function OrderTracker({
             onClick={onDismiss}
             className="w-full min-h-[44px] py-2.5 rounded-xl text-sm font-medium
                        transition-all active:scale-[0.98] touch-manipulation
-                       bg-[#2a2825] text-foreground active:bg-[#3a3835]"
+                       bg-muted text-foreground active:bg-muted-foreground/20"
           >
             📋 رجوع للمنيو
           </button>
@@ -932,7 +932,7 @@ export default function CustomerMenuPage({
                   'active:scale-95 touch-manipulation select-none',
                   selectedCategory === cat.id
                     ? 'bg-primary text-primary-foreground border-primary font-semibold'
-                    : 'border-border text-muted-foreground active:border-[#3a3835]'
+                    : 'border-border text-muted-foreground active:border-muted-foreground/30'
                 )}
               >
                 {cat.emoji} {cat.name_ar}
@@ -1052,7 +1052,7 @@ function ItemCard({
   return (
     <button
       onClick={onClick}
-      className="card-hover flex items-center gap-3 text-start w-full py-3 active:bg-[#2a2825]"
+      className="card-hover flex items-center gap-3 text-start w-full py-3 active:bg-muted"
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">

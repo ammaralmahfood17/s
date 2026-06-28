@@ -79,7 +79,7 @@ export function OpeningHoursEditor({ value, onChange }: Props) {
     <div className="space-y-2">
       <div className="flex items-center gap-2 mb-3">
         <Clock size={16} className="text-brand-400" />
-        <span className="text-sm font-medium text-[#fafaf9]">
+        <span className="text-sm font-medium text-foreground">
           ساعات العمل
         </span>
       </div>
@@ -90,12 +90,12 @@ export function OpeningHoursEditor({ value, onChange }: Props) {
           <div key={day.key}
             className={cn(
               'p-2.5 rounded-xl border transition-all space-y-2',
-              dh.closed ? 'border-[#1a1916] opacity-60' : 'border-[#2a2825]'
+              dh.closed ? 'border-border opacity-60' : 'border-border'
             )}
           >
             {/* Row 1: day name + closed toggle */}
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#a8a29e] font-medium">
+              <span className="text-sm text-muted-foreground font-medium">
                 {day.ar}
               </span>
               <button
@@ -121,7 +121,7 @@ export function OpeningHoursEditor({ value, onChange }: Props) {
                   onChange={e => update(day.key, 'open', e.target.value)}
                   className="input text-sm py-2 px-2.5 flex-1 min-w-0"
                 />
-                <span className="text-[#3a3835] text-xs flex-shrink-0">—</span>
+                <span className="text-muted-foreground/80 text-xs flex-shrink-0">—</span>
                 <input
                   type="time"
                   value={dh.close}
@@ -134,7 +134,7 @@ export function OpeningHoursEditor({ value, onChange }: Props) {
                     type="button"
                     onClick={() => copyFromPrev(day.key)}
                     className="w-9 h-9 flex-shrink-0 flex items-center justify-center
-                               text-[#57534e] active:text-[#a8a29e] active:bg-[#1a1916]
+                               text-muted-foreground active:text-muted-foreground active:bg-card
                                rounded-lg touch-manipulation"
                     title="نسخ من اليوم السابق"
                   >
@@ -166,22 +166,22 @@ export function OpeningHoursDisplay({
     <div className="text-xs">
       <button
         onClick={() => setExpanded(e => !e)}
-        className="flex items-center gap-1.5 text-[#a8a29e] hover:text-[#fafaf9] transition-colors"
+        className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
       >
         <Clock size={12} />
         <span className={open ? 'text-green-400' : 'text-red-400'}>
           {open ? 'مفتوح الآن' : 'مغلق الآن'}
         </span>
         {todayHours && !todayHours.closed && (
-          <span className="text-[#57534e]">
+          <span className="text-muted-foreground">
             · {todayHours.open}–{todayHours.close}
           </span>
         )}
-        <span className="text-[#3a3835]">{expanded ? '▲' : '▼'}</span>
+        <span className="text-muted-foreground/80">{expanded ? '▲' : '▼'}</span>
       </button>
 
       {expanded && (
-        <div className="mt-2 space-y-1 bg-[#1a1916] border border-[#2a2825] rounded-xl p-3">
+        <div className="mt-2 space-y-1 bg-card border border-border rounded-xl p-3">
           {DAYS.map((day) => {
             const dh = hours[day.key];
             const isToday = day.key === todayKey;
@@ -192,10 +192,10 @@ export function OpeningHoursDisplay({
                   isToday && 'text-brand-400 font-medium'
                 )}
               >
-                <span className={isToday ? 'text-brand-400' : 'text-[#57534e]'}>
+                <span className={isToday ? 'text-brand-400' : 'text-muted-foreground'}>
                   {day.ar}
                 </span>
-                <span className={dh?.closed ? 'text-red-500' : (isToday ? 'text-brand-400' : 'text-[#a8a29e]')}>
+                <span className={dh?.closed ? 'text-red-500' : (isToday ? 'text-brand-400' : 'text-muted-foreground')}>
                   {getOpeningHoursText(hours, day.key)}
                 </span>
               </div>

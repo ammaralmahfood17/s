@@ -12,12 +12,12 @@ const Sonner = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-[#0f0e0c] group-[.toaster]:text-[#fafaf9] group-[.toaster]:border-[#2a2825] group-[.toaster]:shadow-lg",
-          description: "group-[.toast]:text-[#a8a29e]",
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
+          description: "group-[.toast]:text-muted-foreground",
           actionButton:
-            "group-[.toast]:bg-brand-500 group-[.toast]:text-[#0f0e0c]",
+            "group-[.toast]:bg-brand-500 group-[.toast]:text-primary-foreground",
           cancelButton:
-            "group-[.toast]:bg-[#1a1916] group-[.toast]:text-[#a8a29e]",
+            "group-[.toast]:bg-card group-[.toast]:text-muted-foreground",
         },
       }}
       {...props}

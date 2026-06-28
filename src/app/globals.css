@@ -11,20 +11,57 @@
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 
-  /* ── Sari3-style theme (light/neutral) ───────────────── */
-  --background: 0 0% 96%;       /* #f5f5f5  — bg-muted/30 */
+  /* ── Dokan dark theme (default) ────────────────────────── */
+  --background: 40 11% 7%;        /* #0f0e0c — near black */
+  --foreground: 60 7% 98%;        /* #fafaf9 — off white */
+  --card: 45 8% 9%;               /* #1a1916 — dark surface */
+  --card-foreground: 60 7% 98%;   /* #fafaf9 */
+  --popover: 45 8% 9%;            /* #1a1916 */
+  --popover-foreground: 60 7% 98%;
+  --primary: 36 95% 50%;          /* #f59e0b — amber brand */
+  --primary-foreground: 0 0% 0%;
+  --secondary: 40 6% 15%;         /* #2a2825 */
+  --secondary-foreground: 60 7% 98%;
+  --muted: 45 8% 12%;             /* #1f1e1b */
+  --muted-foreground: 30 5% 48%;  /* #827e7a */
+  --accent: 36 95% 50%;           /* #f59e0b */
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 50% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 80% 50%;
+  --warning-foreground: 0 0% 100%;
+  --border: 40 6% 15%;            /* #2a2825 */
+  --input: 40 6% 15%;             /* #2a2825 */
+  --ring: 36 95% 50%;             /* #f59e0b */
+
+  /* Sidebar (matches default dark) */
+  --sidebar: 40 11% 7%;           /* #0f0e0c */
+  --sidebar-foreground: 60 7% 98%;
+  --sidebar-primary: 36 95% 50%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 45 8% 12%;    /* #1f1e1b */
+  --sidebar-accent-foreground: 60 7% 98%;
+  --sidebar-border: 40 6% 15%;    /* #2a2825 */
+  --sidebar-ring: 36 95% 50%;
+}
+
+/* ── Light theme (when .dark class is removed) ──────────── */
+html:not(.dark) {
+  --background: 0 0% 96%;       /* #f5f5f5 */
   --foreground: 0 0% 9%;        /* #171717 */
-  --card: 0 0% 100%;            /* #ffffff */
-  --card-foreground: 0 0% 9%;   /* #171717 */
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 9%;
-  --primary: 36 95% 40%;        /* #b45309  — brand */
+  --primary: 36 95% 40%;        /* #b45309 */
   --primary-foreground: 0 0% 100%;
   --secondary: 0 0% 92%;        /* #ebebeb */
   --secondary-foreground: 0 0% 9%;
   --muted: 0 0% 92%;            /* #ebebeb */
   --muted-foreground: 0 0% 45%; /* #737373 */
-  --accent: 36 95% 50%;         /* #f59e0b  — brand accent */
+  --accent: 36 95% 50%;         /* #f59e0b */
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
@@ -33,10 +70,9 @@
   --warning: 38 92% 50%;
   --warning-foreground: 0 0% 100%;
   --border: 0 0% 88%;           /* #e0e0e0 */
-  --input: 0 0% 88%;            /* #e0e0e0 */
-  --ring: 36 95% 50%;           /* #f59e0b */
+  --input: 0 0% 88%;
+  --ring: 36 95% 50%;
 
-  /* Sidebar */
   --sidebar: 0 0% 98%;          /* #fafafa */
   --sidebar-foreground: 0 0% 9%;
   --sidebar-primary: 36 95% 40%;
@@ -47,13 +83,52 @@
   --sidebar-ring: 36 95% 50%;
 }
 
+/* ── Force dark: .dark class (same as :root default) ────── */
+html.dark {
+  --background: 40 11% 7%;        /* #0f0e0c */
+  --foreground: 60 7% 98%;        /* #fafaf9 */
+  --card: 45 8% 9%;
+  --card-foreground: 60 7% 98%;
+  --popover: 45 8% 9%;
+  --popover-foreground: 60 7% 98%;
+  --primary: 36 95% 50%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 40 6% 15%;
+  --secondary-foreground: 60 7% 98%;
+  --muted: 45 8% 12%;
+  --muted-foreground: 30 5% 48%;
+  --accent: 36 95% 50%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 50% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 80% 50%;
+  --warning-foreground: 0 0% 100%;
+  --border: 40 6% 15%;
+  --input: 40 6% 15%;
+  --ring: 36 95% 50%;
+
+  --sidebar: 40 11% 7%;
+  --sidebar-foreground: 60 7% 98%;
+  --sidebar-primary: 36 95% 50%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 45 8% 12%;
+  --sidebar-accent-foreground: 60 7% 98%;
+  --sidebar-border: 40 6% 15%;
+  --sidebar-ring: 36 95% 50%;
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
   }
+
+  html:not(.dark) { color-scheme: light; }
 
   body {
     @apply bg-background text-foreground;
@@ -73,11 +148,11 @@
 
 /* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: hsl(var(--muted)); }
-::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.3); border-radius: 2px; }
+::-webkit-scrollbar-track { background: hsl(var(--background)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.5); }
 
-/* ── Components (Sari3-style) ──────────────────────────── */
+/* ── Components (Dokan dark) ───────────────────────────── */
 @layer components {
 
   /* Buttons — pill-shaped, per Sari3 */
@@ -122,7 +197,7 @@
   }
 
   /* Cards — rounded-2xl, with shadow-card */
-  .card { @apply bg-card border border-border rounded-2xl p-4 shadow-card; }
+  .card { @apply bg-card border border-border rounded-2xl p-4; }
   .card-hover {
     @apply card hover:border-primary/40 active:border-primary/40 active:bg-accent/5
            transition-all duration-150 cursor-pointer select-none touch-manipulation;
@@ -142,14 +217,14 @@
 
   .label { @apply block text-sm font-semibold text-muted-foreground mb-1.5; }
 
-  /* Status badges — pill-shaped, per Sari3 */
+  /* Status badges — pill-shaped */
   .badge { @apply inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full; }
-  .badge-pending   { @apply bg-[#fef3c7] text-[#92400e] border border-[#fbbf24]; }
-  .badge-confirmed { @apply bg-[#dbeafe] text-[#1e40af] border border-[#93c5fd]; }
-  .badge-preparing { @apply bg-[#fef3c7] text-[#92400e] border border-[#fcd34d]; }
-  .badge-ready     { @apply bg-[#d1fae5] text-[#065f46] border border-[#6ee7b7]; }
-  .badge-delivered { @apply bg-[#e0e7ff] text-[#3730a3] border border-[#a5b4fc]; }
-  .badge-cancelled { @apply bg-[#fee2e2] text-[#991b1b] border border-[#fca5a5]; }
+  .badge-pending   { @apply bg-amber-950/60 text-[#fcd34d] border border-amber-800/50; }
+  .badge-confirmed { @apply bg-blue-950/60 text-blue-400 border border-blue-800/50; }
+  .badge-preparing { @apply bg-amber-950/60 text-[#fcd34d] border border-amber-800/50; }
+  .badge-ready     { @apply bg-emerald-950/60 text-emerald-400 border border-emerald-800/50; }
+  .badge-delivered { @apply bg-indigo-950/60 text-indigo-400 border border-indigo-800/50; }
+  .badge-cancelled { @apply bg-red-950/60 text-red-400 border border-red-800/50; }
 
   /* Sidebar nav links */
   .sidebar-link {
@@ -160,15 +235,15 @@
            select-none touch-manipulation;
   }
   .sidebar-link-active {
-    @apply sidebar-link bg-sidebar-accent text-sidebar-foreground;
+    @apply sidebar-link bg-sidebar-accent text-sidebar-foreground border border-border;
   }
 
   /* Kitchen card */
-  .kitchen-card { @apply bg-card border-2 rounded-2xl p-4 shadow-card transition-all duration-300; }
+  .kitchen-card { @apply bg-card border-2 rounded-2xl p-4 transition-all duration-300; }
   .kitchen-card-pending   { @apply border-muted-foreground/20; }
   .kitchen-card-confirmed { @apply border-blue-500/40; }
-  .kitchen-card-preparing { @apply border-yellow-500/40 bg-yellow-50/50; }
-  .kitchen-card-ready     { @apply border-emerald-500/40 bg-emerald-50/50; }
+  .kitchen-card-preparing { @apply border-yellow-500/40; }
+  .kitchen-card-ready     { @apply border-emerald-500/40; }
 
   .divider      { @apply border-t border-border; }
   .section-title { @apply block text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3; }

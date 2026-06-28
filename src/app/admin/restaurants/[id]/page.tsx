@@ -311,7 +311,7 @@ export default function AdminRestaurantDetailPage({
                         'text-xs px-3 min-h-[40px] rounded-lg border transition-all touch-manipulation',
                         sub.status === s
                           ? 'bg-primary/20 border-primary text-primary'
-                          : 'border-border text-muted-foreground hover:border-[#3a3835] hover:text-foreground'
+                          : 'border-border text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
                       )}>
                       {s}
                     </button>

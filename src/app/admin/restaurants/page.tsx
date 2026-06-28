@@ -132,7 +132,7 @@ export default async function AdminRestaurantsPage() {
 
           {rows.length === 0 && (
             <div className="text-center py-16 text-muted-foreground">
-              <Store size={40} className="mx-auto mb-3 text-[#3a3835]" />
+              <Store size={40} className="mx-auto mb-3 text-muted-foreground/80" />
               <p>لا توجد عربات مسجلة بعد</p>
             </div>
           )}

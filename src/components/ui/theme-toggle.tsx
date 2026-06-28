@@ -43,7 +43,7 @@ export function ThemeToggle() {
       <button
         type="button"
         aria-label="تبديل الثيم"
-        className="w-9 h-9 rounded-full border border-[#2a2825] bg-[#1a1916]"
+        className="w-9 h-9 rounded-full border border-border bg-card"
         tabIndex={-1}
         style={{ visibility: 'hidden' }}
       />
@@ -60,8 +60,8 @@ export function ThemeToggle() {
         'flex items-center justify-center',
         'active:scale-95 select-none touch-manipulation',
         theme === 'dark'
-          ? 'border-[#2a2825] bg-[#1a1916] text-[#f59e0b] hover:bg-[#2a2825]'
-          : 'border-[#e5e7eb] bg-white text-[#d97706] hover:bg-[#f3f4f6]',
+          ? 'border-border bg-card text-primary hover:bg-muted'
+          : 'border-border bg-card text-primary hover:bg-muted',
       )}
     >
       {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}

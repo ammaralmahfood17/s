@@ -63,22 +63,22 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center gap-2 px-3 py-2 rounded-xl
-                   bg-[#0f0e0c] border border-[#2a2825] hover:border-[#3a3835]
+                   bg-background border border-border hover:border-muted-foreground/30
                    transition-all text-sm"
       >
         <Store size={14} className="text-brand-400 flex-shrink-0" />
-        <span className="flex-1 text-start text-[#fafaf9] truncate">
+        <span className="flex-1 text-start text-foreground truncate">
           {current ? (isAr ? current.name_ar : current.name_en) : '...'}
         </span>
         <ChevronDown size={14} className={cn(
-          'text-[#57534e] transition-transform flex-shrink-0',
+          'text-muted-foreground transition-transform flex-shrink-0',
           open && 'rotate-180'
         )} />
       </button>
 
       {open && (
         <div className="absolute top-full left-3 right-3 z-50 mt-1
-                        bg-[#1a1916] border border-[#2a2825] rounded-xl
+                        bg-card border border-border rounded-xl
                         shadow-2xl overflow-hidden animate-slide-up">
           {restaurants.map(r => (
             <button
@@ -91,15 +91,15 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
               }}
               className={cn(
                 'w-full flex items-center gap-2 px-3 py-2.5 text-sm text-start',
-                'hover:bg-[#2a2825] transition-colors',
+                'hover:bg-muted transition-colors',
                 r.id === currentRestaurantId && 'bg-brand-500/10 text-brand-400'
               )}
             >
               <div className="flex-1 min-w-0">
-                <div className="text-[#fafaf9] truncate">
+                <div className="text-foreground truncate">
                   {isAr ? r.name_ar : r.name_en}
                 </div>
-                <div className="text-xs text-[#57534e]">
+                <div className="text-xs text-muted-foreground">
                   {r.is_open ? (isAr ? 'مفتوح' : 'Open') : (isAr ? 'مغلق' : 'Closed')}
                   {r.ordering_paused && ` · ${isAr ? 'موقوف' : 'Paused'}`}
                 </div>
@@ -110,14 +110,14 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
             </button>
           ))}
 
-          <div className="border-t border-[#2a2825]">
+          <div className="border-t border-border">
             <button
               onClick={() => {
                 setOpen(false);
                 router.push(`/${locale}/dashboard/settings?new=1`);
               }}
               className="w-full flex items-center gap-2 px-3 py-2.5 text-sm
-                         text-brand-400 hover:bg-[#2a2825] transition-colors"
+                         text-brand-400 hover:bg-muted transition-colors"
             >
               <Plus size={14} />
               {isAr ? 'إضافة مطعم جديد' : 'Add new restaurant'}

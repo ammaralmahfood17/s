@@ -21,18 +21,18 @@ export function AppShell({ children, sidebar, basePath = '', topBarContent }: Ap
   const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex" dir="rtl">
+    <div className="min-h-screen bg-background flex" dir="rtl">
       {/* ── Desktop Sidebar ─────────────────────────────────── */}
       <aside
         className={cn(
-          'hidden lg:flex flex-col flex-shrink-0 bg-[#0a0a08] border-e border-[#1a1916] transition-all duration-300',
+          'hidden lg:flex flex-col flex-shrink-0 bg-background border-e border-border transition-all duration-300',
           sidebarCollapsed ? 'w-16' : 'w-56',
         )}
       >
         {/* Collapse toggle */}
         <button
           onClick={() => setSidebarCollapsed((v) => !v)}
-          className="flex items-center justify-center h-12 border-b border-[#1a1916] text-[#57534e] hover:text-[#fafaf9] transition-colors"
+          className="flex items-center justify-center h-12 border-b border-border text-muted-foreground hover:text-foreground transition-colors"
           aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <Menu size={18} className={cn('transition-transform', sidebarCollapsed && 'rotate-180')} />
@@ -52,22 +52,22 @@ export function AppShell({ children, sidebar, basePath = '', topBarContent }: Ap
         <SheetTrigger asChild>
           <button
             className="lg:hidden fixed top-3 right-3 z-40 w-11 h-11 flex items-center justify-center
-                       text-[#a8a29e] active:text-[#fafaf9] touch-manipulation"
+                       text-muted-foreground active:text-foreground touch-manipulation"
             aria-label="Open menu"
           >
             <Menu size={22} />
           </button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-64 max-w-[80vw] bg-[#0a0a08] border-e border-[#1a1916] p-0">
+        <SheetContent side="right" className="w-64 max-w-[80vw] bg-background border-e border-border p-0">
           <VisuallyHidden>
             <SheetTitle>القائمة — Menu</SheetTitle>
           </VisuallyHidden>
           <div className="flex flex-col h-full safe-top safe-bottom">
-            <div className="flex items-center justify-between px-4 h-12 border-b border-[#1a1916]">
-              <span className="text-sm font-bold text-[#fafaf9]">دكان</span>
+            <div className="flex items-center justify-between px-4 h-12 border-b border-border">
+              <span className="text-sm font-bold text-foreground">دكان</span>
               <button
                 onClick={() => setMobileSidebarOpen(false)}
-                className="w-11 h-11 flex items-center justify-center text-[#57534e] hover:text-[#fafaf9]"
+                className="w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
                 <X size={20} />
               </button>
@@ -83,12 +83,12 @@ export function AppShell({ children, sidebar, basePath = '', topBarContent }: Ap
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}
         <header className="lg:hidden flex items-center gap-3 px-4 h-14
-                           border-b border-[#1a1916] bg-[#0a0a08]/95 backdrop-blur-sm
+                           border-b border-border bg-background/95 backdrop-blur-sm
                            sticky top-0 z-30 safe-top">
           <button
             onClick={() => setMobileSidebarOpen(true)}
-            className="w-11 h-11 -ms-2 flex items-center justify-center text-[#a8a29e]
-                       active:text-[#fafaf9] touch-manipulation flex-shrink-0"
+            className="w-11 h-11 -ms-2 flex items-center justify-center text-muted-foreground
+                       active:text-foreground touch-manipulation flex-shrink-0"
             aria-label="Open menu"
           >
             <Menu size={22} />

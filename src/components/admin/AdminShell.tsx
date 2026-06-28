@@ -126,7 +126,7 @@ export default function AdminShell({ userEmail, children }: Props) {
             <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
               <Search size={10} /> Ctrl+K
             </kbd>
-            <span className="mx-1 text-[#2a2825]">·</span>
+            <span className="mx-1 text-muted">·</span>
             <span className="text-[10px] text-muted-foreground font-medium">⌘⇧B للشريط</span>
           </div>
 

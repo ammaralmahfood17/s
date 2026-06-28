@@ -1,6 +1,19 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+// ============================================================
+// AUTH RESPONSIBILITY SPLIT (read before touching this file)
+// ------------------------------------------------------------
+// middleware.ts:        "Is the visitor logged in at all?"
+//                        + super_admin check for /admin/**
+// [slug]/dashboard/layout.tsx: "Is this logged-in user actually
+//                        staff/owner of THIS restaurant (slug)?"
+//
+// Do not add restaurant-ownership checks here — that logic lives
+// in dashboard/layout.tsx as the single source of truth. Keeping
+// it in one place avoids the two checks silently drifting apart.
+// ============================================================
+
 const protectedPrefixes = ['/admin'];
 
 export async function middleware(request: NextRequest) {

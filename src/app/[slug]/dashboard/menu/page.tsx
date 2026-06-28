@@ -341,7 +341,7 @@ function ItemModal({
                     'text-xs px-3 py-1 rounded-full border transition-all',
                     form.tags.includes(tag)
                       ? 'bg-primary/20 border-primary text-primary'
-                      : 'border-border text-muted-foreground hover:border-[#3a3835]'
+                      : 'border-border text-muted-foreground hover:border-muted-foreground/30'
                   )}
                 >
                   {TAG_LABELS[tag]}
