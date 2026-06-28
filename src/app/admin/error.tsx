@@ -21,7 +21,7 @@ export default function AdminError({
                         flex items-center justify-center mx-auto mb-5">
           <AlertTriangle size={24} className="text-red-400" />
         </div>
-        <h2 className="text-xl font-bold text-[#fafaf9] mb-2">خطأ في لوحة الإدارة</h2>
+        <h2 className="text-xl font-bold text-foreground mb-2">خطأ في لوحة الإدارة</h2>
         <p className="text-[#a8a29e] text-sm mb-6">حدث خطأ غير متوقع.</p>
         <button onClick={reset} className="btn-primary">
           <RefreshCw size={15} />

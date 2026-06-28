@@ -69,22 +69,22 @@ export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
 
   const statCards = [
-    { icon: Store,        label: 'إجمالي العربات',       value: String(stats.totalRestaurants), color: 'text-brand-400' },
+    { icon: Store,        label: 'إجمالي العربات',       value: String(stats.totalRestaurants), color: 'text-primary' },
     { icon: CheckCircle,  label: 'اشتراكات نشطة',        value: String(stats.activeRestaurants), color: 'text-green-400' },
     { icon: Clock,        label: 'في التجربة',            value: String(stats.trialingCount),     color: 'text-yellow-400' },
-    { icon: TrendingUp,   label: 'إيرادات هذا الشهر',    value: formatBHD(stats.monthlyRevenue), color: 'text-brand-400' },
-    { icon: AlertCircle,  label: 'متأخرة الدفع',          value: String(stats.pastDueCount),     color: stats.pastDueCount > 0 ? 'text-red-400' : 'text-[#a8a29e]' },
-    { icon: CreditCard,   label: 'تنتهي قريباً (7 أيام)', value: String(stats.expiringSoon),     color: stats.expiringSoon > 0 ? 'text-orange-400' : 'text-[#a8a29e]' },
+    { icon: TrendingUp,   label: 'إيرادات هذا الشهر',    value: formatBHD(stats.monthlyRevenue), color: 'text-primary' },
+    { icon: AlertCircle,  label: 'متأخرة الدفع',          value: String(stats.pastDueCount),     color: stats.pastDueCount > 0 ? 'text-red-400' : 'text-muted-foreground' },
+    { icon: CreditCard,   label: 'تنتهي قريباً (7 أيام)', value: String(stats.expiringSoon),     color: stats.expiringSoon > 0 ? 'text-orange-400' : 'text-muted-foreground' },
   ];
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#fafaf9]">
+        <h1 className="text-2xl font-bold text-foreground">
           لوحة الإدارة
         </h1>
-        <p className="text-sm text-[#57534e] mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           منصة دوكان · البحرين 🇧🇭
         </p>
       </div>
@@ -136,11 +136,11 @@ export default async function AdminOverviewPage() {
         ].map(a => (
           <Link key={a.href} href={a.href}
             className="card-hover flex items-center gap-3 py-3">
-            <div className="w-9 h-9 rounded-lg bg-brand-500/10 border border-brand-500/20
+            <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20
                             flex items-center justify-center flex-shrink-0">
-              <a.icon size={18} className="text-brand-400" />
+              <a.icon size={18} className="text-primary" />
             </div>
-            <span className="text-sm font-medium text-[#fafaf9]">
+            <span className="text-sm font-medium text-foreground">
               {a.label}
             </span>
           </Link>
@@ -151,7 +151,7 @@ export default async function AdminOverviewPage() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="section-title mb-0">أحدث العربات</h2>
-          <Link href="/admin/restaurants" className="text-xs text-brand-400 hover:text-brand-300">
+          <Link href="/admin/restaurants" className="text-xs text-primary hover:text-primary">
             عرض الكل ←
           </Link>
         </div>
@@ -162,15 +162,15 @@ export default async function AdminOverviewPage() {
           }) => (
             <Link key={r.id} href={`/admin/restaurants/${r.id}`}>
               <div className="card-hover flex items-center gap-3 py-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#2a2825] flex items-center justify-center
+                <div className="w-9 h-9 rounded-xl bg-card flex items-center justify-center
                                 flex-shrink-0 text-lg">
                   🏪
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-[#fafaf9] truncate">
+                  <div className="text-sm font-medium text-foreground truncate">
                     {r.name_ar}
                   </div>
-                  <div className="text-xs text-[#57534e]">
+                  <div className="text-xs text-muted-foreground">
                     {new Date(r.created_at).toLocaleDateString('en-BH')}
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export default async function AdminOverviewPage() {
                   <span className={`badge ${STATUS_BADGE[r.subscription_status] ?? 'badge-pending'}`}>
                     {STATUS_LABEL[r.subscription_status] ?? r.subscription_status}
                   </span>
-                  <span className={`text-xs ${r.is_open ? 'text-green-400' : 'text-[#57534e]'}`}>
+                  <span className={`text-xs ${r.is_open ? 'text-green-400' : 'text-muted-foreground'}`}>
                     {r.is_open ? '● مفتوح' : '● مغلق'}
                   </span>
                 </div>

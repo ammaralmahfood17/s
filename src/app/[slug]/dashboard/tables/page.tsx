@@ -26,7 +26,7 @@ function QRModal({
       QRCode.toCanvas(canvasRef.current, url, {
         width: 256,
         margin: 2,
-        color: { dark: '#0f0e0c', light: '#fafaf9' },
+        color: { dark: '#171717', light: '#ffffff' },
       });
     }
   }, [url]);
@@ -46,13 +46,13 @@ function QRModal({
 
     ctx.drawImage(canvas, 72, 80, 256, 256);
 
-    ctx.fillStyle = '#0f0e0c';
+    ctx.fillStyle = '#171717';
     ctx.font = 'bold 24px system-ui';
     ctx.textAlign = 'center';
     ctx.fillText(table.name_ar, 200, 60);
 
     ctx.font = '16px system-ui';
-    ctx.fillStyle = '#57534e';
+    ctx.fillStyle = '#737373';
     ctx.fillText(isDriveThru ? 'اطلب من السيارة' : 'امسح للطلب', 200, 375);
 
     ctx.font = 'bold 18px system-ui';
@@ -71,23 +71,23 @@ function QRModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 safe-x">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1916] border border-[#2a2825] rounded-2xl p-5 sm:p-6
+      <div className="relative bg-card border border-border rounded-2xl p-5 sm:p-6
                       w-full max-w-sm max-h-[92dvh] overflow-y-auto overscroll-contain
                       text-center shadow-2xl animate-slide-up safe-bottom">
-        <h2 className="font-bold text-[#fafaf9] text-lg mb-1">
+        <h2 className="font-bold text-foreground text-lg mb-1">
           {table.name_ar}
         </h2>
         {isDriveThru && (
-          <div className="inline-flex items-center gap-1 text-xs text-brand-400 bg-brand-500/10
+          <div className="inline-flex items-center gap-1 text-xs text-primary bg-primary/10
                           px-2 py-0.5 rounded-full mb-2">
             <Car size={12} />
             طلب سيارات
           </div>
         )}
-        <p className="text-xs text-[#57534e] mb-6 break-all">{url}</p>
+        <p className="text-xs text-muted-foreground mb-6 break-all">{url}</p>
 
         <div className="flex justify-center mb-6">
-          <div className="p-3 sm:p-4 bg-[#fafaf9] rounded-2xl inline-block max-w-full">
+          <div className="p-3 sm:p-4 bg-card rounded-2xl inline-block max-w-full">
             <canvas ref={canvasRef} className="block max-w-full h-auto" style={{ width: 'min(220px, 100%)' }} />
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function TablesPage() {
   };
 
   if (loading) {
-    return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+    return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
   }
 
   // Separate Drive Thru from regular tables
@@ -190,10 +190,10 @@ export default function TablesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[#fafaf9]">
+          <h1 className="text-xl font-bold text-foreground">
             الطاولات
           </h1>
-          <p className="text-sm text-[#57534e]">
+          <p className="text-sm text-muted-foreground">
             أنشئ رموز QR لكل طاولة
           </p>
         </div>
@@ -208,22 +208,22 @@ export default function TablesPage() {
 
       {/* Drive Thru card */}
       {driveThruTable && (
-        <div className="card border-brand-500/30 bg-brand-500/5 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center flex-shrink-0">
-            <Car size={24} className="text-brand-400" />
+        <div className="card border-primary/30 bg-primary/5 flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+            <Car size={24} className="text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-semibold text-[#fafaf9] text-sm flex items-center gap-2">
+            <div className="font-semibold text-foreground text-sm flex items-center gap-2">
               طلب سيارات (Drive Thru)
-              <span className="text-xs bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded-full">افتراضي</span>
+              <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">افتراضي</span>
             </div>
-            <div className="text-xs text-[#57534e]">
+            <div className="text-xs text-muted-foreground">
               الرابط: {process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz'}/{restaurantSlug}/t/{driveThruTable.qr_token}
             </div>
           </div>
           <button
             onClick={() => setQrTable(driveThruTable)}
-            className="btn-ghost py-1.5 px-2 text-brand-400 hover:text-brand-300"
+            className="btn-ghost py-1.5 px-2 text-primary hover:text-primary/80"
           >
             <QrCode size={16} />
           </button>
@@ -232,11 +232,11 @@ export default function TablesPage() {
 
       {/* Add table trigger */}
       {adding && (
-        <div className="card space-y-3 animate-slide-up border-brand-500/30">
-          <h3 className="font-semibold text-[#fafaf9] text-sm">
+        <div className="card space-y-3 animate-slide-up border-primary/30">
+          <h3 className="font-semibold text-foreground text-sm">
             طاولة جديدة
           </h3>
-          <p className="text-xs text-[#57534e]">
+          <p className="text-xs text-muted-foreground">
             سيتم إنشاء طاولة {regularTables.length + 1} تلقائياً
           </p>
           <div className="flex gap-2">
@@ -254,11 +254,11 @@ export default function TablesPage() {
       {/* Regular tables */}
       {regularTables.length === 0 ? (
         <div className="card text-center py-16">
-          <QrCode size={48} className="text-[#3a3835] mx-auto mb-3" />
-          <p className="text-[#a8a29e] font-medium">
+          <QrCode size={48} className="text-muted-foreground/30 mx-auto mb-3" />
+          <p className="text-muted-foreground font-medium">
             لا توجد طاولات بعد
           </p>
-          <p className="text-sm text-[#57534e] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             أضف طاولات وأنشئ رموز QR للعملاء
           </p>
         </div>
@@ -273,20 +273,20 @@ export default function TablesPage() {
               )}
             >
               <div
-                className="w-12 h-12 rounded-xl bg-[#fafaf9] flex items-center justify-center
+                className="w-12 h-12 rounded-xl bg-card flex items-center justify-center
                             flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => setQrTable(table)}
               >
-                <QrCode size={28} className="text-[#0f0e0c]" />
+                <QrCode size={28} className="text-foreground" />
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-[#fafaf9] text-sm">
+                <div className="font-semibold text-foreground text-sm">
                   {table.name_ar}
                 </div>
                 <div className={cn(
                   'text-xs mt-0.5 font-medium',
-                  table.is_active ? 'text-green-400' : 'text-[#57534e]'
+                  table.is_active ? 'text-green-400' : 'text-muted-foreground'
                 )}>
                   {table.is_active ? 'نشط' : 'غير نشط'}
                 </div>
@@ -295,7 +295,7 @@ export default function TablesPage() {
               <div className="flex items-center gap-1 flex-shrink-0">
                 <button
                   onClick={() => setQrTable(table)}
-                  className="btn-ghost py-1.5 px-2 text-brand-400 hover:text-brand-300"
+                  className="btn-ghost py-1.5 px-2 text-primary hover:text-primary/80"
                   title="عرض QR"
                 >
                   <QrCode size={16} />
@@ -307,7 +307,7 @@ export default function TablesPage() {
                 >
                   {table.is_active
                     ? <ToggleRight size={18} className="text-green-400" />
-                    : <ToggleLeft size={18} className="text-[#57534e]" />
+                    : <ToggleLeft size={18} className="text-muted-foreground" />
                   }
                 </button>
                 <button

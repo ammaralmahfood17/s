@@ -12,11 +12,11 @@ function MiniBar({ value, max, label }: { value: number; max: number; label: str
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
     <div className="flex items-center gap-2">
-      <div className="text-xs text-[#57534e] w-16 text-right flex-shrink-0">{label}</div>
-      <div className="flex-1 h-2 bg-[#1a1916] rounded-full overflow-hidden">
-        <div className="h-full bg-brand-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
+      <div className="text-xs text-muted-foreground w-16 text-right flex-shrink-0">{label}</div>
+      <div className="flex-1 h-2 bg-card rounded-full overflow-hidden">
+        <div className="h-full bg-primary rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
       </div>
-      <div className="text-xs text-[#a8a29e] w-16 flex-shrink-0 text-right">{value.toFixed(3)}</div>
+      <div className="text-xs text-muted-foreground w-16 flex-shrink-0 text-right">{value.toFixed(3)}</div>
     </div>
   );
 }
@@ -93,25 +93,25 @@ export default function AnalyticsPage() {
 
   const maxRevDay=Math.max(...revenueByDay.map(d=>d.total),0.001);
   const statCards=[
-    {icon:TrendingUp,label:'إيرادات اليوم',value:formatBHD(stats.revenueToday,'ar'),color:'text-brand-400'},
+    {icon:TrendingUp,label:'إيرادات اليوم',value:formatBHD(stats.revenueToday,'ar'),color:'text-primary'},
     {icon:ShoppingBag,label:'طلبات اليوم',value:String(stats.ordersToday),color:'text-blue-400'},
     {icon:BarChart3,label:'إيرادات الأسبوع',value:formatBHD(stats.revenueWeek,'ar'),color:'text-purple-400'},
     {icon:Clock,label:'متوسط الطلب',value:formatBHD(stats.avgOrder,'ar'),color:'text-teal-400'},
   ];
 
-  if(loading) return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+  if(loading) return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
 
   return (
     <div className="p-4 sm:p-6 max-w-5xl space-y-5 sm:space-y-6">
       <div>
-        <h1 className="text-lg sm:text-xl font-bold text-[#fafaf9]">التحليلات</h1>
-        <p className="text-sm text-[#57534e]">نظرة على الأداء</p>
+        <h1 className="text-lg sm:text-xl font-bold text-foreground">التحليلات</h1>
+        <p className="text-sm text-muted-foreground">نظرة على الأداء</p>
       </div>
 
       {/* Export row — own line on mobile so it never gets squeezed */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
         <input type="date" className="input text-sm py-2 px-3 w-32 sm:w-36 flex-shrink-0" value={dateFrom} onChange={e=>setDateFrom(e.target.value)} />
-        <span className="text-[#57534e] flex-shrink-0">—</span>
+        <span className="text-muted-foreground flex-shrink-0">—</span>
         <input type="date" className="input text-sm py-2 px-3 w-32 sm:w-36 flex-shrink-0" value={dateTo} readOnly />
         <button onClick={()=>handleExport('orders')} disabled={exporting} className="btn-secondary text-sm py-2 px-3 flex items-center gap-1.5 flex-shrink-0">
           <Download size={14}/>الطلبات
@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
       <div className="flex gap-1.5 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
         {[{key:'overview',ar:'نظرة عامة'},{key:'reviews',ar:'التقييمات',icon:Star}].map(tab=>(
           <button key={tab.key} onClick={()=>setActiveTab(tab.key as 'overview'|'reviews')}
-            className={`flex items-center gap-1.5 px-4 min-h-[40px] rounded-xl text-sm font-medium transition-all flex-shrink-0 touch-manipulation ${activeTab===tab.key?'bg-brand-500 text-[#0f0e0c]':'text-[#a8a29e] active:bg-[#1a1916]'}`}>
+            className={`flex items-center gap-1.5 px-4 min-h-[40px] rounded-xl text-sm font-medium transition-all flex-shrink-0 touch-manipulation ${activeTab===tab.key?'bg-primary text-background':'text-muted-foreground active:bg-card'}`}>
             {tab.icon && <tab.icon size={14}/>}{tab.ar}
           </button>
         ))}
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
             <div className="card">
               <h2 className="section-title">الإيرادات اليومية (7 أيام)</h2>
               {revenueByDay.every(d=>d.total===0)?(
-                <div className="text-center py-8 text-[#57534e] text-sm">لا توجد بيانات</div>
+                <div className="text-center py-8 text-muted-foreground text-sm">لا توجد بيانات</div>
               ):(
                 <div className="space-y-2 mt-2">
                   {revenueByDay.map(day=>(
@@ -162,17 +162,17 @@ export default function AnalyticsPage() {
             <div className="card">
               <h2 className="section-title">الأكثر طلباً</h2>
               {topItems.length===0?(
-                <div className="text-center py-8 text-[#57534e] text-sm">لا توجد بيانات</div>
+                <div className="text-center py-8 text-muted-foreground text-sm">لا توجد بيانات</div>
               ):(
                 <div className="space-y-3 mt-2">
                   {topItems.map((item,i)=>(
                     <div key={item.name_en} className="flex items-center gap-3">
                       <span className="text-sm w-5 flex-shrink-0">{i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`}</span>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-[#fafaf9] truncate">{item.name_ar}</div>
-                        <div className="text-xs text-[#57534e]">{item.qty} وحدة</div>
+                        <div className="text-sm text-foreground truncate">{item.name_ar}</div>
+                        <div className="text-xs text-muted-foreground">{item.qty} وحدة</div>
                       </div>
-                      <div className="text-sm text-brand-400 font-semibold">{formatBHD(item.revenue,'ar')}</div>
+                      <div className="text-sm text-primary font-semibold">{formatBHD(item.revenue,'ar')}</div>
                     </div>
                   ))}
                 </div>

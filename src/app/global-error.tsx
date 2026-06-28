@@ -17,8 +17,8 @@ export default function GlobalError({
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body {
             font-family: system-ui, -apple-system, sans-serif;
-            background: #0f0e0c;
-            color: #fafaf9;
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
             display: grid;
             place-items: center;
             min-height: 100vh;
@@ -39,7 +39,7 @@ export default function GlobalError({
           .primary { background: #f59e0b; color: #0f0e0c; }
           .primary:hover { background: #d97706; }
           .secondary { background: transparent; color: #a8a29e; border-color: #2a2825; }
-          .secondary:hover { color: #fafaf9; border-color: #3a3835; }
+          .secondary:hover { color: hsl(var(--foreground)); border-color: #3a3835; }
           .icon { margin: 0 auto 1.5rem; width: 5rem; height: 5rem;
                   background: #2a1010; border: 1px solid #7f1d1d;
                   border-radius: 9999px; display: grid; place-items: center; }

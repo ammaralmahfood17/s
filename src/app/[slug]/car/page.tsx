@@ -54,11 +54,11 @@ function ItemModal({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1916] w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-up overflow-hidden">
+      <div className="relative bg-card w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-up overflow-hidden">
         {item.image_url && (
           <div className="relative h-40 sm:h-48 flex-shrink-0">
             <NextImage src={getPublicImageUrl(item.image_url)} alt={item.name_ar} fill className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1916] to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
           </div>
         )}
         <button onClick={onClose} className="absolute top-3 end-3 w-11 h-11 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white z-10 active:scale-90 transition-transform touch-manipulation">
@@ -66,12 +66,12 @@ function ItemModal({
         </button>
         <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4 overscroll-contain">
           <div>
-            <h2 className="text-xl font-bold text-[#fafaf9]">{item.name_ar}</h2>
-            {item.description_ar && <p className="text-sm text-[#a8a29e] mt-1 leading-relaxed">{item.description_ar}</p>}
+            <h2 className="text-xl font-bold text-foreground">{item.name_ar}</h2>
+            {item.description_ar && <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{item.description_ar}</p>}
             {item.tags?.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {item.tags.map(tag => (
-                  <span key={tag} className="text-xs bg-[#0f0e0c] text-[#a8a29e] px-2 py-0.5 rounded-full border border-[#2a2825]">
+                  <span key={tag} className="text-xs bg-background text-muted-foreground px-2 py-0.5 rounded-full border border-border">
                     {TAG_LABELS[tag] ?? tag}
                   </span>
                 ))}
@@ -80,7 +80,7 @@ function ItemModal({
           </div>
           {variations.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-[#fafaf9] mb-2">اختر الحجم *</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-2">اختر الحجم *</h3>
               <div className="grid grid-cols-2 gap-2">
                 {variations.map(v => {
                   const vPrice = item.price + v.price_modifier;
@@ -88,10 +88,10 @@ function ItemModal({
                   return (
                     <button key={v.id} onClick={() => setSelectedVariation(v)}
                       className={cn('p-3 rounded-xl border text-start transition-all',
-                        isSelected ? 'border-brand-500 bg-brand-500/10' : 'border-[#2a2825] bg-[#0f0e0c] hover:border-[#3a3835]'
+                        isSelected ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-muted-foreground/40'
                       )}>
-                      <div className={cn('text-sm font-medium', isSelected ? 'text-brand-400' : 'text-[#fafaf9]')}>{v.name_ar}</div>
-                      <div className="text-xs text-[#a8a29e] mt-0.5">{formatBHD(vPrice, 'ar')}</div>
+                      <div className={cn('text-sm font-medium', isSelected ? 'text-primary' : 'text-foreground')}>{v.name_ar}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{formatBHD(vPrice, 'ar')}</div>
                     </button>
                   );
                 })}
@@ -100,24 +100,24 @@ function ItemModal({
           )}
           {addons.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-[#fafaf9] mb-2">إضافات</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-2">إضافات</h3>
               <div className="space-y-2">
                 {addons.map(addon => {
                   const isSelected = selectedAddons.some(a => a.id === addon.id);
                   return (
                     <button key={addon.id} onClick={() => toggleAddon(addon)}
                       className={cn('w-full flex items-center justify-between p-3 rounded-xl border transition-all',
-                        isSelected ? 'border-brand-500 bg-brand-500/10' : 'border-[#2a2825] bg-[#0f0e0c] hover:border-[#3a3835]'
+                        isSelected ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-muted-foreground/40'
                       )}>
                       <div className="flex items-center gap-2">
                         <div className={cn('w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
-                          isSelected ? 'border-brand-500 bg-brand-500' : 'border-[#3a3835]'
+                          isSelected ? 'border-primary bg-primary' : 'border-border'
                         )}>
-                          {isSelected && <span className="text-[#0f0e0c] text-xs font-bold">✓</span>}
+                          {isSelected && <span className="text-primary-foreground text-xs font-bold">✓</span>}
                         </div>
-                        <span className="text-sm text-[#fafaf9]">{addon.name_ar}</span>
+                        <span className="text-sm text-foreground">{addon.name_ar}</span>
                       </div>
-                      <span className="text-sm text-brand-400 font-medium">
+                      <span className="text-sm text-primary font-medium">
                         {addon.price > 0 ? `+${formatBHD(addon.price, 'ar')}` : 'مجاني'}
                       </span>
                     </button>
@@ -131,12 +131,12 @@ function ItemModal({
             <textarea className="input resize-none h-16 text-sm" dir="rtl" placeholder="حساسية؟ طلبات خاصة..." value={notes} onChange={e => setNotes(e.target.value)} />
           </div>
         </div>
-        <div className="px-5 pt-4 border-t border-[#2a2825] bg-[#1a1916] flex-shrink-0 safe-bottom">
+        <div className="px-5 pt-4 border-t border-border bg-card flex-shrink-0 safe-bottom">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-[#0f0e0c] border border-[#2a2825] rounded-xl p-1 flex-shrink-0">
-              <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-11 h-11 flex items-center justify-center text-[#a8a29e] active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg transition-colors touch-manipulation"><Minus size={16} /></button>
-              <span className="font-bold text-[#fafaf9] w-6 text-center text-sm">{qty}</span>
-              <button onClick={() => setQty(q => q + 1)} className="w-11 h-11 flex items-center justify-center text-[#a8a29e] active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg transition-colors touch-manipulation"><Plus size={16} /></button>
+            <div className="flex items-center gap-1 bg-background border border-border rounded-xl p-1 flex-shrink-0">
+              <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-11 h-11 flex items-center justify-center text-muted-foreground active:text-foreground active:bg-card rounded-lg transition-colors touch-manipulation"><Minus size={16} /></button>
+              <span className="font-bold text-foreground w-6 text-center text-sm">{qty}</span>
+              <button onClick={() => setQty(q => q + 1)} className="w-11 h-11 flex items-center justify-center text-muted-foreground active:text-foreground active:bg-card rounded-lg transition-colors touch-manipulation"><Plus size={16} /></button>
             </div>
             <button onClick={() => {
               if (variations.length > 0 && !selectedVariation) { toast.error('يرجى اختيار الحجم'); return; }
@@ -177,20 +177,20 @@ function CarInfoModal({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1916] w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl shadow-2xl animate-slide-up overflow-hidden">
-        <div className="px-5 py-4 border-b border-[#2a2825] flex items-center justify-between">
+      <div className="relative bg-card w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl shadow-2xl animate-slide-up overflow-hidden">
+        <div className="px-5 py-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Car size={20} className="text-brand-400" />
-            <h2 className="font-bold text-[#fafaf9]">معلومات السيارة</h2>
+            <Car size={20} className="text-primary" />
+            <h2 className="font-bold text-foreground">معلومات السيارة</h2>
           </div>
-          <button onClick={onClose} className="w-11 h-11 flex items-center justify-center text-[#57534e] active:text-[#fafaf9] touch-manipulation"><X size={20} /></button>
+          <button onClick={onClose} className="w-11 h-11 flex items-center justify-center text-muted-foreground active:text-foreground touch-manipulation"><X size={20} /></button>
         </div>
         <div className="p-5 space-y-4">
           {/* Car number */}
           <div>
             <label className="label flex items-center gap-1.5"><Hash size={14} /> رقم السيارة *</label>
             <input className="input" dir="ltr" placeholder="123456" value={carNumber} onChange={e => setCarNumber(e.target.value)} maxLength={8} />
-            <p className="text-xs text-[#57534e] mt-1">أدخل رقم لوحة السيارة</p>
+            <p className="text-xs text-muted-foreground mt-1">أدخل رقم لوحة السيارة</p>
           </div>
           {/* Car color */}
           <div>
@@ -199,16 +199,16 @@ function CarInfoModal({
               {COLORS.map(c => (
                 <button key={c.value} onClick={() => setCarColor(c.value)}
                   className={cn('flex flex-col items-center gap-1 p-2 rounded-xl border transition-all min-h-[60px] touch-manipulation',
-                    carColor === c.value ? 'border-brand-500 bg-brand-500/10' : 'border-[#2a2825] bg-[#0f0e0c] active:border-[#3a3835]'
+                    carColor === c.value ? 'border-primary bg-primary/10' : 'border-border bg-background active:border-muted-foreground/40'
                   )}>
-                  <div className="w-6 h-6 rounded-full border border-[#3a3835]" style={{ backgroundColor: c.hex }} />
-                  <span className="text-[10px] text-[#a8a29e]">{c.label}</span>
+                  <div className="w-6 h-6 rounded-full border border-border" style={{ backgroundColor: c.hex }} />
+                  <span className="text-[10px] text-muted-foreground">{c.label}</span>
                 </button>
               ))}
             </div>
           </div>
         </div>
-        <div className="px-5 py-4 border-t border-[#2a2825] safe-bottom">
+        <div className="px-5 py-4 border-t border-border safe-bottom">
           <button onClick={() => {
             if (!carNumber.trim()) { toast.error('يرجى إدخال رقم السيارة'); return; }
             if (!carColor) { toast.error('يرجى اختيار لون السيارة'); return; }
@@ -344,7 +344,7 @@ function CartDrawer({
           <div className="flex items-center justify-between w-full gap-2 min-w-0">
             <div className="flex items-center gap-2 flex-shrink-0">
               <ShoppingCart size={20} />
-              <span className="bg-[#0f0e0c]/30 text-sm px-2 py-0.5 rounded-full font-bold">{count}</span>
+              <span className="bg-background/30 text-sm px-2 py-0.5 rounded-full font-bold">{count}</span>
             </div>
             <span className="truncate">عرض الطلب</span>
             <span className="font-bold flex-shrink-0">{formatBHD(total, 'ar')}</span>
@@ -355,48 +355,48 @@ function CartDrawer({
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="relative bg-[#1a1916] w-full max-w-md rounded-t-3xl max-h-[88dvh] flex flex-col shadow-2xl animate-slide-up overscroll-contain">
-            <div className="flex justify-center pt-3 pb-1 flex-shrink-0"><div className="w-10 h-1 bg-[#3a3835] rounded-full" /></div>
-            <div className="px-5 py-3 flex items-center justify-between border-b border-[#2a2825] flex-shrink-0">
-              <h2 className="font-bold text-[#fafaf9]">طلبك</h2>
-              <button onClick={() => setOpen(false)} className="text-[#57534e] hover:text-[#fafaf9]"><ChevronUp size={20} /></button>
-            </div>
+              <div className="relative bg-card w-full max-w-md rounded-t-3xl max-h-[88dvh] flex flex-col shadow-2xl animate-slide-up overscroll-contain">
+                <div className="flex justify-center pt-3 pb-1 flex-shrink-0"><div className="w-10 h-1 bg-border rounded-full" /></div>
+                <div className="px-5 py-3 flex items-center justify-between border-b border-border flex-shrink-0">
+                  <h2 className="font-bold text-foreground">طلبك</h2>
+                  <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground"><ChevronUp size={20} /></button>
+                </div>
 
-            {/* Order type indicator */}
-            <div className="px-5 py-2 bg-[#0f0e0c]/50 border-b border-[#2a2825]">
-              <div className="flex items-center gap-2 text-xs text-[#57534e]">
-                {orderType === 'car' ? (
-                  <>
-                    <Car size={12} className="text-brand-400" />
-                    <span>طلب سيارة</span>
-                    {carNumber && <span className="text-brand-400">· {carNumber}</span>}
-                  </>
-                ) : (
-                  <span>📍 {tableName}</span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-5 py-3 space-y-3">
-              {items.map(ci => (
-                <div key={ci.cartId} className="flex gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-[#fafaf9]">{ci.item.name_ar}</div>
-                    {ci.variation && <div className="text-xs text-[#57534e]">{ci.variation.name_ar}</div>}
-                    {ci.addons.length > 0 && <div className="text-xs text-[#57534e]">+ {ci.addons.map(a => a.name_ar).join(', ')}</div>}
-                    {ci.notes && <div className="text-xs text-yellow-600 italic">{'\u201C'}{ci.notes}{'\u201D'}</div>}
-                    <div className="text-sm text-brand-400 font-semibold mt-0.5">{formatBHD(ci.lineTotal, 'ar')}</div>
-                  </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <div className="flex items-center bg-[#0f0e0c] border border-[#2a2825] rounded-lg">
-                      <button onClick={() => updateQuantity(ci.cartId, ci.quantity - 1)} className="w-10 h-10 flex items-center justify-center text-[#a8a29e] active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg transition-colors touch-manipulation"><Minus size={13} /></button>
-                      <span className="text-sm font-bold text-[#fafaf9] w-5 text-center">{ci.quantity}</span>
-                      <button onClick={() => updateQuantity(ci.cartId, ci.quantity + 1)} className="w-10 h-10 flex items-center justify-center text-[#a8a29e] active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg transition-colors touch-manipulation"><Plus size={13} /></button>
-                    </div>
-                    <button onClick={() => removeItem(ci.cartId)} className="w-10 h-10 flex items-center justify-center text-red-400 active:text-red-300 active:bg-red-950/30 rounded-lg transition-colors touch-manipulation"><X size={15} /></button>
+                {/* Order type indicator */}
+                <div className="px-5 py-2 bg-background/50 border-b border-border">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    {orderType === 'car' ? (
+                      <>
+                        <Car size={12} className="text-primary" />
+                        <span>طلب سيارة</span>
+                        {carNumber && <span className="text-primary">· {carNumber}</span>}
+                      </>
+                    ) : (
+                      <span>📍 {tableName}</span>
+                    )}
                   </div>
                 </div>
-              ))}
+
+                <div className="flex-1 overflow-y-auto px-5 py-3 space-y-3">
+                  {items.map(ci => (
+                    <div key={ci.cartId} className="flex gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-foreground">{ci.item.name_ar}</div>
+                        {ci.variation && <div className="text-xs text-muted-foreground">{ci.variation.name_ar}</div>}
+                        {ci.addons.length > 0 && <div className="text-xs text-muted-foreground">+ {ci.addons.map(a => a.name_ar).join(', ')}</div>}
+                        {ci.notes && <div className="text-xs text-yellow-600 italic">{'\\u201C'}{ci.notes}{'\\u201D'}</div>}
+                        <div className="text-sm text-primary font-semibold mt-0.5">{formatBHD(ci.lineTotal, 'ar')}</div>
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <div className="flex items-center bg-background border border-border rounded-lg">
+                          <button onClick={() => updateQuantity(ci.cartId, ci.quantity - 1)} className="w-10 h-10 flex items-center justify-center text-muted-foreground active:text-foreground active:bg-card rounded-lg transition-colors touch-manipulation"><Minus size={13} /></button>
+                          <span className="text-sm font-bold text-foreground w-5 text-center">{ci.quantity}</span>
+                          <button onClick={() => updateQuantity(ci.cartId, ci.quantity + 1)} className="w-10 h-10 flex items-center justify-center text-muted-foreground active:text-foreground active:bg-card rounded-lg transition-colors touch-manipulation"><Plus size={13} /></button>
+                        </div>
+                        <button onClick={() => removeItem(ci.cartId)} className="w-10 h-10 flex items-center justify-center text-red-400 active:text-red-300 active:bg-red-950/30 rounded-lg transition-colors touch-manipulation"><X size={15} /></button>
+                      </div>
+                    </div>
+                  ))}
               <div>
                 <label className="label text-xs">اسمك (اختياري)</label>
                 <input className="input text-sm" dir="rtl" placeholder="حتى نناديك باسمك" value={customerName} onChange={e => setCustomerName(e.target.value)} />
@@ -407,15 +407,15 @@ function CartDrawer({
               </div>
             </div>
 
-            <div className="px-5 py-4 border-t border-[#2a2825] flex-shrink-0 safe-bottom">
+            <div className="px-5 py-4 border-t border-border flex-shrink-0 safe-bottom">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-[#a8a29e]">الإجمالي</span>
-                <span className="font-bold text-lg text-[#fafaf9]">{formatBHD(total, 'ar')}</span>
+                <span className="text-sm text-muted-foreground">الإجمالي</span>
+                <span className="font-bold text-lg text-foreground">{formatBHD(total, 'ar')}</span>
               </div>
               <button onClick={placeOrder} disabled={placing} className="btn-primary w-full py-3">
                 {placing ? 'جار الإرسال...' : 'تأكيد الطلب ✓'}
               </button>
-              <p className="text-xs text-[#57534e] text-center mt-2">الدفع عند الكاشير</p>
+              <p className="text-xs text-muted-foreground text-center mt-2">الدفع عند الكاشير</p>
             </div>
           </div>
         </div>
@@ -433,19 +433,19 @@ function OrderSuccessScreen({
   slug: string;
 }) {
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="text-center max-w-sm space-y-6">
-        <div className="w-20 h-20 rounded-full bg-brand-500/20 border-2 border-brand-500 flex items-center justify-center mx-auto">
+        <div className="w-20 h-20 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center mx-auto">
           <span className="text-4xl">✓</span>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#fafaf9] mb-2">تم استلام طلبك!</h1>
-          <p className="text-[#a8a29e]">رقم الطلب</p>
-          <p className="text-3xl font-black text-brand-400 mt-1">{orderNumber}</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">تم استلام طلبك!</h1>
+          <p className="text-muted-foreground">رقم الطلب</p>
+          <p className="text-3xl font-black text-primary mt-1">{orderNumber}</p>
         </div>
-        <div className="bg-[#1a1916] border border-[#2a2825] rounded-2xl p-4">
-          <p className="text-sm text-[#a8a29e]">سنقوم بإشعارك عندما يكون طلبك جاهزاً</p>
-          <p className="text-xs text-[#57534e] mt-2">يمكنك متابعة حالة طلبك باستخدام رقم الطلب</p>
+        <div className="bg-card border border-border rounded-2xl p-4">
+          <p className="text-sm text-muted-foreground">سنقوم بإشعارك عندما يكون طلبك جاهزاً</p>
+          <p className="text-xs text-muted-foreground mt-2">يمكنك متابعة حالة طلبك باستخدام رقم الطلب</p>
         </div>
         <a href={`/${slug}`} className="btn-secondary w-full inline-block">
           العودة للقائمة
@@ -558,13 +558,13 @@ export default function CarOrderPage({
 
   if (showCarForm && !carInfo) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="max-w-sm w-full text-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mx-auto mb-2">
-            <Car size={32} className="text-brand-400" />
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-2">
+            <Car size={32} className="text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-[#fafaf9]">طلب من السيارة</h1>
-          <p className="text-sm text-[#a8a29e] mb-4">أدخل معلومات سيارتك للبدء في الطلب</p>
+          <h1 className="text-2xl font-bold text-foreground">طلب من السيارة</h1>
+          <p className="text-sm text-muted-foreground mb-4">أدخل معلومات سيارتك للبدء في الطلب</p>
           <CarInfoModal onClose={() => setShowCarForm(false)} onSubmit={(num, color) => setCarInfo({ carNumber: num, carColor: color })} />
           <button onClick={() => setShowCarForm(false)} className="btn-secondary w-full text-sm">
             تخطي والعودة
@@ -575,25 +575,25 @@ export default function CarOrderPage({
   }
 
   if (loading) {
-    return <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center text-[#57534e]">جار التحميل...</div>;
+    return <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">جار التحميل...</div>;
   }
 
   if (!restaurant) {
-    return <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center text-[#57534e]">المطعم غير موجود</div>;
+    return <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">المطعم غير موجود</div>;
   }
 
   const filteredItems = activeCategory ? items.filter(i => i.category_id === activeCategory) : items;
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] pb-24">
+    <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-[#0f0e0c]/95 backdrop-blur-sm border-b border-[#1a1916]">
+      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="px-4 py-3 flex items-center gap-2">
-          <Car size={22} className="text-brand-400 flex-shrink-0" />
+          <Car size={22} className="text-primary flex-shrink-0" />
           <div className="min-w-0">
-            <h1 className="font-bold text-[#fafaf9] truncate">{restaurant.name_ar}</h1>
+            <h1 className="font-bold text-foreground truncate">{restaurant.name_ar}</h1>
             {carInfo && (
-              <div className="flex items-center gap-2 text-xs text-[#57534e]">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span>🚗 {carInfo.carNumber}</span>
                 <span>·</span>
                 <span className="capitalize">{carInfo.carColor}</span>
@@ -606,7 +606,7 @@ export default function CarOrderPage({
           {categories.map(cat => (
             <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
               className={cn('flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all touch-manipulation',
-                activeCategory === cat.id ? 'bg-brand-500 text-[#0f0e0c]' : 'text-[#a8a29e] bg-[#1a1916]'
+                activeCategory === cat.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground bg-card'
               )}>
               {cat.emoji && <span className="ml-1">{cat.emoji}</span>}
               {cat.name_ar}
@@ -625,18 +625,18 @@ export default function CarOrderPage({
                 <NextImage src={getPublicImageUrl(item.image_url)} alt={item.name_ar} width={64} height={64} className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="w-16 h-16 rounded-xl bg-[#2a2825] flex items-center justify-center flex-shrink-0 text-2xl">🍽️</div>
+              <div className="w-16 h-16 rounded-xl bg-card flex items-center justify-center flex-shrink-0 text-2xl">🍽️</div>
             )}
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-[#fafaf9] text-sm">{item.name_ar}</div>
-              {item.description_ar && <div className="text-xs text-[#57534e] truncate mt-0.5">{item.description_ar}</div>}
-              <div className="text-sm font-bold text-brand-400 mt-1">{formatBHD(item.price, 'ar')}</div>
+              <div className="font-medium text-foreground text-sm">{item.name_ar}</div>
+              {item.description_ar && <div className="text-xs text-muted-foreground truncate mt-0.5">{item.description_ar}</div>}
+              <div className="text-sm font-bold text-primary mt-1">{formatBHD(item.price, 'ar')}</div>
             </div>
-            <Plus size={20} className="text-brand-400 flex-shrink-0" />
+            <Plus size={20} className="text-primary flex-shrink-0" />
           </button>
         ))}
         {filteredItems.length === 0 && (
-          <div className="text-center py-12 text-[#57534e]">لا توجد عناصر في هذا القسم</div>
+          <div className="text-center py-12 text-muted-foreground">لا توجد عناصر في هذا القسم</div>
         )}
       </div>
 

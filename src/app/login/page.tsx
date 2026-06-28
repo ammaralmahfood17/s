@@ -67,19 +67,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center">
-              <QrCode size={22} className="text-[#0f0e0c]" />
+            <div className="brand-icon !size-10 !rounded-xl">
+              <span className="text-sm">د</span>
             </div>
-            <span className="font-bold text-[#fafaf9] text-xl">
+            <span className="font-bold text-foreground text-xl">
               دكان
             </span>
           </Link>
-          <h1 className="text-2xl font-bold text-[#fafaf9]">تسجيل الدخول</h1>
+          <h1 className="text-2xl font-black text-foreground">تسجيل الدخول</h1>
         </div>
 
         {/* Form */}
@@ -113,7 +113,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#57534e] hover:text-[#a8a29e]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -123,7 +123,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full"
+              className="w-full rounded-full"
             >
               {loading ? 'جار التحميل...' : 'تسجيل الدخول'}
             </Button>
@@ -131,10 +131,10 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-[#a8a29e] mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-6">
           ليس لديك حساب؟{' '}
           <Link href="/register"
-            className="text-brand-400 hover:text-brand-300 font-medium">
+            className="text-primary hover:text-primary/80 font-bold">
             إنشاء حساب
           </Link>
         </p>

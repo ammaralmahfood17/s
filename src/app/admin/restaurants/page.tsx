@@ -40,10 +40,10 @@ export default async function AdminRestaurantsPage() {
     <div className="p-4 sm:p-6 max-w-6xl space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[#fafaf9]">
+          <h1 className="text-xl font-bold text-foreground">
             جميع العربات
           </h1>
-          <p className="text-sm text-[#57534e]">
+          <p className="text-sm text-muted-foreground">
             {rows.length} مسجلة
           </p>
         </div>
@@ -54,7 +54,7 @@ export default async function AdminRestaurantsPage() {
         <div className="overflow-x-auto table-scroll">
           <table className="w-full text-sm min-w-[640px]">
             <thead>
-              <tr className="border-b border-[#2a2825]">
+              <tr className="border-b border-border">
                 {[
                   'اسم العربة',
                   'الرابط',
@@ -64,7 +64,7 @@ export default async function AdminRestaurantsPage() {
                   'مفتوح',
                   'إجراءات',
                 ].map(h => (
-                  <th key={h} className="text-start text-xs font-semibold text-[#57534e]
+                  <th key={h} className="text-start text-xs font-semibold text-muted-foreground
                                          px-4 py-3 whitespace-nowrap">
                     {h}
                   </th>
@@ -79,18 +79,18 @@ export default async function AdminRestaurantsPage() {
                 const isExpired = expiresAt && new Date(expiresAt) < new Date();
 
                 return (
-                  <tr key={r.id} className="border-b border-[#1a1916] hover:bg-[#1a1916] transition-colors">
+                  <tr key={r.id} className="border-b border-border hover:bg-card transition-colors">
                     <td className="px-4 py-3">
-                      <div className="font-medium text-[#fafaf9]">
+                      <div className="font-medium text-foreground">
                         {r.name_ar}
                       </div>
-                      <div className="text-xs text-[#57534e]">{r.phone ?? '—'}</div>
+                      <div className="text-xs text-muted-foreground">{r.phone ?? '—'}</div>
                     </td>
-                    <td className="px-4 py-3 text-[#57534e] font-mono text-xs">
+                    <td className="px-4 py-3 text-muted-foreground font-mono text-xs">
                       {r.slug}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs text-[#a8a29e]">
+                      <span className="text-xs text-muted-foreground">
                         {plan ? plan.name_ar : '—'}
                       </span>
                     </td>
@@ -101,25 +101,25 @@ export default async function AdminRestaurantsPage() {
                     </td>
                     <td className="px-4 py-3">
                       {expiresAt ? (
-                        <span className={`text-xs ${isExpired ? 'text-red-400' : 'text-[#a8a29e]'}`}>
+                        <span className={`text-xs ${isExpired ? 'text-red-400' : 'text-muted-foreground'}`}>
                           {new Date(expiresAt).toLocaleDateString('en-BH')}
                           {isExpired && ' ⚠️'}
                         </span>
                       ) : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs font-medium ${r.is_open ? 'text-green-400' : 'text-[#57534e]'}`}>
+                      <span className={`text-xs font-medium ${r.is_open ? 'text-green-400' : 'text-muted-foreground'}`}>
                         {r.is_open ? '● مفتوح' : '● مغلق'}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <Link href={`/admin/restaurants/${r.id}`}
-                          className="text-xs text-brand-400 hover:text-brand-300">
+                          className="text-xs text-primary hover:text-primary">
                           إدارة
                         </Link>
                         <a href={`/r/${r.slug}`} target="_blank"
-                          className="text-xs text-[#57534e] hover:text-[#a8a29e]">
+                          className="text-xs text-muted-foreground hover:text-muted-foreground">
                           <ExternalLink size={12} />
                         </a>
                       </div>
@@ -131,7 +131,7 @@ export default async function AdminRestaurantsPage() {
           </table>
 
           {rows.length === 0 && (
-            <div className="text-center py-16 text-[#57534e]">
+            <div className="text-center py-16 text-muted-foreground">
               <Store size={40} className="mx-auto mb-3 text-[#3a3835]" />
               <p>لا توجد عربات مسجلة بعد</p>
             </div>

@@ -147,7 +147,7 @@ export default function ManualOrderPage({
     setPlacing(false);
   };
 
-  if (loading) return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+  if (loading) return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
 
   const filteredItems = items.filter(i => {
     const matchesCategory = !activeCategory || i.category_id === activeCategory;
@@ -158,8 +158,8 @@ export default function ManualOrderPage({
   return (
     <div className="p-4 sm:p-6 max-w-5xl space-y-4">
       <div>
-        <h1 className="text-xl font-bold text-[#fafaf9]">طلب يدوي</h1>
-        <p className="text-sm text-[#57534e]">إنشاء طلب جديد للعميل</p>
+        <h1 className="text-xl font-bold text-foreground">طلب يدوي</h1>
+        <p className="text-sm text-muted-foreground">إنشاء طلب جديد للعميل</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -167,7 +167,7 @@ export default function ManualOrderPage({
         <div className="lg:col-span-2 space-y-3">
           {/* Search */}
           <div className="relative">
-            <Search size={16} className="absolute start-3 top-1/2 -translate-y-1/2 text-[#57534e]" />
+            <Search size={16} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input className="input ps-10" placeholder="بحث عن عنصر..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} dir="rtl" />
           </div>
 
@@ -175,12 +175,12 @@ export default function ManualOrderPage({
           <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
             <button onClick={() => setActiveCategory('')}
               className={cn('flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
-                !activeCategory ? 'bg-brand-500 text-[#0f0e0c]' : 'text-[#a8a29e] bg-[#1a1916]'
+                !activeCategory ? 'bg-primary text-primary-foreground' : 'text-muted-foreground bg-card'
               )}>الكل</button>
             {categories.map(cat => (
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
                 className={cn('flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
-                  activeCategory === cat.id ? 'bg-brand-500 text-[#0f0e0c]' : 'text-[#a8a29e] bg-[#1a1916]'
+                  activeCategory === cat.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground bg-card'
                 )}>
                 {cat.emoji && <span className="ml-1">{cat.emoji}</span>}
                 {cat.name_ar}
@@ -193,10 +193,10 @@ export default function ManualOrderPage({
             {filteredItems.map(item => (
               <button key={item.id} onClick={() => addToCart(item, variationsMap[item.id]?.[0] ?? null)}
                 className="card text-start active:scale-[0.97] transition-transform">
-                <div className="text-sm font-medium text-[#fafaf9] truncate">{item.name_ar}</div>
-                <div className="text-xs text-brand-400 font-semibold mt-1">{formatBHD(item.price, 'ar')}</div>
+                <div className="text-sm font-medium text-foreground truncate">{item.name_ar}</div>
+                <div className="text-xs text-primary font-semibold mt-1">{formatBHD(item.price, 'ar')}</div>
                 {variationsMap[item.id]?.length > 0 && (
-                  <div className="text-[10px] text-[#57534e] mt-0.5">{variationsMap[item.id].length} حجم</div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">{variationsMap[item.id].length} حجم</div>
                 )}
               </button>
             ))}
@@ -205,25 +205,25 @@ export default function ManualOrderPage({
 
         {/* Cart */}
         <div className="card space-y-3 h-fit sticky top-4">
-          <h2 className="font-bold text-[#fafaf9]">الطلب</h2>
+          <h2 className="font-bold text-foreground">الطلب</h2>
 
           <input className="input text-sm" placeholder="اسم العميل (اختياري)" value={customerName} onChange={e => setCustomerName(e.target.value)} dir="rtl" />
 
           {cart.length === 0 ? (
-            <div className="text-center py-8 text-[#57534e] text-sm">اضغط على العناصر لإضافتها</div>
+            <div className="text-center py-8 text-muted-foreground text-sm">اضغط على العناصر لإضافتها</div>
           ) : (
             <div className="space-y-2">
               {cart.map(c => (
-                <div key={c.id} className="flex items-center gap-2 bg-[#0f0e0c] rounded-lg p-2">
+                <div key={c.id} className="flex items-center gap-2 bg-background rounded-lg p-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#fafaf9] truncate">{c.item.name_ar}</div>
-                    {c.variation && <div className="text-[10px] text-[#57534e]">{c.variation.name_ar}</div>}
+                    <div className="text-xs text-foreground truncate">{c.item.name_ar}</div>
+                    {c.variation && <div className="text-[10px] text-muted-foreground">{c.variation.name_ar}</div>}
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => updateQuantity(c.id, c.quantity - 1)} className="w-7 h-7 flex items-center justify-center text-[#a8a29e] bg-[#1a1916] rounded touch-manipulation"><Minus size={12} /></button>
-                    <span className="text-xs text-[#fafaf9] w-4 text-center">{c.quantity}</span>
-                    <button onClick={() => updateQuantity(c.id, c.quantity + 1)} className="w-7 h-7 flex items-center justify-center text-[#a8a29e] bg-[#1a1916] rounded touch-manipulation"><Plus size={12} /></button>
-                    <button onClick={() => setCart(prev => prev.filter(x => x.id !== c.id))} className="w-7 h-7 flex items-center justify-center text-red-400 bg-[#1a1916] rounded touch-manipulation"><Trash2 size={12} /></button>
+                    <button onClick={() => updateQuantity(c.id, c.quantity - 1)} className="w-7 h-7 flex items-center justify-center text-muted-foreground bg-card rounded touch-manipulation"><Minus size={12} /></button>
+                    <span className="text-xs text-foreground w-4 text-center">{c.quantity}</span>
+                    <button onClick={() => updateQuantity(c.id, c.quantity + 1)} className="w-7 h-7 flex items-center justify-center text-muted-foreground bg-card rounded touch-manipulation"><Plus size={12} /></button>
+                    <button onClick={() => setCart(prev => prev.filter(x => x.id !== c.id))} className="w-7 h-7 flex items-center justify-center text-red-400 bg-card rounded touch-manipulation"><Trash2 size={12} /></button>
                   </div>
                 </div>
               ))}
@@ -234,9 +234,9 @@ export default function ManualOrderPage({
 
           {cart.length > 0 && (
             <>
-              <div className="flex justify-between pt-2 border-t border-[#2a2825]">
-                <span className="text-sm text-[#a8a29e]">الإجمالي</span>
-                <span className="font-bold text-[#fafaf9]">{formatBHD(total, 'ar')}</span>
+              <div className="flex justify-between pt-2 border-t border-border">
+                <span className="text-sm text-muted-foreground">الإجمالي</span>
+                <span className="font-bold text-foreground">{formatBHD(total, 'ar')}</span>
               </div>
               <button onClick={placeOrder} disabled={placing} className="btn-primary w-full">
                 {placing ? 'جار الإنشاء...' : 'إنشاء الطلب'}

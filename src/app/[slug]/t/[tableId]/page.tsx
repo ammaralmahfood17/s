@@ -70,7 +70,7 @@ function ItemModal({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1916] w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl
+      <div className="relative bg-card w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl
                       max-h-[92dvh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-up overflow-hidden">
         {/* Image */}
         {item.image_url && (
@@ -81,7 +81,7 @@ function ItemModal({
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1916] to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
           </div>
         )}
 
@@ -98,19 +98,19 @@ function ItemModal({
         <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4 overscroll-contain">
           {/* Item info */}
           <div>
-            <h2 className="text-xl font-bold text-[#fafaf9]">
+            <h2 className="text-xl font-bold text-foreground">
               {item.name_ar}
             </h2>
             {item.description_ar && (
-              <p className="text-sm text-[#a8a29e] mt-1 leading-relaxed">
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                 {item.description_ar}
               </p>
             )}
             {item.tags?.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {item.tags.map(tag => (
-                  <span key={tag} className="text-xs bg-[#0f0e0c] text-[#a8a29e]
-                                             px-2 py-0.5 rounded-full border border-[#2a2825]">
+                  <span key={tag} className="text-xs bg-background text-muted-foreground
+                                             px-2 py-0.5 rounded-full border border-border">
                     {TAG_LABELS[tag] ?? tag}
                   </span>
                 ))}
@@ -121,7 +121,7 @@ function ItemModal({
           {/* Variations */}
           {variations.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-[#fafaf9] mb-2">
+              <h3 className="text-sm font-semibold text-foreground mb-2">
                 اختر الحجم *
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -135,14 +135,14 @@ function ItemModal({
                       className={cn(
                         'p-3 rounded-xl border text-start transition-all',
                         isSelected
-                          ? 'border-brand-500 bg-brand-500/10'
-                          : 'border-[#2a2825] bg-[#0f0e0c] hover:border-[#3a3835]'
+                          ? 'border-primary bg-primary/10'
+                          : 'border-border bg-background hover:border-[#3a3835]'
                       )}
                     >
-                      <div className={`text-sm font-medium ${isSelected ? 'text-brand-400' : 'text-[#fafaf9]'}`}>
+                      <div className={`text-sm font-medium ${isSelected ? 'text-primary' : 'text-foreground'}`}>
                         {v.name_ar}
                       </div>
-                      <div className="text-xs text-[#a8a29e] mt-0.5">
+                      <div className="text-xs text-muted-foreground mt-0.5">
                         {formatBHD(vPrice, 'ar')}
                       </div>
                     </button>
@@ -155,7 +155,7 @@ function ItemModal({
           {/* Addons */}
           {addons.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-[#fafaf9] mb-2">
+              <h3 className="text-sm font-semibold text-foreground mb-2">
                 إضافات
               </h3>
               <div className="space-y-2">
@@ -168,22 +168,22 @@ function ItemModal({
                       className={cn(
                         'w-full flex items-center justify-between p-3 rounded-xl border transition-all',
                         isSelected
-                          ? 'border-brand-500 bg-brand-500/10'
-                          : 'border-[#2a2825] bg-[#0f0e0c] hover:border-[#3a3835]'
+                          ? 'border-primary bg-primary/10'
+                          : 'border-border bg-background hover:border-[#3a3835]'
                       )}
                     >
                       <div className="flex items-center gap-2">
                         <div className={cn(
                           'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
-                          isSelected ? 'border-brand-500 bg-brand-500' : 'border-[#3a3835]'
+                          isSelected ? 'border-primary bg-primary' : 'border-[#3a3835]'
                         )}>
-                          {isSelected && <span className="text-[#0f0e0c] text-xs font-bold">✓</span>}
+                          {isSelected && <span className="text-primary-foreground text-xs font-bold">✓</span>}
                         </div>
-                        <span className="text-sm text-[#fafaf9]">
+                        <span className="text-sm text-foreground">
                           {addon.name_ar}
                         </span>
                       </div>
-                      <span className="text-sm text-brand-400 font-medium">
+                      <span className="text-sm text-primary font-medium">
                         {addon.price > 0
                           ? `+${formatBHD(addon.price, 'ar')}`
                           : 'مجاني'
@@ -212,23 +212,23 @@ function ItemModal({
         </div>
 
         {/* Footer: qty + add */}
-        <div className="px-5 pt-4 border-t border-[#2a2825] bg-[#1a1916] flex-shrink-0 safe-bottom">
+        <div className="px-5 pt-4 border-t border-border bg-card flex-shrink-0 safe-bottom">
           <div className="flex items-center gap-3">
             {/* Quantity — 44px touch targets */}
-            <div className="flex items-center gap-1 bg-[#0f0e0c] border border-[#2a2825] rounded-xl p-1 flex-shrink-0">
+            <div className="flex items-center gap-1 bg-background border border-border rounded-xl p-1 flex-shrink-0">
               <button
                 onClick={() => setQty(q => Math.max(1, q - 1))}
-                className="w-11 h-11 flex items-center justify-center text-[#a8a29e]
-                           active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg
+                className="w-11 h-11 flex items-center justify-center text-muted-foreground
+                           active:text-foreground active:bg-card rounded-lg
                            transition-colors touch-manipulation"
               >
                 <Minus size={16} />
               </button>
-              <span className="font-bold text-[#fafaf9] w-6 text-center text-sm">{qty}</span>
+              <span className="font-bold text-foreground w-6 text-center text-sm">{qty}</span>
               <button
                 onClick={() => setQty(q => q + 1)}
-                className="w-11 h-11 flex items-center justify-center text-[#a8a29e]
-                           active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg
+                className="w-11 h-11 flex items-center justify-center text-muted-foreground
+                           active:text-foreground active:bg-card rounded-lg
                            transition-colors touch-manipulation"
               >
                 <Plus size={16} />
@@ -380,7 +380,7 @@ function CartDrawer({
           <div className="flex items-center justify-between w-full gap-2 min-w-0">
             <div className="flex items-center gap-2 flex-shrink-0">
               <ShoppingCart size={20} />
-              <span className="bg-[#0f0e0c]/30 text-sm px-2 py-0.5 rounded-full font-bold">
+              <span className="bg-background/30 text-sm px-2 py-0.5 rounded-full font-bold">
                 {count}
               </span>
             </div>
@@ -394,25 +394,25 @@ function CartDrawer({
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="relative bg-[#1a1916] w-full max-w-md rounded-t-3xl
+          <div className="relative bg-card w-full max-w-md rounded-t-3xl
                           max-h-[88dvh] flex flex-col shadow-2xl animate-slide-up overscroll-contain">
             {/* Handle */}
             <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
               <div className="w-10 h-1 bg-[#3a3835] rounded-full" />
             </div>
 
-            <div className="px-5 py-3 flex items-center justify-between border-b border-[#2a2825] flex-shrink-0">
-              <h2 className="font-bold text-[#fafaf9]">
+            <div className="px-5 py-3 flex items-center justify-between border-b border-border flex-shrink-0">
+              <h2 className="font-bold text-foreground">
                 طلبك
               </h2>
-              <button onClick={() => setOpen(false)} className="text-[#57534e] hover:text-[#fafaf9]">
+              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
                 <ChevronUp size={20} />
               </button>
             </div>
 
             {/* Table name */}
-            <div className="px-5 py-2 bg-[#0f0e0c]/50 border-b border-[#2a2825]">
-              <span className="text-xs text-[#57534e]">
+            <div className="px-5 py-2 bg-background/50 border-b border-border">
+              <span className="text-xs text-muted-foreground">
                 📍 {tableName}
               </span>
             </div>
@@ -422,42 +422,42 @@ function CartDrawer({
               {items.map((ci) => (
                 <div key={ci.cartId} className="flex gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-[#fafaf9]">
+                    <div className="text-sm font-medium text-foreground">
                       {ci.item.name_ar}
                     </div>
                     {ci.variation && (
-                      <div className="text-xs text-[#57534e]">
+                      <div className="text-xs text-muted-foreground">
                         {ci.variation.name_ar}
                       </div>
                     )}
                     {ci.addons.length > 0 && (
-                      <div className="text-xs text-[#57534e]">
+                      <div className="text-xs text-muted-foreground">
                         + {ci.addons.map(a => a.name_ar).join(', ')}
                       </div>
                     )}
                     {ci.notes && (
                       <div className="text-xs text-yellow-600 italic">{'\u201C'}{ci.notes}{'\u201D'}</div>
                     )}
-                    <div className="text-sm text-brand-400 font-semibold mt-0.5">
+                    <div className="text-sm text-primary font-semibold mt-0.5">
                       {formatBHD(ci.lineTotal, 'ar')}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1 flex-shrink-0">
-                    <div className="flex items-center bg-[#0f0e0c] border border-[#2a2825] rounded-lg">
+                    <div className="flex items-center bg-background border border-border rounded-lg">
                       <button
                         onClick={() => updateQuantity(ci.cartId, ci.quantity - 1)}
-                        className="w-10 h-10 flex items-center justify-center text-[#a8a29e]
-                                   active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg
+                        className="w-10 h-10 flex items-center justify-center text-muted-foreground
+                                   active:text-foreground active:bg-card rounded-lg
                                    transition-colors touch-manipulation"
                       >
                         <Minus size={13} />
                       </button>
-                      <span className="text-sm font-bold text-[#fafaf9] w-5 text-center">{ci.quantity}</span>
+                      <span className="text-sm font-bold text-foreground w-5 text-center">{ci.quantity}</span>
                       <button
                         onClick={() => updateQuantity(ci.cartId, ci.quantity + 1)}
-                        className="w-10 h-10 flex items-center justify-center text-[#a8a29e]
-                                   active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg
+                        className="w-10 h-10 flex items-center justify-center text-muted-foreground
+                                   active:text-foreground active:bg-card rounded-lg
                                    transition-colors touch-manipulation"
                       >
                         <Plus size={13} />
@@ -504,19 +504,19 @@ function CartDrawer({
             </div>
 
             {/* Pay at cashier notice */}
-            <div className="px-5 py-3 bg-brand-500/10 border-t border-brand-500/20 mx-5 rounded-xl mb-3
+            <div className="px-5 py-3 bg-primary/10 border-t border-primary/20 mx-5 rounded-xl mb-3
                             flex items-start gap-2 flex-shrink-0">
-              <Info size={16} className="text-brand-400 flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-brand-300 leading-relaxed">
+              <Info size={16} className="text-primary flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-primary leading-relaxed">
                 الدفع عند الكاشير عند استلام طلبك. لا يلزم أي دفع إلكتروني.
               </p>
             </div>
 
             {/* Footer */}
-            <div className="px-5 pt-2 space-y-3 border-t border-[#2a2825] flex-shrink-0 safe-bottom">
+            <div className="px-5 pt-2 space-y-3 border-t border-border flex-shrink-0 safe-bottom">
               <div className="flex justify-between text-sm font-semibold">
-                <span className="text-[#a8a29e]">الإجمالي</span>
-                <span className="text-brand-400 text-lg">{formatBHD(total, 'ar')}</span>
+                <span className="text-muted-foreground">الإجمالي</span>
+                <span className="text-primary text-lg">{formatBHD(total, 'ar')}</span>
               </div>
               <button
                 onClick={placeOrder}
@@ -581,15 +581,15 @@ function OrderTracker({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 safe-x">
-      <div className="bg-[#1a1916] border border-[#2a2825] rounded-2xl p-6 w-full max-w-sm
+      <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-sm
                       max-h-[92dvh] overflow-y-auto overscroll-contain animate-slide-up shadow-2xl
                       relative">
         {/* Close button — always visible */}
         <button
           onClick={onDismiss}
           className="absolute top-3 end-3 w-8 h-8 flex items-center justify-center
-                     rounded-full bg-[#2a2825] active:bg-[#3a3835] text-[#a8a29e]
-                     hover:text-[#fafaf9] transition-colors touch-manipulation"
+                     rounded-full bg-[#2a2825] active:bg-[#3a3835] text-muted-foreground
+                     hover:text-foreground transition-colors touch-manipulation"
           aria-label={'إغلاق'}
         >
           ✕
@@ -599,18 +599,18 @@ function OrderTracker({
           <div className="text-4xl mb-2">
             {status === 'preparing' ? '🍳' : status === 'completed' ? '🎉' : '📋'}
           </div>
-          <h2 className="text-xl font-bold text-[#fafaf9]">
+          <h2 className="text-xl font-bold text-foreground">
             تم تقديم طلبك!
           </h2>
-          <p className="text-[#a8a29e] text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             رقم طلبك
           </p>
-          <div className="text-3xl font-black text-brand-400 mt-1">{orderNumber}</div>
+          <div className="text-3xl font-black text-primary mt-1">{orderNumber}</div>
 
           {/* Prep time estimate — only while order is still active */}
           {prepTimeMinutes && !['completed', 'cancelled'].includes(status) && (
-            <div className="inline-flex items-center gap-1.5 mt-2 text-xs text-[#a8a29e]
-                            bg-[#0f0e0c] border border-[#2a2825] rounded-full px-3 py-1">
+            <div className="inline-flex items-center gap-1.5 mt-2 text-xs text-muted-foreground
+                            bg-background border border-border rounded-full px-3 py-1">
               ⏱ {`الوقت المتوقع: ~${prepTimeMinutes} دقيقة`}
             </div>
           )}
@@ -626,17 +626,17 @@ function OrderTracker({
               <div key={step} className="flex items-center gap-3">
                 <div className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0',
-                  isDone    ? 'bg-brand-500 text-[#0f0e0c]' :
-                  isCurrent ? 'bg-[#2a2825] border-2 border-brand-500 animate-pulse' :
-                              'bg-[#1a1916] border border-[#2a2825]'
+                  isDone    ? 'bg-primary text-primary-foreground' :
+                  isCurrent ? 'bg-[#2a2825] border-2 border-primary animate-pulse' :
+                              'bg-card border border-border'
                 )}>
                   {isDone ? '✓' : info.icon}
                 </div>
                 <div className="flex-1">
                   <div className={cn(
                     'text-sm font-medium',
-                    isCurrent ? 'text-brand-400' :
-                    isDone    ? 'text-[#a8a29e]' : 'text-[#3a3835]'
+                    isCurrent ? 'text-primary' :
+                    isDone    ? 'text-muted-foreground' : 'text-[#3a3835]'
                   )}>
                     {info.ar}
                   </div>
@@ -647,15 +647,15 @@ function OrderTracker({
         </div>
 
         {/* Cashier note */}
-        <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-3 mb-4">
-          <p className="text-xs text-brand-300 text-center leading-relaxed">
+        <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 mb-4">
+          <p className="text-xs text-primary text-center leading-relaxed">
             💳 ادفع عند الكاشير عند استلام طلبك
           </p>
         </div>
 
         {/* Review form on completion */}
         {status === 'completed' && !reviewSubmitted && (
-          <div className="mb-4 pt-4 border-t border-[#2a2825]">
+          <div className="mb-4 pt-4 border-t border-border">
             <ReviewForm
               restaurantId={restaurantId}
               orderId={orderId}
@@ -676,7 +676,7 @@ function OrderTracker({
             onClick={onDismiss}
             className="w-full min-h-[44px] py-2.5 rounded-xl text-sm font-medium
                        transition-all active:scale-[0.98] touch-manipulation
-                       bg-[#2a2825] text-[#fafaf9] active:bg-[#3a3835]"
+                       bg-[#2a2825] text-foreground active:bg-[#3a3835]"
           >
             📋 رجوع للمنيو
           </button>
@@ -790,21 +790,21 @@ export default function CustomerMenuPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center">
-        <div className="text-[#57534e]">جار التحميل...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground">جار التحميل...</div>
       </div>
     );
   }
 
   if (!restaurant || !table) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center">
           <div className="text-4xl mb-3">😕</div>
-          <h1 className="text-xl font-bold text-[#fafaf9]">
+          <h1 className="text-xl font-bold text-foreground">
             رمز QR غير صالح
           </h1>
-          <p className="text-[#a8a29e] mt-2">
+          <p className="text-muted-foreground mt-2">
             يرجى مسح رمز QR مرة أخرى
           </p>
         </div>
@@ -819,16 +819,16 @@ export default function CustomerMenuPage({
 
   if (!restaurant.is_open) {
     return (
-      <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center">
           <div className="text-5xl mb-3">🔒</div>
-          <h1 className="text-xl font-bold text-[#fafaf9]">
+          <h1 className="text-xl font-bold text-foreground">
             {restaurant.name_ar}
           </h1>
-          <p className="text-[#a8a29e] mt-2">
+          <p className="text-muted-foreground mt-2">
             المطعم مغلق حالياً
           </p>
-          <p className="text-sm text-[#57534e] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             يرجى المحاولة لاحقاً
           </p>
         </div>
@@ -837,7 +837,7 @@ export default function CustomerMenuPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c]" style={{ paddingBottom: 'calc(7rem + env(safe-area-inset-bottom, 0px))' }}>
+    <div className="min-h-screen bg-background" style={{ paddingBottom: 'calc(7rem + env(safe-area-inset-bottom, 0px))' }}>
       {/* Restaurant header */}
       <div className="relative">
         {restaurant.cover_url && (
@@ -848,14 +848,14 @@ export default function CustomerMenuPage({
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0f0e0c]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
           </div>
         )}
         <div className={cn('px-4 pb-3', restaurant.cover_url ? '-mt-12 relative z-10' : 'pt-8')}>
           <div className="flex items-end gap-3">
             {restaurant.logo_url && (
-              <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-[#2a2825]
-                              bg-[#1a1916] flex-shrink-0">
+              <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-border
+                              bg-card flex-shrink-0">
                 <NextImage
                   src={getPublicImageUrl(restaurant.logo_url, 'restaurant-assets')}
                   alt="logo"
@@ -866,11 +866,11 @@ export default function CustomerMenuPage({
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold text-[#fafaf9]">
+              <h1 className="text-xl font-bold text-foreground">
                 {restaurant.name_ar}
               </h1>
               {restaurant.description_ar && (
-                <p className="text-xs text-[#a8a29e] mt-0.5 line-clamp-2">
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                   {restaurant.description_ar}
                 </p>
               )}
@@ -881,11 +881,11 @@ export default function CustomerMenuPage({
                 )}>
                   {reallyOpen ? '● مفتوح' : '● مغلق'}
                 </span>
-                <span className="text-xs text-[#57534e]">
+                <span className="text-xs text-muted-foreground">
                   📍 {table.name_ar}
                 </span>
                 {restaurant.prep_time_minutes && (
-                  <span className="text-xs text-[#57534e]">
+                  <span className="text-xs text-muted-foreground">
                     ⏱ {`~${restaurant.prep_time_minutes} د`}
                   </span>
                 )}
@@ -921,7 +921,7 @@ export default function CustomerMenuPage({
 
       {/* Category pills — sticky, 44px touch targets */}
       {!searchQuery && categories.length > 0 && (
-        <div className="sticky top-0 z-20 bg-[#0f0e0c]/95 backdrop-blur-sm pt-1 pb-2 mb-2">
+        <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm pt-1 pb-2 mb-2">
           <div className="flex gap-2 px-4 overflow-x-auto scrollbar-hide">
             {categories.map(cat => (
               <button
@@ -931,8 +931,8 @@ export default function CustomerMenuPage({
                   'flex-shrink-0 text-sm px-3.5 min-h-[40px] rounded-xl border transition-all',
                   'active:scale-95 touch-manipulation select-none',
                   selectedCategory === cat.id
-                    ? 'bg-brand-500 text-[#0f0e0c] border-brand-500 font-semibold'
-                    : 'border-[#2a2825] text-[#a8a29e] active:border-[#3a3835]'
+                    ? 'bg-primary text-primary-foreground border-primary font-semibold'
+                    : 'border-border text-muted-foreground active:border-[#3a3835]'
                 )}
               >
                 {cat.emoji} {cat.name_ar}
@@ -954,7 +954,7 @@ export default function CustomerMenuPage({
               />
             ))}
             {filteredItems.length === 0 && (
-              <div className="text-center py-12 text-[#57534e]">
+              <div className="text-center py-12 text-muted-foreground">
                 لا توجد نتائج
               </div>
             )}
@@ -965,7 +965,7 @@ export default function CustomerMenuPage({
             if (catItems.length === 0) return null;
             return (
               <div key={cat.id} ref={el => { if (el) catRefs.current[cat.id] = el; }}>
-                <h2 className="text-base font-bold text-[#fafaf9] mb-3 flex items-center gap-2">
+                <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
                   <span>{cat.emoji}</span>
                   {cat.name_ar}
                 </h2>
@@ -987,7 +987,7 @@ export default function CustomerMenuPage({
       {/* Reviews */}
       {restaurant && (
         <div className="px-4 mt-8">
-          <h2 className="text-sm font-bold text-[#fafaf9] mb-3 flex items-center gap-1.5">
+          <h2 className="text-sm font-bold text-foreground mb-3 flex items-center gap-1.5">
             <Star size={14} className="text-yellow-400" />
             تقييمات العملاء
           </h2>
@@ -1056,17 +1056,17 @@ function ItemCard({
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-[#fafaf9] text-sm leading-tight">
+          <span className="font-medium text-foreground text-sm leading-tight">
             {item.name_ar}
           </span>
           {item.is_featured && <Star size={12} className="text-yellow-400 flex-shrink-0" />}
         </div>
         {item.description_ar && (
-          <p className="text-xs text-[#57534e] mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
             {item.description_ar}
           </p>
         )}
-        <div className="font-bold text-brand-400 text-sm mt-1.5">
+        <div className="font-bold text-primary text-sm mt-1.5">
           {formatBHD(item.price, 'ar')}
         </div>
       </div>
@@ -1082,13 +1082,13 @@ function ItemCard({
             />
           </div>
         ) : (
-          <div className="w-20 h-20 rounded-xl bg-[#1a1916] flex items-center justify-center text-2xl">
+          <div className="w-20 h-20 rounded-xl bg-card flex items-center justify-center text-2xl">
             🍴
           </div>
         )}
-        <div className="w-11 h-11 rounded-lg bg-brand-500 flex items-center justify-center
+        <div className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center
                         touch-manipulation">
-          <Plus size={18} className="text-[#0f0e0c]" />
+          <Plus size={18} className="text-primary-foreground" />
         </div>
       </div>
     </button>

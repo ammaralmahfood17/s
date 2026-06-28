@@ -227,7 +227,7 @@ export default function AdminRestaurantDetailPage({
   };
 
   if (loading) {
-    return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+    return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
   }
 
   if (!restaurant) {
@@ -242,26 +242,26 @@ export default function AdminRestaurantDetailPage({
   return (
     <div className="p-4 sm:p-6 max-w-4xl space-y-5">
       {/* Back */}
-      <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-[#57534e] hover:text-[#a8a29e]">
+      <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-muted-foreground">
         <ArrowLeft size={16} className="rtl:rotate-180" />
         رجوع
       </button>
 
       {/* Restaurant header */}
       <div className="card flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#2a2825] flex items-center justify-center text-2xl flex-shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-border flex items-center justify-center text-2xl flex-shrink-0">
           🏪
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h1 className="text-xl font-bold text-[#fafaf9]">
+              <h1 className="text-xl font-bold text-foreground">
                 {restaurant.name_ar}
               </h1>
-              <p className="text-sm text-[#57534e] font-mono mt-0.5">/{restaurant.slug}</p>
+              <p className="text-sm text-muted-foreground font-mono mt-0.5">/{restaurant.slug}</p>
             </div>
             <a href={`/r/${restaurant.slug}`} target="_blank"
-              className="text-[#57534e] hover:text-brand-400">
+              className="text-muted-foreground hover:text-primary">
               <ExternalLink size={16} />
             </a>
           </div>
@@ -272,7 +272,7 @@ export default function AdminRestaurantDetailPage({
             <span className={`badge ${restaurant.is_open ? 'badge-confirmed' : 'badge-cancelled'}`}>
               {restaurant.is_open ? 'مفتوح' : 'مغلق'}
             </span>
-            {restaurant.phone && <span className="text-xs text-[#57534e]">{restaurant.phone}</span>}
+            {restaurant.phone && <span className="text-xs text-muted-foreground">{restaurant.phone}</span>}
           </div>
         </div>
       </div>
@@ -293,8 +293,8 @@ export default function AdminRestaurantDetailPage({
                   { label: 'ملاحظات', value: sub.admin_notes ?? '—' },
                 ].map(row => (
                   <div key={row.label} className="flex justify-between text-sm">
-                    <span className="text-[#57534e]">{row.label}</span>
-                    <span className={cn('font-medium', row.label === 'الحالة' ? (STATUS_BADGE[row.value] ? 'text-brand-400' : '') : 'text-[#fafaf9]')}>
+                    <span className="text-muted-foreground">{row.label}</span>
+                    <span className={cn('font-medium', row.label === 'الحالة' ? (STATUS_BADGE[row.value] ? 'text-primary' : '') : 'text-foreground')}>
                       {row.value}
                     </span>
                   </div>
@@ -303,15 +303,15 @@ export default function AdminRestaurantDetailPage({
 
               {/* Quick status actions */}
               <div>
-                <p className="text-xs text-[#57534e] mb-2">تغيير الحالة:</p>
+                <p className="text-xs text-muted-foreground mb-2">تغيير الحالة:</p>
                 <div className="flex gap-2 flex-wrap">
                   {['active', 'trialing', 'past_due', 'cancelled', 'paused'].map(s => (
                     <button key={s} onClick={() => updateSubStatus(s)} disabled={saving || sub.status === s}
                       className={cn(
                         'text-xs px-3 min-h-[40px] rounded-lg border transition-all touch-manipulation',
                         sub.status === s
-                          ? 'bg-brand-500/20 border-brand-500 text-brand-400'
-                          : 'border-[#2a2825] text-[#57534e] hover:border-[#3a3835] hover:text-[#fafaf9]'
+                          ? 'bg-primary/20 border-primary text-primary'
+                          : 'border-border text-muted-foreground hover:border-[#3a3835] hover:text-foreground'
                       )}>
                       {s}
                     </button>
@@ -321,7 +321,7 @@ export default function AdminRestaurantDetailPage({
 
               {/* Extend buttons */}
               <div>
-                <p className="text-xs text-[#57534e] mb-2">تمديد الاشتراك:</p>
+                <p className="text-xs text-muted-foreground mb-2">تمديد الاشتراك:</p>
                 <div className="flex gap-2">
                   {[1, 3, 6, 12].map(m => (
                     <button key={m} onClick={() => extendSubscription(m)} disabled={saving}
@@ -341,7 +341,7 @@ export default function AdminRestaurantDetailPage({
               </button>
             </>
           ) : (
-            <p className="text-sm text-[#57534e]">لا يوجد اشتراك</p>
+            <p className="text-sm text-muted-foreground">لا يوجد اشتراك</p>
           )}
         </div>
 
@@ -404,22 +404,22 @@ export default function AdminRestaurantDetailPage({
       <div className="card">
         <h2 className="section-title">سجل الدفعات</h2>
         {payments.length === 0 ? (
-          <p className="text-sm text-[#57534e] py-4 text-center">لا توجد دفعات مسجلة بعد</p>
+          <p className="text-sm text-muted-foreground py-4 text-center">لا توجد دفعات مسجلة بعد</p>
         ) : (
           <div className="space-y-2 mt-2">
             {(payments ?? []).map((p: Payment) => (
-              <div key={p.id} className="flex items-center gap-3 py-2 border-b border-[#1a1916]">
+              <div key={p.id} className="flex items-center gap-3 py-2 border-b border-border">
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-[#fafaf9] font-medium">
+                  <div className="text-sm text-foreground font-medium">
                     {formatBHD(p.amount_bhd)} — {p.payment_method}
                   </div>
-                  <div className="text-xs text-[#57534e]">
+                  <div className="text-xs text-muted-foreground">
                     {new Date(p.paid_at).toLocaleDateString('en-BH')}
                     {p.reference && ` · المرجع: ${p.reference}`}
                   </div>
-                  {p.notes && <div className="text-xs text-[#57534e] italic">{p.notes}</div>}
+                  {p.notes && <div className="text-xs text-muted-foreground italic">{p.notes}</div>}
                 </div>
-                <div className="text-xs text-[#57534e] flex-shrink-0">
+                <div className="text-xs text-muted-foreground flex-shrink-0">
                   {new Date(p.period_from).toLocaleDateString('en-BH')} →{' '}
                   {new Date(p.period_to).toLocaleDateString('en-BH')}
                 </div>

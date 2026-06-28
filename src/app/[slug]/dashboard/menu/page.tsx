@@ -162,19 +162,19 @@ function ItemModal({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1916] border border-[#2a2825] rounded-t-3xl sm:rounded-2xl
+      <div className="relative bg-card border border-border rounded-t-3xl sm:rounded-2xl
                       w-full max-w-xl max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto overscroll-contain shadow-2xl">
-        <div className="sticky top-0 bg-[#1a1916] border-b border-[#2a2825] px-5 py-4
+        <div className="sticky top-0 bg-card border-b border-border px-5 py-4
                         flex items-center justify-between z-10">
-          <h2 className="font-bold text-[#fafaf9]">
+          <h2 className="font-bold text-foreground">
             {item
               ? 'تعديل العنصر'
               : 'إضافة عنصر'
             }
           </h2>
           <button onClick={onClose}
-            className="w-11 h-11 -me-2 flex items-center justify-center text-[#57534e]
-                       active:text-[#fafaf9] text-xl touch-manipulation">×</button>
+            className="w-11 h-11 -me-2 flex items-center justify-center text-muted-foreground
+                       active:text-foreground text-xl touch-manipulation">×</button>
         </div>
 
         <div className="p-5 space-y-4">
@@ -183,7 +183,7 @@ function ItemModal({
             <label className="label">صورة العنصر</label>
             <div className="flex gap-3 items-center">
               {form.image_url ? (
-                <div className="w-20 h-20 rounded-xl overflow-hidden border border-[#2a2825] flex-shrink-0">
+                <div className="w-20 h-20 rounded-xl overflow-hidden border border-border flex-shrink-0">
                   <NextImage
                     src={getPublicImageUrl(form.image_url)}
                     alt="item"
@@ -193,9 +193,9 @@ function ItemModal({
                   />
                 </div>
               ) : (
-                <div className="w-20 h-20 rounded-xl bg-[#0f0e0c] border border-dashed border-[#3a3835]
+                <div className="w-20 h-20 rounded-xl bg-background border border-dashed border-border
                                 flex items-center justify-center flex-shrink-0">
-                  <Image size={20} className="text-[#3a3835]" />
+                  <Image size={20} className="text-border" />
                 </div>
               )}
               <div>
@@ -283,7 +283,7 @@ function ItemModal({
                 onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
                 placeholder="0.000"
               />
-              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-[#57534e] text-sm">
+              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
                 د.ب.
               </span>
             </div>
@@ -296,7 +296,7 @@ function ItemModal({
                 onClick={() => setForm(f => ({ ...f, is_available: !f.is_available }))}
                 className={cn(
                   'w-10 h-6 rounded-full transition-colors relative',
-                  form.is_available ? 'bg-brand-500' : 'bg-[#2a2825]'
+                  form.is_available ? 'bg-primary' : 'bg-border'
                 )}
               >
                 <span className={cn(
@@ -304,7 +304,7 @@ function ItemModal({
                   form.is_available ? 'translate-x-5' : 'translate-x-1'
                 )} />
               </div>
-              <span className="text-sm text-[#a8a29e]">
+              <span className="text-sm text-muted-foreground">
                 متاح
               </span>
             </label>
@@ -313,7 +313,7 @@ function ItemModal({
                 onClick={() => setForm(f => ({ ...f, is_featured: !f.is_featured }))}
                 className={cn(
                   'w-10 h-6 rounded-full transition-colors relative',
-                  form.is_featured ? 'bg-yellow-500' : 'bg-[#2a2825]'
+                  form.is_featured ? 'bg-yellow-500' : 'bg-border'
                 )}
               >
                 <span className={cn(
@@ -321,7 +321,7 @@ function ItemModal({
                   form.is_featured ? 'translate-x-5' : 'translate-x-1'
                 )} />
               </div>
-              <span className="text-sm text-[#a8a29e]">
+              <span className="text-sm text-muted-foreground">
                 <Star size={12} className="inline mb-0.5" /> مميز
               </span>
             </label>
@@ -339,8 +339,8 @@ function ItemModal({
                   className={cn(
                     'text-xs px-3 py-1 rounded-full border transition-all',
                     form.tags.includes(tag)
-                      ? 'bg-brand-500/20 border-brand-500 text-brand-400'
-                      : 'border-[#2a2825] text-[#57534e] hover:border-[#3a3835]'
+                      ? 'bg-primary/20 border-primary text-primary'
+                      : 'border-border text-muted-foreground hover:border-[#3a3835]'
                   )}
                 >
                   {TAG_LABELS[tag]}
@@ -358,13 +358,13 @@ function ItemModal({
               <button
                 type="button"
                 onClick={() => setVariations(v => [...v, { name_en: '', name_ar: '', price_modifier: 0 }])}
-                className="text-xs text-brand-400 active:text-brand-300 min-h-[40px] px-2 touch-manipulation"
+                className="text-xs text-primary active:text-primary/80 min-h-[40px] px-2 touch-manipulation"
               >
                 + إضافة
               </button>
             </div>
             {variations.map((v, i) => (
-              <div key={i} className="bg-[#0f0e0c] border border-[#2a2825] rounded-xl p-2.5 mb-2 space-y-2">
+              <div key={i} className="bg-background border border-border rounded-xl p-2.5 mb-2 space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     className="input text-sm text-right font-cairo"
@@ -406,13 +406,13 @@ function ItemModal({
               <button
                 type="button"
                 onClick={() => setAddons(a => [...a, { name_en: '', name_ar: '', price: 0 }])}
-                className="text-xs text-brand-400 active:text-brand-300 min-h-[40px] px-2 touch-manipulation"
+                className="text-xs text-primary active:text-primary/80 min-h-[40px] px-2 touch-manipulation"
               >
                 + إضافة
               </button>
             </div>
             {addons.map((a, i) => (
-              <div key={i} className="bg-[#0f0e0c] border border-[#2a2825] rounded-xl p-2.5 mb-2 space-y-2">
+              <div key={i} className="bg-background border border-border rounded-xl p-2.5 mb-2 space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     className="input text-sm text-right font-cairo"
@@ -448,7 +448,7 @@ function ItemModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-[#1a1916] border-t border-[#2a2825] px-5 py-4 flex gap-3 safe-bottom">
+        <div className="sticky bottom-0 bg-card border-t border-border px-5 py-4 flex gap-3 safe-bottom">
           <button type="button" onClick={onClose} className="btn-secondary flex-1">
             إلغاء
           </button>
@@ -539,14 +539,14 @@ export default function MenuPage() {
   };
 
   if (loading) {
-    return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+    return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
   }
 
   return (
     <div className="p-4 sm:p-6 max-w-4xl space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-lg sm:text-xl font-bold text-[#fafaf9]">
+        <h1 className="text-lg sm:text-xl font-bold text-foreground">
           القائمة
         </h1>
         <button onClick={addCategory} className="btn-primary text-sm flex-shrink-0">
@@ -559,10 +559,10 @@ export default function MenuPage() {
       {categories.length === 0 ? (
         <div className="card text-center py-16">
           <div className="text-5xl mb-3">🍽</div>
-          <p className="text-[#a8a29e] font-medium">
+          <p className="text-muted-foreground font-medium">
             لا توجد أصناف بعد
           </p>
-          <p className="text-sm text-[#57534e] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             ابدأ بإضافة صنف للقائمة
           </p>
           <button onClick={addCategory} className="btn-primary mt-4 mx-auto">
@@ -585,10 +585,10 @@ export default function MenuPage() {
                 >
                   <div className="text-xl w-8 text-center flex-shrink-0">{cat.emoji || '🍴'}</div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-[#fafaf9] text-sm sm:text-base truncate">
+                    <div className="font-semibold text-foreground text-sm sm:text-base truncate">
                       {cat.name_ar}
                     </div>
-                    <div className="text-xs text-[#57534e]">
+                    <div className="text-xs text-muted-foreground">
                       {catItems.length} عنصر
                     </div>
                   </div>
@@ -599,8 +599,8 @@ export default function MenuPage() {
                         setActiveCatId(cat.id);
                         setEditItem('new');
                       }}
-                      className="flex items-center gap-1 text-xs text-[#a8a29e] active:text-[#fafaf9]
-                                 min-h-[40px] px-2.5 rounded-lg active:bg-[#1a1916]
+                      className="flex items-center gap-1 text-xs text-muted-foreground active:text-foreground
+                                 min-h-[40px] px-2.5 rounded-lg active:bg-card
                                  touch-manipulation transition-colors"
                     >
                       <Plus size={14} />
@@ -614,7 +614,7 @@ export default function MenuPage() {
                     >
                       <Trash2 size={14} />
                     </button>
-                    {isOpen ? <ChevronDown size={16} className="text-[#57534e]" /> : <ChevronRight size={16} className="text-[#57534e]" />}
+                    {isOpen ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
                   </div>
                 </div>
 
@@ -622,7 +622,7 @@ export default function MenuPage() {
                 {isOpen && (
                   <div className="mt-3 space-y-2">
                     {catItems.length === 0 ? (
-                      <div className="text-center py-6 text-[#57534e] text-sm border-t border-[#2a2825]">
+                      <div className="text-center py-6 text-muted-foreground text-sm border-t border-border">
                         لا توجد عناصر. أضف أول عنصر.
                       </div>
                     ) : (
@@ -632,8 +632,8 @@ export default function MenuPage() {
                           className={cn(
                             'rounded-xl border transition-all p-3',
                             item.is_available
-                              ? 'border-[#2a2825] bg-[#0f0e0c]'
-                              : 'border-[#1a1916] bg-[#0a0a08] opacity-60'
+                              ? 'border-border bg-background'
+                              : 'border-border bg-sidebar opacity-60'
                           )}
                         >
                           {/* Top row: image + name/price — tap to edit */}
@@ -650,7 +650,7 @@ export default function MenuPage() {
                                 className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-lg bg-[#1a1916] flex items-center
+                              <div className="w-12 h-12 rounded-lg bg-card flex items-center
                                               justify-center flex-shrink-0 text-xl">
                                 🍴
                               </div>
@@ -658,18 +658,18 @@ export default function MenuPage() {
 
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="font-medium text-[#fafaf9] text-sm truncate">
+                                <span className="font-medium text-foreground text-sm truncate">
                                   {item.name_ar}
                                 </span>
                                 {item.is_featured && <Star size={13} className="text-yellow-500 flex-shrink-0" />}
                               </div>
-                              <div className="text-brand-400 text-sm font-semibold">
+                              <div className="text-primary text-sm font-semibold">
                                 {formatBHD(item.price, 'ar')}
                               </div>
                               {item.tags?.length > 0 && (
                                 <div className="flex gap-1 mt-1 flex-wrap">
                                   {item.tags.map(tag => (
-                                    <span key={tag} className="text-xs bg-[#1a1916] text-[#57534e] px-1.5 py-0.5 rounded">
+                                    <span key={tag} className="text-xs bg-card text-muted-foreground px-1.5 py-0.5 rounded">
                                       {tag}
                                     </span>
                                   ))}
@@ -677,12 +677,12 @@ export default function MenuPage() {
                               )}
                             </div>
 
-                            <Pencil size={15} className="text-[#3a3835] flex-shrink-0" />
+                            <Pencil size={15} className="text-border flex-shrink-0" />
                           </button>
 
                           {/* Bottom row: stock control + quick actions — 44px targets */}
                           <div className="flex items-center justify-between gap-2 mt-2.5 pt-2.5
-                                          border-t border-[#1a1916]">
+                                          border-t border-border">
                             <StockControl
                               item={item as Item & { stock_enabled?: boolean; stock_count?: number | null; sold_out?: boolean }}
                               onUpdate={load}
@@ -690,8 +690,8 @@ export default function MenuPage() {
                             <div className="flex items-center gap-1 flex-shrink-0">
                               <button
                                 onClick={() => toggleItemAvailability(item)}
-                                className="w-11 h-11 flex items-center justify-center text-[#a8a29e]
-                                           active:text-[#fafaf9] active:bg-[#1a1916] rounded-lg
+                                className="w-11 h-11 flex items-center justify-center text-muted-foreground
+                                           active:text-foreground active:bg-card rounded-lg
                                            touch-manipulation transition-colors"
                               >
                                 {item.is_available ? <Eye size={16} /> : <EyeOff size={16} />}

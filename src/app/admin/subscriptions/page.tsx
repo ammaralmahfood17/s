@@ -51,10 +51,10 @@ export default async function AdminSubscriptionsPage({
   return (
     <div className="p-4 sm:p-6 max-w-6xl space-y-4">
       <div>
-        <h1 className="text-xl font-bold text-[#fafaf9]">
+        <h1 className="text-xl font-bold text-foreground">
           الاشتراكات
         </h1>
-        <p className="text-sm text-[#57534e]">
+        <p className="text-sm text-muted-foreground">
           {rows.length} اشتراك{filter ? ` · ${filter}` : ''}
         </p>
       </div>
@@ -66,8 +66,8 @@ export default async function AdminSubscriptionsPage({
             href={`/admin/subscriptions${tab.key ? `?filter=${tab.key}` : ''}`}
             className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
               (filter ?? '') === tab.key
-                ? 'bg-brand-500 text-[#0f0e0c]'
-                : 'text-[#a8a29e] hover:text-[#fafaf9] bg-[#1a1916]'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground bg-card'
             }`}>
             {tab.label}
           </Link>
@@ -79,9 +79,9 @@ export default async function AdminSubscriptionsPage({
         <div className="overflow-x-auto table-scroll">
           <table className="w-full text-sm min-w-[640px]">
             <thead>
-              <tr className="border-b border-[#2a2825]">
+              <tr className="border-b border-border">
                 {['العربة', 'الخطة', 'الحالة', 'تاريخ الانتهاء', 'الأيام المتبقية', 'المبلغ', 'إجراءات'].map(h => (
-                  <th key={h} className="text-start text-xs font-semibold text-[#57534e] px-4 py-3 whitespace-nowrap">
+                  <th key={h} className="text-start text-xs font-semibold text-muted-foreground px-4 py-3 whitespace-nowrap">
                     {h}
                   </th>
                 ))}
@@ -97,39 +97,39 @@ export default async function AdminSubscriptionsPage({
                 const isUrgent = daysLeft <= 7 && daysLeft >= 0 && s.status === 'active';
 
                 return (
-                  <tr key={s.id} className={`border-b border-[#1a1916] hover:bg-[#1a1916] transition-colors ${isExpired ? 'opacity-60' : ''}`}>
+                  <tr key={s.id} className={`border-b border-border hover:bg-card transition-colors ${isExpired ? 'opacity-60' : ''}`}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-[#fafaf9]">{r?.name_ar ?? '—'}</div>
-                      <div className="text-xs text-[#57534e] font-mono">{r?.slug}</div>
+                      <div className="font-medium text-foreground">{r?.name_ar ?? '—'}</div>
+                      <div className="text-xs text-muted-foreground font-mono">{r?.slug}</div>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#a8a29e]">
+                    <td className="px-4 py-3 text-xs text-muted-foreground">
                       {s.plans?.name_ar ?? '—'}
-                      <div className="text-[#57534e]">{s.plans?.price_bhd === 0 ? 'مجاني' : `${formatBHD(s.plans?.price_bhd ?? 0)}/شهر`}</div>
+                      <div className="text-muted-foreground">{s.plans?.price_bhd === 0 ? 'مجاني' : `${formatBHD(s.plans?.price_bhd ?? 0)}/شهر`}</div>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`badge ${STATUS_BADGE[s.status] ?? 'badge-pending'}`}>
                         {s.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#a8a29e]">
+                    <td className="px-4 py-3 text-xs text-muted-foreground">
                       {new Date(s.current_period_end).toLocaleDateString('en-BH')}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-sm font-bold ${
                         isExpired ? 'text-red-400' :
                         isUrgent  ? 'text-orange-400' :
-                        'text-[#a8a29e]'
+                        'text-muted-foreground'
                       }`}>
                         {isExpired ? `منذ ${Math.abs(daysLeft)} يوم` : `${daysLeft} يوم`}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#a8a29e]">
+                    <td className="px-4 py-3 text-xs text-muted-foreground">
                       {s.amount_bhd ? formatBHD(s.amount_bhd) : '—'}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <Link href={`/admin/restaurants/${r?.id}`}
-                          className="text-xs text-brand-400 hover:text-brand-300">
+                          className="text-xs text-primary">
                           إدارة
                         </Link>
                         <AdminQuickActions
@@ -146,7 +146,7 @@ export default async function AdminSubscriptionsPage({
           </table>
 
           {rows.length === 0 && (
-            <div className="text-center py-16 text-[#57534e]">
+            <div className="text-center py-16 text-muted-foreground">
               <p>لا توجد اشتراكات</p>
             </div>
           )}

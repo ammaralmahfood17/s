@@ -29,24 +29,24 @@ export default async function RestaurantStorefrontPage({
     .order('sort_order');
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm text-center space-y-6">
         <div>
-          <div className="w-16 h-16 rounded-2xl bg-brand-500/10 border border-brand-500/20
-                          flex items-center justify-center mx-auto mb-4">
-            <QrCode size={32} className="text-brand-400" />
+          <div className="brand-icon w-16 h-16 rounded-2xl mx-auto mb-4"
+               style={{ width: 64, height: 64 }}>
+            <span className="text-xl">د</span>
           </div>
-          <h1 className="text-2xl font-bold text-[#fafaf9]">
+          <h1 className="text-2xl font-black text-foreground">
             {restaurant.name_ar}
           </h1>
           {restaurant.address_ar && (
-            <div className="flex items-center justify-center gap-1 mt-2 text-sm text-[#57534e]">
+            <div className="flex items-center justify-center gap-1 mt-2 text-sm text-muted-foreground">
               <MapPin size={14} />
               {restaurant.address_ar}
             </div>
           )}
           {restaurant.phone && (
-            <div className="flex items-center justify-center gap-1 mt-1 text-sm text-[#57534e]">
+            <div className="flex items-center justify-center gap-1 mt-1 text-sm text-muted-foreground">
               <Phone size={14} />
               {restaurant.phone}
             </div>
@@ -56,13 +56,13 @@ export default async function RestaurantStorefrontPage({
         {!restaurant.is_open ? (
           <div className="card text-center py-8">
             <div className="text-4xl mb-3">🔒</div>
-            <p className="text-[#a8a29e] font-medium">
+            <p className="text-muted-foreground font-medium">
               المطعم مغلق حالياً
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm text-[#a8a29e]">
+            <p className="text-sm text-muted-foreground">
               اختر طاولتك للطلب
             </p>
             {(tables ?? []).map((table) => (
@@ -71,21 +71,21 @@ export default async function RestaurantStorefrontPage({
                 href={`/${slug}/t/${table.qr_token}`}
                 className="card-hover flex items-center justify-between py-4 px-5 block"
               >
-                <span className="font-medium text-[#fafaf9]">
+                <span className="font-medium text-foreground">
                   {table.name_ar}
                 </span>
-                <QrCode size={18} className="text-brand-400" />
+                <QrCode size={18} className="text-primary" />
               </Link>
             ))}
             {(!tables || tables.length === 0) && (
-              <div className="card text-center py-8 text-[#57534e] text-sm">
+              <div className="card text-center py-8 text-muted-foreground text-sm">
                 لا توجد طاولات متاحة
               </div>
             )}
           </div>
         )}
 
-        <div className="text-xs text-[#3a3835]">
+        <div className="text-xs text-muted-foreground/40">
           مدعوم بـ دكان · Dokan
         </div>
       </div>

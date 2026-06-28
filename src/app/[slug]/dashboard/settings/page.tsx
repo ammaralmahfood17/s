@@ -114,7 +114,7 @@ export default function SettingsPage() {
     setSaving(false);
   };
 
-  if (loading) return <div className="p-6 text-[#57534e]">جار التحميل...</div>;
+  if (loading) return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
 
   const sections = [
     { key: 'basic',    labelAr: 'معلومات أساسية' },
@@ -126,7 +126,7 @@ export default function SettingsPage() {
     <div className="p-4 sm:p-6 max-w-2xl space-y-5">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-[#fafaf9]">
+        <h1 className="text-xl font-bold text-foreground">
           إعدادات المطعم
         </h1>
       </div>
@@ -135,13 +135,13 @@ export default function SettingsPage() {
       {restaurant && (
         <div className="card flex items-center justify-between">
           <div>
-            <div className="font-medium text-[#fafaf9] text-sm">حالة المطعم</div>
+            <div className="font-medium text-foreground text-sm">حالة المطعم</div>
             <div className={`text-xs mt-0.5 ${form.is_open ? 'text-green-400' : 'text-red-400'}`}>
               {form.is_open ? 'مفتوح — العملاء يمكنهم الطلب' : 'مغلق'}
             </div>
           </div>
           <div onClick={() => setForm(f => ({ ...f, is_open: !f.is_open }))}
-            className={cn('w-12 h-6 rounded-full cursor-pointer transition-colors relative', form.is_open ? 'bg-green-500' : 'bg-[#2a2825]')}>
+            className={cn('w-12 h-6 rounded-full cursor-pointer transition-colors relative', form.is_open ? 'bg-green-500' : 'bg-muted')}>
             <span className={cn('absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow', form.is_open ? 'translate-x-7' : 'translate-x-1')} />
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function SettingsPage() {
         {sections.map(s => (
           <button key={s.key} onClick={() => setActiveSection(s.key as 'basic'|'hours'|'ordering')}
             className={cn('flex-1 py-2 rounded-xl text-sm font-medium transition-all',
-              activeSection === s.key ? 'bg-brand-500 text-[#0f0e0c]' : 'text-[#a8a29e] hover:text-[#fafaf9] bg-[#1a1916]')}>
+              activeSection === s.key ? 'bg-primary text-background' : 'text-muted-foreground hover:text-foreground bg-card')}>
             {s.labelAr}
           </button>
         ))}
@@ -168,13 +168,13 @@ export default function SettingsPage() {
             <div>
               <label className="label">صورة الغلاف</label>
               <div onClick={() => coverRef.current?.click()}
-                className="relative h-32 rounded-xl border-2 border-dashed border-[#2a2825] overflow-hidden cursor-pointer hover:border-brand-500/50 transition-colors">
+                className="relative h-32 rounded-xl border-2 border-dashed border-border overflow-hidden cursor-pointer hover:border-brand-500/50 transition-colors">
                 {form.cover_url ? (
                   <NextImage src={getPublicImageUrl(form.cover_url,'restaurant-assets')} alt="cover" fill className="object-cover" />
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full gap-2">
-                    <Upload size={24} className="text-[#3a3835]" />
-                    <span className="text-xs text-[#57534e]">انقر لرفع الغلاف</span>
+                    <Upload size={24} className="text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">انقر لرفع الغلاف</span>
                   </div>
                 )}
               </div>
@@ -184,14 +184,14 @@ export default function SettingsPage() {
             {/* Logo */}
             <div className="flex items-center gap-4">
               <div onClick={() => logoRef.current?.click()}
-                className="w-16 h-16 rounded-xl border-2 border-dashed border-[#2a2825] overflow-hidden cursor-pointer hover:border-brand-500/50 transition-colors flex items-center justify-center flex-shrink-0">
+                className="w-16 h-16 rounded-xl border-2 border-dashed border-border overflow-hidden cursor-pointer hover:border-brand-500/50 transition-colors flex items-center justify-center flex-shrink-0">
                 {form.logo_url ? (
                   <NextImage src={getPublicImageUrl(form.logo_url,'restaurant-assets')} alt="logo" width={64} height={64} className="object-cover w-full h-full" />
-                ) : <Upload size={20} className="text-[#3a3835]" />}
+                ) : <Upload size={20} className="text-muted-foreground" />}
               </div>
               <div>
-                <div className="text-sm text-[#a8a29e]">شعار المطعم</div>
-                <div className="text-xs text-[#57534e]">انقر لرفع الشعار</div>
+                <div className="text-sm text-muted-foreground">شعار المطعم</div>
+                <div className="text-xs text-muted-foreground">انقر لرفع الشعار</div>
               </div>
               <input ref={logoRef} type="file" accept="image/*" className="hidden"
                 onChange={e => { const f=e.target.files?.[0];if(f)uploadImage(f,'restaurant-assets','logo_url'); }} />
@@ -218,7 +218,7 @@ export default function SettingsPage() {
             <div>
               <label className="label">رابط المطعم *</label>
               <div className="flex items-center">
-                <span className="text-xs text-[#57534e] bg-[#0f0e0c] border border-e-0 border-[#2a2825] px-3 py-3 rounded-s-xl whitespace-nowrap">dokan.bh/r/</span>
+                <span className="text-xs text-muted-foreground bg-background border border-e-0 border-border px-3 py-3 rounded-s-xl whitespace-nowrap">dokan.bh/r/</span>
                 <input className="input rounded-s-none border-s-0 flex-1" value={form.slug}
                   onChange={e => setForm(f => ({...f, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')}))} placeholder="al-salam" />
               </div>
@@ -282,11 +282,11 @@ export default function SettingsPage() {
           <div className="card space-y-3">
             <div className="flex items-center gap-2">
               <Clock size={16} className="text-brand-400" />
-              <h2 className="text-sm font-semibold text-[#fafaf9]">
+              <h2 className="text-sm font-semibold text-foreground">
                 وقت التحضير التقريبي
               </h2>
             </div>
-            <p className="text-xs text-[#57534e]">
+            <p className="text-xs text-muted-foreground">
               يظهر للعميل بعد تأكيد الطلب
             </p>
             <div className="flex items-center gap-3">
@@ -297,9 +297,9 @@ export default function SettingsPage() {
                 onChange={e => setForm(f => ({...f, prep_time_minutes: parseInt(e.target.value)}))}
                 className="flex-1 accent-brand-500"
               />
-              <div className="w-24 text-center bg-[#0f0e0c] border border-[#2a2825] rounded-xl py-2">
+              <div className="w-24 text-center bg-background border border-border rounded-xl py-2">
                 <span className="font-bold text-brand-400">{form.prep_time_minutes}</span>
-                <span className="text-xs text-[#57534e]"> دقيقة</span>
+                <span className="text-xs text-muted-foreground"> دقيقة</span>
               </div>
             </div>
             <div className="flex gap-1.5">
@@ -307,8 +307,8 @@ export default function SettingsPage() {
                 <button key={t} onClick={() => setForm(f => ({...f, prep_time_minutes: t}))}
                   className={cn('flex-1 min-h-[40px] rounded-lg text-xs font-medium transition-all border touch-manipulation',
                     form.prep_time_minutes === t
-                      ? 'bg-brand-500/20 border-brand-500 text-brand-400'
-                      : 'border-[#2a2825] text-[#57534e] active:border-[#3a3835]')}>
+                      ? 'bg-primary/20 border-brand-500 text-brand-400'
+                      : 'border-border text-muted-foreground active:border-muted')}>
                   {t}د
                 </button>
               ))}
@@ -320,11 +320,11 @@ export default function SettingsPage() {
             <div className="card space-y-3">
               <div className="flex items-center gap-2">
                 <PauseCircle size={16} className="text-orange-400" />
-                <h2 className="text-sm font-semibold text-[#fafaf9]">
+                <h2 className="text-sm font-semibold text-foreground">
                   إيقاف الطلبات مؤقتاً
                 </h2>
               </div>
-              <p className="text-xs text-[#57534e]">
+              <p className="text-xs text-muted-foreground">
                 أوقف الطلبات الجديدة مؤقتاً عندما يكون المطبخ مشغولاً
               </p>
               <PauseOrderingControl
@@ -339,10 +339,10 @@ export default function SettingsPage() {
 
           {/* Public link */}
           {restaurant && (
-            <div className="card bg-[#0f0e0c] flex items-center gap-3">
+            <div className="card bg-background flex items-center gap-3">
               <Globe size={18} className="text-brand-400 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <div className="text-xs text-[#57534e]">الرابط العام</div>
+                <div className="text-xs text-muted-foreground">الرابط العام</div>
                 <div className="text-sm text-brand-400 truncate">dokan.bh/r/{restaurant.slug}</div>
               </div>
             </div>

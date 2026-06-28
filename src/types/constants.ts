@@ -10,12 +10,12 @@ export const ORDER_STATUS_CONFIG: Record<
   OrderStatus,
   { en: string; ar: string; color: string; bg: string }
 > = {
-  pending:    { en: 'Pending',        ar: 'في الانتظار',     color: '#a8a29e', bg: '#1c1917' },
-  confirmed:  { en: 'Confirmed',      ar: 'تم التأكيد',      color: '#86efac', bg: '#1a2e1a' },
-  preparing:  { en: 'Preparing',      ar: 'يتم التحضير',     color: '#fcd34d', bg: '#1c1406' },
-  ready:      { en: 'Ready',          ar: 'جاهز',           color: '#5eead4', bg: '#0f2d2d' },
-  delivered:  { en: 'Delivered',      ar: 'تم التسليم',      color: '#a5b4fc', bg: '#1a1a2e' },
-  cancelled:  { en: 'Cancelled',      ar: 'ملغى',            color: '#fca5a5', bg: '#2a1010' },
+  pending:    { en: 'Pending',        ar: 'في الانتظار',     color: '#92400e', bg: '#fef3c7' },
+  confirmed:  { en: 'Confirmed',      ar: 'تم التأكيد',      color: '#1e40af', bg: '#dbeafe' },
+  preparing:  { en: 'Preparing',      ar: 'يتم التحضير',     color: '#92400e', bg: '#fef3c7' },
+  ready:      { en: 'Ready',          ar: 'جاهز',           color: '#065f46', bg: '#d1fae5' },
+  delivered:  { en: 'Delivered',      ar: 'تم التسليم',      color: '#3730a3', bg: '#e0e7ff' },
+  cancelled:  { en: 'Cancelled',      ar: 'ملغى',            color: '#991b1b', bg: '#fee2e2' },
 };
 
 export const ORDER_TYPE_LABELS: Record<OrderType, { en: string; ar: string }> = {

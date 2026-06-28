@@ -53,7 +53,7 @@ export default function AdminShell({ userEmail, children }: Props) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen w-full bg-[#0f0e0c]">
+      <div className="flex min-h-screen w-full bg-background">
         {/* ── Sidebar ── */}
         <Sidebar side="right" variant="sidebar" collapsible="icon">
           <SidebarHeader>
@@ -62,8 +62,8 @@ export default function AdminShell({ userEmail, children }: Props) {
                 <Shield size={16} className="text-white" />
               </div>
               <div className="group-data-[collapsible=icon]:hidden">
-                <div className="font-bold text-[#fafaf9] text-sm leading-none">لوحة الإدارة</div>
-                <div className="text-xs text-[#57534e] mt-0.5">Super Admin Panel</div>
+                <div className="font-bold text-foreground text-sm leading-none">لوحة الإدارة</div>
+                <div className="text-xs text-muted-foreground mt-0.5">Super Admin Panel</div>
               </div>
             </div>
           </SidebarHeader>
@@ -94,7 +94,7 @@ export default function AdminShell({ userEmail, children }: Props) {
 
           <SidebarFooter>
             <div className="group-data-[collapsible=icon]:hidden px-1 mb-1">
-              <div className="text-xs text-[#57534e] truncate px-2 py-1">{userEmail}</div>
+              <div className="text-xs text-muted-foreground truncate px-2 py-1">{userEmail}</div>
             </div>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -114,20 +114,20 @@ export default function AdminShell({ userEmail, children }: Props) {
         {/* ── Main Content ── */}
         <SidebarInset>
           {/* Mobile header */}
-          <header className="md:hidden flex items-center gap-3 px-4 h-14 border-b border-[#1a1916] bg-[#0a0a08]/95 backdrop-blur-sm sticky top-0 z-30 safe-top">
+          <header className="md:hidden flex items-center gap-3 px-4 h-14 border-b border-border bg-sidebar/95 backdrop-blur-sm sticky top-0 z-30 safe-top">
             <SidebarTrigger />
             <Shield size={16} className="text-red-400 flex-shrink-0" />
-            <span className="font-bold text-[#fafaf9] text-sm truncate">لوحة الإدارة</span>
+            <span className="font-bold text-foreground text-sm truncate">لوحة الإدارة</span>
           </header>
 
           {/* Keyboard shortcut hint */}
-          <div className="hidden md:flex items-center justify-end gap-2 px-6 py-2 border-b border-[#1a1916] bg-[#0a0a08]/40">
-            <span className="text-[10px] text-[#57534e] font-medium">⌘K للبحث</span>
-            <kbd className="inline-flex items-center gap-0.5 rounded border border-[#2a2825] bg-[#1a1916] px-1.5 py-0.5 text-[10px] font-medium text-[#57534e]">
+          <div className="hidden md:flex items-center justify-end gap-2 px-6 py-2 border-b border-border bg-sidebar/40">
+            <span className="text-[10px] text-muted-foreground font-medium">⌘K للبحث</span>
+            <kbd className="inline-flex items-center gap-0.5 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
               <Search size={10} /> Ctrl+K
             </kbd>
             <span className="mx-1 text-[#2a2825]">·</span>
-            <span className="text-[10px] text-[#57534e] font-medium">⌘⇧B للشريط</span>
+            <span className="text-[10px] text-muted-foreground font-medium">⌘⇧B للشريط</span>
           </div>
 
           <main className="flex-1">

@@ -99,14 +99,14 @@ export default function SetupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-xl bg-brand-500 flex items-center justify-center mx-auto mb-4">
-            <Store size={24} className="text-[#0f0e0c]" />
+            <Store size={24} className="text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-[#fafaf9]">إنشاء عربة جديدة</h1>
-          <p className="text-sm text-[#57534e] mt-1">أدخل بيانات مطعمك لبدء استقبال الطلبات</p>
+          <h1 className="text-2xl font-bold text-foreground">إنشاء عربة جديدة</h1>
+          <p className="text-sm text-muted-foreground mt-1">أدخل بيانات مطعمك لبدء استقبال الطلبات</p>
         </div>
 
         <form onSubmit={handleCreate} className="card space-y-5">
@@ -128,7 +128,7 @@ export default function SetupPage() {
           <div>
             <label className="label">الرابط (slug)</label>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[#57534e] whitespace-nowrap">dokanstore.xyz/</span>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">dokanstore.xyz/</span>
               <input
                 type="text"
                 value={slug}
@@ -139,7 +139,7 @@ export default function SetupPage() {
                 required
               />
             </div>
-            <p className="text-xs text-[#57534e] mt-1">سيتم تعبئته تلقائياً من الاسم العربي</p>
+            <p className="text-xs text-muted-foreground mt-1">سيتم تعبئته تلقائياً من الاسم العربي</p>
           </div>
 
           {/* Name English */}

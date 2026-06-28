@@ -41,7 +41,7 @@ export default function ErrorPage({
   return (
     <html lang="ar" dir="rtl">
       <body className={`${cairo.variable} antialiased`}>
-        <div className="min-h-screen bg-[#0f0e0c] flex items-center justify-center p-4 safe-top safe-bottom">
+        <div className="min-h-screen bg-background flex items-center justify-center p-4 safe-top safe-bottom">
           <div className="max-w-md w-full text-center">
             {/* Icon */}
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-950/60 border border-red-800
@@ -52,10 +52,10 @@ export default function ErrorPage({
               </svg>
             </div>
 
-            <h1 className="text-2xl font-bold text-[#fafaf9] mb-2">
+            <h1 className="text-2xl font-bold text-foreground mb-2">
               حدث خطأ غير متوقع
             </h1>
-            <p className="text-[#a8a29e] text-sm mb-8 leading-relaxed">
+            <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
               عذراً، حدث خطأ في تحميل هذه الصفحة. يمكنك المحاولة مرة أخرى أو العودة للصفحة الرئيسية.
             </p>
 
@@ -77,10 +77,10 @@ export default function ErrorPage({
             {/* Silent error detail for debugging — only shows in dev */}
             {process.env.NODE_ENV === 'development' && (
               <details className="mt-8 text-left">
-                <summary className="text-xs text-[#57534e] cursor-pointer hover:text-[#a8a29e]">
+                <summary className="text-xs text-muted-foreground cursor-pointer hover:text-muted-foreground">
                   تفاصيل التقني (dev)
                 </summary>
-                <pre className="mt-2 text-xs text-red-300 bg-[#1a1916] p-4 rounded-xl overflow-auto max-h-48 leading-relaxed font-mono">
+                <pre className="mt-2 text-xs text-red-300 bg-card p-4 rounded-xl overflow-auto max-h-48 leading-relaxed font-mono">
                   {error.message}
                   {'\n\n'}
                   {error.stack}

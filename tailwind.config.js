@@ -17,24 +17,65 @@ module.exports = {
           '800': '#92400e',
           '900': '#78350f',
         },
-        surface: {
-          DEFAULT: '#0f0e0c',
-          card: '#1a1916',
-          border: '#2a2825',
-          muted: '#3a3835',
+        // شفاف CSS Variables لتوافق shadcn
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
-        text: {
-          primary: '#fafaf9',
-          secondary: '#a8a29e',
-          muted: '#57534e',
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))',
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          foreground: 'hsl(var(--warning-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
         },
         status: {
-          pending: { bg: '#1c1917', text: '#a8a29e', border: '#292524' },
-          confirmed: { bg: '#1a2e1a', text: '#86efac', border: '#14532d' },
-          preparing: { bg: '#1c1406', text: '#fcd34d', border: '#713f12' },
-          ready: { bg: '#0f2d2d', text: '#5eead4', border: '#134e4a' },
-          completed: { bg: '#1a1a2e', text: '#a5b4fc', border: '#1e1b4b' },
-          cancelled: { bg: '#2a1010', text: '#fca5a5', border: '#7f1d1d' },
+          pending: { bg: '#fef3c7', text: '#92400e', border: '#fbbf24' },
+          confirmed: { bg: '#dbeafe', text: '#1e40af', border: '#93c5fd' },
+          preparing: { bg: '#fef3c7', text: '#92400e', border: '#fcd34d' },
+          ready: { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7' },
+          delivered: { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
+          cancelled: { bg: '#fee2e2', text: '#991b1b', border: '#fca5a5' },
         },
       },
       fontFamily: {
@@ -45,6 +86,10 @@ module.exports = {
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',
+      },
+      boxShadow: {
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+        pop: '0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
       },
       animation: {
         'slide-up': 'slideUp 0.3s ease-out',
@@ -78,7 +123,6 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-brand': 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-        'gradient-dark': 'linear-gradient(180deg, #1a1916 0%, #0f0e0c 100%)',
       },
     },
   },

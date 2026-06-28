@@ -16,9 +16,9 @@ import {
 const KITCHEN_STATUSES = ['pending', 'confirmed', 'preparing'];
 
 const CARD_STYLES: Record<string, string> = {
-  pending:   'border-[#3a3835] bg-[#0f0e0c]',
-  confirmed: 'border-blue-700 bg-[#0f1a2e]',
-  preparing: 'border-yellow-700 bg-[#1a1200]',
+  pending:   'border-muted-foreground/20',
+  confirmed: 'border-blue-500/40',
+  preparing: 'border-yellow-500/40 bg-yellow-50/50',
 };
 
 const STATUS_ICONS: Record<string, React.ElementType> = {
@@ -90,17 +90,17 @@ function KitchenCard({
 
       {/* Order header */}
       <div className="flex items-center justify-between gap-2">
-        <div className="font-black text-2xl text-[#fafaf9] tracking-tight">
+        <div className="font-black text-2xl text-foreground tracking-tight">
           {order.order_number}
         </div>
         <div className="flex items-center gap-1.5">
           <StatusIcon size={14} className={cn(
-            order.status === 'pending' ? 'text-[#57534e]' :
+            order.status === 'pending' ? 'text-muted-foreground' :
             'text-yellow-400 animate-pulse'
           )} />
           <span className={cn(
             'text-xs font-semibold',
-            order.status === 'pending' ? 'text-[#a8a29e]' :
+            order.status === 'pending' ? 'text-muted-foreground' :
             'text-yellow-400'
           )}>
             {STATUS_LABEL[order.status]}
@@ -109,9 +109,9 @@ function KitchenCard({
       </div>
 
       {/* Table + time */}
-      <div className="flex items-center gap-2 text-xs text-[#57534e]">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
         {order.table && (
-          <span className="bg-[#1a1916] px-2 py-0.5 rounded-full">
+          <span className="bg-card px-2 py-0.5 rounded-full">
             {order.table.name_ar}
           </span>
         )}
@@ -126,20 +126,20 @@ function KitchenCard({
       <div className="space-y-2 flex-1">
         {(order.order_items ?? []).map((item) => (
           <div key={item.id} className="flex gap-2">
-            <span className="text-brand-400 font-bold text-sm w-6 flex-shrink-0">
+            <span className="text-primary font-bold text-sm w-6 flex-shrink-0">
               {item.quantity}×
             </span>
             <div>
-              <div className="text-[#fafaf9] text-sm font-medium leading-tight">
+              <div className="text-foreground text-sm font-medium leading-tight">
                 {item.item_name_ar}
               </div>
               {item.variation_name_en && (
-                <div className="text-xs text-[#57534e]">
+                <div className="text-xs text-muted-foreground">
                   {item.variation_name_ar}
                 </div>
               )}
               {item.addons?.length > 0 && (
-                <div className="text-xs text-[#57534e]">
+                <div className="text-xs text-muted-foreground">
                   + {item.addons.map(a => a.name_ar).join(', ')}
                 </div>
               )}
@@ -269,13 +269,13 @@ export default function KitchenPage() {
   const totalActive = orders.length;
 
   return (
-    <div className="min-h-screen bg-[#0a0a08] safe-top safe-bottom">
+    <div className="min-h-screen bg-sidebar safe-top safe-bottom">
       {/* Header */}
       <div className="flex items-center justify-between p-4 pb-2 sticky top-0 z-10
-                      bg-[#0a0a08]/95 backdrop-blur-sm">
+                      bg-sidebar/95 backdrop-blur-sm">
         <div className="flex items-center gap-2 min-w-0">
-          <ChefHat size={22} className="text-brand-400 flex-shrink-0" />
-          <h1 className="text-lg sm:text-xl font-bold text-[#fafaf9] truncate">
+          <ChefHat size={22} className="text-primary flex-shrink-0" />
+          <h1 className="text-lg sm:text-xl font-bold text-foreground truncate">
             شاشة المطبخ
           </h1>
         </div>
@@ -287,7 +287,7 @@ export default function KitchenPage() {
               if (!soundOn) playChime();
             }}
             className="w-11 h-11 flex items-center justify-center rounded-xl
-                       text-[#57534e] hover:text-[#fafaf9] hover:bg-[#1a1916]
+                       text-muted-foreground hover:text-foreground hover:bg-card
                        transition-all touch-manipulation"
             title={soundOn ? 'كتم الصوت' : 'تشغيل الصوت'}
           >
@@ -303,7 +303,7 @@ export default function KitchenPage() {
             </span>
           </div>
           {totalActive > 0 && (
-            <div className="bg-brand-500 text-[#0f0e0c] font-bold px-2.5 py-1 rounded-full text-xs sm:text-sm">
+            <div className="bg-primary text-primary-foreground font-bold px-2.5 py-1 rounded-full text-xs sm:text-sm">
               {totalActive}
             </div>
           )}
@@ -312,19 +312,19 @@ export default function KitchenPage() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="text-[#57534e]">جار التحميل...</div>
+          <div className="text-muted-foreground">جار التحميل...</div>
         </div>
       ) : totalActive === 0 ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4 px-4">
-          <div className="w-20 h-20 rounded-full bg-[#1a1916] border border-[#2a2825]
+          <div className="w-20 h-20 rounded-full bg-card border border-border
                           flex items-center justify-center">
             <ChefHat size={40} className="text-[#3a3835]" />
           </div>
           <div className="text-center">
-            <h2 className="text-xl font-bold text-[#a8a29e]">
+            <h2 className="text-xl font-bold text-muted-foreground">
               لا يوجد طلبات نشطة
             </h2>
-            <p className="text-sm text-[#57534e] mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               لا توجد طلبات نشطة الآن
             </p>
           </div>
@@ -342,17 +342,17 @@ export default function KitchenPage() {
               return (
                 <div key={col.status} className="snap-center flex-shrink-0 w-[88vw] space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-[#a8a29e]">
+                    <h3 className="text-sm font-semibold text-muted-foreground">
                       {colLabel[col.status]}
                     </h3>
                     {col.orders.length > 0 && (
-                      <span className="text-xs bg-[#1a1916] text-[#a8a29e] px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-card text-muted-foreground px-2 py-0.5 rounded-full">
                         {col.orders.length}
                       </span>
                     )}
                   </div>
                   {col.orders.length === 0 ? (
-                    <div className="border-2 border-dashed border-[#1a1916] rounded-2xl h-20
+                    <div className="border-2 border-dashed border-border rounded-2xl h-20
                                     flex items-center justify-center">
                       <span className="text-xs text-[#3a3835]">فارغ</span>
                     </div>
@@ -378,11 +378,11 @@ export default function KitchenPage() {
               return (
                 <div key={col.status} className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-[#a8a29e]">
+                    <h3 className="text-sm font-semibold text-muted-foreground">
                       {colLabel[col.status]}
                     </h3>
                     {col.orders.length > 0 && (
-                      <span className="text-xs bg-[#1a1916] text-[#a8a29e]
+                      <span className="text-xs bg-card text-muted-foreground
                                        px-2 py-0.5 rounded-full">
                         {col.orders.length}
                       </span>
@@ -390,7 +390,7 @@ export default function KitchenPage() {
                   </div>
 
                   {col.orders.length === 0 ? (
-                    <div className="border-2 border-dashed border-[#1a1916] rounded-2xl h-20
+                    <div className="border-2 border-dashed border-border rounded-2xl h-20
                                     flex items-center justify-center">
                       <span className="text-xs text-[#3a3835]">
                         فارغ

@@ -2,7 +2,7 @@ export default function DashboardLoading() {
   return (
     <div className="p-4 md:p-6 space-y-4 animate-pulse">
       {/* Header skeleton */}
-      <div className="h-8 w-48 bg-[#1a1916] rounded-xl" />
+      <div className="h-8 w-48 bg-card rounded-xl" />
 
       {/* Stats row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

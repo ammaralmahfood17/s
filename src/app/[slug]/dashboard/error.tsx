@@ -24,8 +24,8 @@ export default function DashboardError({
                         flex items-center justify-center mx-auto mb-5">
           <AlertTriangle size={24} className="text-red-400" />
         </div>
-        <h2 className="text-xl font-bold text-[#fafaf9] mb-2">خطأ في لوحة التحكم</h2>
-        <p className="text-[#a8a29e] text-sm mb-6 leading-relaxed">
+        <h2 className="text-xl font-bold text-foreground mb-2">خطأ في لوحة التحكم</h2>
+        <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
           حدث خطأ أثناء تحميل هذه الصفحة.
         </p>
         <div className="flex items-center justify-center gap-3">
@@ -39,7 +39,7 @@ export default function DashboardError({
           </button>
         </div>
         {error.digest && (
-          <p className="text-xs text-[#57534e] mt-5 font-mono">ref: {error.digest}</p>
+          <p className="text-xs text-muted-foreground mt-5 font-mono">ref: {error.digest}</p>
         )}
       </div>
     </div>
