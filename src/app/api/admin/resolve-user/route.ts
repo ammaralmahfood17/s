@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.admin.listUsers();
 
     if (error) {
-      console.error('resolve-user error:', error.message);
+
       return NextResponse.json({ error: 'Internal error' }, { status: 500 });
     }
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ user_id: user.id, email: user.email });
   } catch (e) {
-    console.error('resolve-user error:', e);
+
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

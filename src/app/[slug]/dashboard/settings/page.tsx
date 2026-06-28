@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { generateSlug, getPublicImageUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
@@ -36,7 +36,7 @@ export default function SettingsPage() {
     opening_hours: {} as WeekHours,
   });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     const { data: r } = await supabase
@@ -61,7 +61,7 @@ export default function SettingsPage() {
       });
     }
     setLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => { load(); }, [load]);
 

@@ -767,14 +767,14 @@ export default function CustomerMenuPage({
         if (cats?.length) setSelectedCategory(cats[0].id);
         initCart(restaurantId, tableData.id);
       } catch (err) {
-        console.error('table page - load error:', err);
+
       } finally {
         setLoading(false);
       }
     };
 
     load();
-  }, [slug, tableId, supabase, initCart]);
+  }, [slug, tableId, supabase, initCart, router]);
 
   const scrollToCategory = (catId: string) => {
     setSelectedCategory(catId);

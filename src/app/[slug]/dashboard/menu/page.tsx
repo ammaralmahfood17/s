@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Plus, Pencil, Trash2, Eye, EyeOff, GripVertical,
-  ChevronDown, ChevronRight, Image, Tag, Star
+  ChevronDown, ChevronRight, Image as ImageIcon, Tag, Star
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { formatBHD, getPublicImageUrl } from '@/lib/utils';
@@ -195,7 +195,8 @@ function ItemModal({
               ) : (
                 <div className="w-20 h-20 rounded-xl bg-background border border-dashed border-border
                                 flex items-center justify-center flex-shrink-0">
-                  <Image size={20} className="text-border" />
+                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                  <ImageIcon size={20} className="text-border" />
                 </div>
               )}
               <div>
@@ -478,7 +479,7 @@ export default function MenuPage() {
   const [activeCatId, setActiveCatId] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     const { data: r } = await supabase.from('restaurants').select('id').eq('owner_id', user.id).single();
@@ -493,7 +494,7 @@ export default function MenuPage() {
     setItems(its ?? []);
     if (cats?.length) setExpanded([cats[0].id]);
     setLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => { load(); }, [load]);
 

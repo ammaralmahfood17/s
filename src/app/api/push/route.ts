@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       }
     } catch {
       // web-push not installed — push silently skipped
-      console.warn('web-push not available. Install with: npm install web-push @types/web-push');
+
     }
 
     return NextResponse.json({ sent });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Plus, Download, QrCode, Trash2, ToggleLeft, ToggleRight, Printer, Car } from 'lucide-react';
 import QRCode from 'qrcode';
 import { createClient } from '@/lib/supabase/client';
@@ -121,7 +121,7 @@ export default function TablesPage() {
   const [qrTable, setQrTable] = useState<Table | null>(null);
   const [adding, setAdding] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     const { data: r } = await supabase
@@ -140,7 +140,7 @@ export default function TablesPage() {
       .order('sort_order');
     setTables(tbls ?? []);
     setLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => { load(); }, [load]);
 

@@ -340,7 +340,7 @@ function CartDrawer({
   return (
     <>
       <div className="fixed inset-x-4 z-40 max-w-md mx-auto" style={{ bottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
-        <button onClick={() => setOpen(true)} className="w-full btn-primary py-4 shadow-2xl shadow-brand-500/20 text-base">
+        <button onClick={() => setOpen(true)} className="w-full btn-primary py-4 shadow-2xl shadow-primary/20 text-base">
           <div className="flex items-center justify-between w-full gap-2 min-w-0">
             <div className="flex items-center gap-2 flex-shrink-0">
               <ShoppingCart size={20} />
@@ -535,7 +535,7 @@ export default function CarOrderPage({
         adds.forEach(a => { if (!aMap[a.item_id]) aMap[a.item_id] = []; aMap[a.item_id].push(a); });
         setAddonsMap(aMap);
       } catch (err) {
-        console.error('car page - load error:', err);
+  
       } finally {
         setLoading(false);
       }

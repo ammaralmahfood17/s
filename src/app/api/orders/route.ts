@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (orderError || !order) {
-      console.error('orders route - create order error:', orderError?.message);
+
       return NextResponse.json({ error: 'فشل إنشاء الطلب. يرجى المحاولة مرة أخرى.' }, { status: 500 });
     }
 
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (itemsError) {
-      console.error('orders route - insert items error:', itemsError.message);
+
       await supabase.from('orders').delete().eq('id', order.id);
       return NextResponse.json({ error: 'فشل إضافة العناصر للطلب.' }, { status: 500 });
     }

@@ -175,7 +175,7 @@ export async function tryCatch<T>(
   try {
     return await fn();
   } catch (err) {
-    console.error(`[${label}] error:`, err);
+
     return fallback;
   }
 }

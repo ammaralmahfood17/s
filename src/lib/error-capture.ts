@@ -67,12 +67,8 @@ export function clearCapturedError(): void {
 export function logError(error: unknown, context?: string): void {
   const prefix = context ? `[Dokan:${context}]` : '[Dokan]';
   if (error instanceof Error) {
-    console.error(`${prefix} ${error.message}`, {
-      name: error.name,
-      stack: error.stack,
-      context,
-    });
+
   } else {
-    console.error(`${prefix}`, error, { context });
+
   }
 }

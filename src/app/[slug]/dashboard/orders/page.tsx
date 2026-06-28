@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   ShoppingBag, Clock, CheckCircle, ChefHat,
   Car, Hand, ArrowUpDown
@@ -193,7 +193,7 @@ export default function OrdersPage() {
 
   const { orders: activeOrders, loading, updateStatus } = useRealtimeOrders(restaurantId ?? '');
 
-  const loadCompleted = async () => {
+  const loadCompleted = useCallback(async () => {
     if (!restaurantId) return;
     setLoadingAll(true);
     const today = new Date().toISOString().split('T')[0];
@@ -207,11 +207,11 @@ export default function OrdersPage() {
       .limit(50);
     setAllOrders((data as OrderWithItems[]) ?? []);
     setLoadingAll(false);
-  };
+  }, [restaurantId, supabase]);
 
   useEffect(() => {
     if (['delivered', 'cancelled'].includes(activeTab)) loadCompleted();
-  }, [activeTab, restaurantId]);
+  }, [activeTab, loadCompleted]);
 
   const handleUpdateStatus = async (id: string, status: OrderStatus) => {
     const ok = await updateStatus(id, status);

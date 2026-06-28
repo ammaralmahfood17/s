@@ -15,7 +15,7 @@ const TTL_MS = 10_000;
 
 function captureError(error: Error, digest?: string) {
   lastCapturedError = { error, digest, at: Date.now() };
-  console.error('[Dokan Error Boundary]', error, digest);
+
 }
 
 export function getLastCapturedError() {

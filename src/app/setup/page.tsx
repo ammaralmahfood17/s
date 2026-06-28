@@ -72,7 +72,7 @@ export default function SetupPage() {
 
     if (error) {
       toast.error('حدث خطأ في إنشاء العربة');
-      console.error(error);
+
       setLoading(false);
       return;
     }

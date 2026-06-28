@@ -62,7 +62,7 @@ export function AdminQuickActions({ subscriptionId, restaurantId, currentStatus 
         toast.error('خطأ في تحديث الاشتراك');
       }
     } catch (err) {
-      console.error('mark paid error:', err);
+
       toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);

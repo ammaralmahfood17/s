@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Store, CreditCard, CheckCircle, XCircle,
@@ -64,7 +64,7 @@ export default function AdminRestaurantDetailPage({
     period_months: '1',
   });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const [restRes, subRes, plansRes, payRes] = await Promise.all([
         supabase.from('restaurants').select('*').eq('id', id).single(),
@@ -79,14 +79,14 @@ export default function AdminRestaurantDetailPage({
       setPlans((plansRes.data ?? []) as Plan[]);
       setPayments((payRes.data ?? []) as Payment[]);
     } catch (err) {
-      console.error('admin restaurant detail - load error:', err);
+
       toast.error('حدث خطأ في تحميل البيانات');
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, supabase]);
 
-  useEffect(() => { load(); }, [id]);
+  useEffect(() => { load(); }, [load]);
 
   // Update subscription status manually
   const updateSubStatus = async (status: string) => {
@@ -107,7 +107,7 @@ export default function AdminRestaurantDetailPage({
         toast.error('خطأ في تحديث الحالة');
       }
     } catch (err) {
-      console.error('update sub status error:', err);
+
       toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
@@ -137,11 +137,11 @@ export default function AdminRestaurantDetailPage({
         toast.success(`تم التمديد لمدة ${months} شهر`);
         load();
       } else {
-        console.error('extend sub error:', error);
+
         toast.error('خطأ في تمديد الاشتراك');
       }
     } catch (err) {
-      console.error('extend subscription error:', err);
+
       toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
@@ -178,7 +178,7 @@ export default function AdminRestaurantDetailPage({
         load();
       }
     } catch (err) {
-      console.error('set free plan error:', err);
+
       toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);
@@ -220,7 +220,7 @@ export default function AdminRestaurantDetailPage({
         toast.error('خطأ في تسجيل الدفعة');
       }
     } catch (err) {
-      console.error('record payment error:', err);
+
       toast.error('حدث خطأ غير متوقع');
     }
     setSaving(false);

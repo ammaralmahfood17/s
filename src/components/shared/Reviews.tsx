@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Star } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/utils';
@@ -282,7 +282,7 @@ export function ReviewsDashboard({
   const [reviews, setReviews] = useState<(Review & { reviewer_name?: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const { data } = await supabase
       .from('reviews')
       .select('*')
@@ -290,9 +290,9 @@ export function ReviewsDashboard({
       .order('created_at', { ascending: false });
     setReviews((data as (Review & { reviewer_name?: string })[]) ?? []);
     setLoading(false);
-  };
+  }, [restaurantId, supabase]);
 
-  useEffect(() => { load(); }, [restaurantId]);
+  useEffect(() => { load(); }, [load]);
 
   const togglePublic = async (id: string, current: boolean) => {
     await supabase.from('reviews').update({ is_public: !current }).eq('id', id);

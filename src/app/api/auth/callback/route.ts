@@ -15,12 +15,12 @@ export async function GET(request: NextRequest) {
       if (!error) {
         return NextResponse.redirect(`${origin}${next}`);
       }
-      console.error('auth callback - exchange code error:', error?.message);
+
     }
 
     return NextResponse.redirect(`${origin}/login?error=auth`);
   } catch (err) {
-    console.error('auth callback - unexpected error:', err);
+
     return NextResponse.redirect(`${origin}/login?error=auth`);
   }
 }

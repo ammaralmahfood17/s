@@ -58,7 +58,7 @@ export function useRealtimeOrders(restaurantId: string) {
       .eq('id', orderId);
 
     if (error) {
-      console.error('SOPRANO_AUDIT_ERROR:', error);
+      // console.error('SOPRANO_AUDIT_ERROR:', error);
     }
 
     if (!error) {
