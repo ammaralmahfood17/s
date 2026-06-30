@@ -11,7 +11,8 @@ export default function AdminError({
   reset: () => void;
 }) {
   useEffect(() => {
-
+    // eslint-disable-next-line no-console
+    console.error('[AdminError]', error.message, error.digest ? `(ref: ${error.digest})` : '');
   }, [error]);
 
   return (
@@ -22,7 +23,10 @@ export default function AdminError({
           <AlertTriangle size={24} className="text-red-400" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">خطأ في لوحة الإدارة</h2>
-        <p className="text-muted-foreground text-sm mb-6">حدث خطأ غير متوقع.</p>
+        <p className="text-muted-foreground text-sm mb-2">
+          {error.message || 'حدث خطأ غير متوقع'}
+        </p>
+        <p className="text-muted-foreground text-xs mb-6">يرجى المحاولة مرة أخرى</p>
         <button onClick={reset} className="btn-primary">
           <RefreshCw size={15} />
           حاول مجدداً

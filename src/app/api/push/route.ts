@@ -40,28 +40,32 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient();
 
-    // Get push subscriptions for this order
+    // Look up the order's restaurant for subscriber targeting
+    const { data: order, error: orderErr } = await supabase
+      .from('orders')
+      .select('restaurant_id, order_number')
+      .eq('id', orderId)
+      .maybeSingle();
+
+    if (orderErr || !order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+
+    // Get push subscriptions for this restaurant
     const { data: subs } = await supabase
       .from('push_subscriptions')
       .select('endpoint, p256dh, auth_key')
-      .eq('order_id', orderId);
+      .eq('restaurant_id', order.restaurant_id);
 
     if (!subs || subs.length === 0) {
       return NextResponse.json({ sent: 0 });
     }
 
-    // Get order number for notification title
-    const { data: order } = await supabase
-      .from('orders')
-      .select('order_number')
-      .eq('id', orderId)
-      .single();
-
     const msg = STATUS_MESSAGES[status];
     if (!msg) return NextResponse.json({ sent: 0 });
 
     const isAr = locale === 'ar';
-    const title = `Dokan ${order?.order_number ?? ''} · ${isAr ? 'دكان' : 'Dokan'}`;
+    const title = `Dokan ${order.order_number ?? ''} · ${isAr ? 'دكان' : 'Dokan'}`;
     const body = isAr ? msg.ar : msg.en;
 
     // Try to use web-push if available

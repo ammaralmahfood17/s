@@ -19,18 +19,29 @@ export function SubscriptionGate({ restaurantId, slug, children }: Props) {
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from('subscriptions')
-        .select('status, current_period_end')
-        .eq('restaurant_id', restaurantId)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from('subscriptions')
+          .select('status, current_period_end')
+          .eq('restaurant_id', restaurantId)
+          .maybeSingle();
 
-      if (data) {
-        setStatus(data.status);
-        const days = Math.ceil(
-          (new Date(data.current_period_end).getTime() - Date.now()) / 86400000
-        );
-        setDaysLeft(days);
+        if (error) {
+          // eslint-disable-next-line no-console
+          console.error('[SubscriptionGate]', error.message);
+          return;
+        }
+
+        if (data) {
+          setStatus(data.status);
+          const days = Math.ceil(
+            (new Date(data.current_period_end).getTime() - Date.now()) / 86400000
+          );
+          setDaysLeft(days);
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('[SubscriptionGate] unexpected', err);
       }
       setLoading(false);
     };
@@ -39,8 +50,8 @@ export function SubscriptionGate({ restaurantId, slug, children }: Props) {
 
   if (loading) return <>{children}</>;
 
-  // Blocked states
-  const blocked = status === 'cancelled' || (status === 'past_due' && daysLeft !== null && daysLeft < -7);
+  // Blocked states — paused and cancelled are immediate; past_due gets 3-day grace
+  const blocked = status === 'cancelled' || status === 'paused' || (status === 'past_due' && daysLeft !== null && daysLeft < -3);
 
   if (blocked) {
     return (

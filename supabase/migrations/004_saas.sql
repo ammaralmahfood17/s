@@ -155,8 +155,8 @@ BEGIN
       trial_ends_at
     ) VALUES (
       NEW.id, starter_plan_id, 'trialing',
-      now(), now() + INTERVAL '14 days',
-      now() + INTERVAL '14 days'
+      now(),       now() + INTERVAL '30 days',
+      now() + INTERVAL '30 days'
     );
   END IF;
   RETURN NEW;

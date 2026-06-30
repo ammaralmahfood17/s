@@ -67,16 +67,19 @@ export function ReviewForm({
     }
     setSubmitting(true);
 
-    const { error } = await supabase.from('reviews').insert({
-      restaurant_id: restaurantId,
-      order_id: orderId,
-      rating,
-      comment: comment.trim() || null,
-      reviewer_name: name.trim() || null,
-      is_public: true,
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        restaurant_id: restaurantId,
+        order_id: orderId,
+        rating,
+        comment: comment.trim() || null,
+        reviewer_name: name.trim() || null,
+      }),
     });
 
-    if (!error) {
+    if (res.ok) {
       setSubmitted(true);
       onSubmitted();
       toast.success('شكراً على تقييمك! ⭐');

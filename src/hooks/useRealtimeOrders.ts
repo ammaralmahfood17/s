@@ -36,13 +36,19 @@ export function useRealtimeOrders(restaurantId: string) {
             .from('orders')
             .select(`*, table:tables(*), order_items(*)`)
             .eq('id', payload.new.id)
-            .single();
+            .maybeSingle();
           if (data) setOrders((prev) => [...prev, data as OrderWithItems]);
         } else if (payload.eventType === 'UPDATE') {
-          const updated = payload.new as OrderWithItems;
-          setOrders((prev) => 
-            prev.map((o) => o.id === updated.id ? { ...o, ...updated } : o)
-          );
+          const { data: freshOrder } = await supabase
+            .from('orders')
+            .select(`*, table:tables(*), order_items(*)`)
+            .eq('id', payload.new.id)
+            .maybeSingle();
+          if (freshOrder) {
+            setOrders((prev) =>
+              prev.map((o) => o.id === freshOrder.id ? (freshOrder as OrderWithItems) : o)
+            );
+          }
         }
       })
       .subscribe();
@@ -50,27 +56,18 @@ export function useRealtimeOrders(restaurantId: string) {
     return () => { supabase.removeChannel(channel); };
   }, [restaurantId, fetchOrders, supabase]);
 
-  // Update status + trigger push notification
+  // Update status via server API route (with tenant check)
   const updateStatus = async (orderId: string, status: OrderStatus, locale = 'ar') => {
-    const { error } = await supabase
-      .from('orders')
-      .update({ status })
-      .eq('id', orderId);
-
-    if (error) {
-      // console.error('SOPRANO_AUDIT_ERROR:', error);
-    }
-
-    if (!error) {
-      // Fire push notification async (non-blocking)
-      fetch('/api/push', {
-        method: 'POST',
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, status, locale }),
-      }).catch(() => {/* silent fail */});
+        body: JSON.stringify({ status, locale }),
+      });
+      return res.ok;
+    } catch {
+      return false;
     }
-
-    return !error;
   };
 
   return { orders, loading, updateStatus, refetch: fetchOrders };
@@ -88,7 +85,7 @@ export function useOrderStatus(orderId: string) {
         .from('orders')
         .select(`*, table:tables(*), order_items(*)`)
         .eq('id', orderId)
-        .single();
+        .maybeSingle();
       if (data) setOrder(data as OrderWithItems);
       setLoading(false);
     };
@@ -99,8 +96,13 @@ export function useOrderStatus(orderId: string) {
       .on('postgres_changes', {
         event: 'UPDATE', schema: 'public', table: 'orders',
         filter: `id=eq.${orderId}`,
-      }, (payload) => {
-        setOrder((prev) => prev ? { ...prev, ...(payload.new as OrderWithItems) } : null);
+      }, async (payload) => {
+        const { data: freshOrder } = await supabase
+          .from('orders')
+          .select(`*, table:tables(*), order_items(*)`)
+          .eq('id', orderId)
+          .maybeSingle();
+        if (freshOrder) setOrder(freshOrder as OrderWithItems);
       })
       .subscribe();
 

@@ -1,12 +1,25 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Plus, Download, QrCode, Trash2, ToggleLeft, ToggleRight, Printer, Car } from 'lucide-react';
+import { Plus, Download, QrCode, Trash2, ToggleLeft, ToggleRight, Printer, Car, Package } from 'lucide-react';
 import QRCode from 'qrcode';
 import { createClient } from '@/lib/supabase/client';
 import type { Table } from '@/types';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+
+function getTableUrl(table: Table, restaurantSlug: string): string {
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz';
+  if (table.name_en === 'Drive Thru') return `${base}/${restaurantSlug}/car`;
+  if (table.name_en === 'External Pickup') return `${base}/${restaurantSlug}/external`;
+  return `${base}/${restaurantSlug}/t/${table.qr_token}`;
+}
+
+function getTableLabel(table: Table): string {
+  if (table.name_en === 'Drive Thru') return 'اطلب من السيارة';
+  if (table.name_en === 'External Pickup') return 'اطلب واستلم من المطعم';
+  return 'امسح للطلب';
+}
 
 function QRModal({
   table,
@@ -18,8 +31,8 @@ function QRModal({
   onClose: () => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const url = `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz'}/${restaurantSlug}/t/${table.qr_token}`;
-  const isDriveThru = table.name_en === 'Drive Thru';
+  const url = getTableUrl(table, restaurantSlug);
+  const label = getTableLabel(table);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -53,7 +66,7 @@ function QRModal({
 
     ctx.font = '16px system-ui';
     ctx.fillStyle = '#737373';
-    ctx.fillText(isDriveThru ? 'اطلب من السيارة' : 'امسح للطلب', 200, 375);
+    ctx.fillText(label, 200, 375);
 
     ctx.font = 'bold 18px system-ui';
     ctx.fillStyle = '#f59e0b';
@@ -77,11 +90,18 @@ function QRModal({
         <h2 className="font-bold text-foreground text-lg mb-1">
           {table.name_ar}
         </h2>
-        {isDriveThru && (
+        {table.name_en === 'Drive Thru' && (
           <div className="inline-flex items-center gap-1 text-xs text-primary bg-primary/10
                           px-2 py-0.5 rounded-full mb-2">
             <Car size={12} />
             طلب سيارات
+          </div>
+        )}
+        {table.name_en === 'External Pickup' && (
+          <div className="inline-flex items-center gap-1 text-xs text-brand-400 bg-brand-500/10
+                          px-2 py-0.5 rounded-full mb-2">
+            <Package size={12} />
+            طلب من الخارج
           </div>
         )}
         <p className="text-xs text-muted-foreground mb-6 break-all">{url}</p>
@@ -181,9 +201,10 @@ export default function TablesPage() {
     return <div className="p-6 text-muted-foreground">جار التحميل...</div>;
   }
 
-  // Separate Drive Thru from regular tables
+  // Separate special tables from regular tables
   const driveThruTable = tables.find(t => t.name_en === 'Drive Thru');
-  const regularTables = tables.filter(t => t.name_en !== 'Drive Thru');
+  const externalPickupTable = tables.find(t => t.name_en === 'External Pickup');
+  const regularTables = tables.filter(t => t.name_en !== 'Drive Thru' && t.name_en !== 'External Pickup');
 
   return (
     <div className="p-4 sm:p-6 max-w-3xl space-y-4">
@@ -206,7 +227,7 @@ export default function TablesPage() {
         </button>
       </div>
 
-      {/* Drive Thru card */}
+      {/* Special table types */}
       {driveThruTable && (
         <div className="card border-primary/30 bg-primary/5 flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -218,12 +239,35 @@ export default function TablesPage() {
               <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">افتراضي</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              الرابط: {process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz'}/{restaurantSlug}/t/{driveThruTable.qr_token}
+              الرابط: {process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz'}/{restaurantSlug}/car
             </div>
           </div>
           <button
             onClick={() => setQrTable(driveThruTable)}
             className="btn-ghost py-1.5 px-2 text-primary hover:text-primary/80"
+          >
+            <QrCode size={16} />
+          </button>
+        </div>
+      )}
+
+      {externalPickupTable && (
+        <div className="card border-brand-500/30 bg-brand-500/5 flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center flex-shrink-0">
+            <Package size={24} className="text-brand-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-foreground text-sm flex items-center gap-2">
+              طلب من الخارج (Takeaway)
+              <span className="text-xs bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded-full">افتراضي</span>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              الرابط: {process.env.NEXT_PUBLIC_APP_URL ?? 'https://dokanstore.xyz'}/{restaurantSlug}/external
+            </div>
+          </div>
+          <button
+            onClick={() => setQrTable(externalPickupTable)}
+            className="btn-ghost py-1.5 px-2 text-brand-400 hover:text-brand-300"
           >
             <QrCode size={16} />
           </button>

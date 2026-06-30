@@ -137,7 +137,7 @@ export type OrderStatus =
   | 'delivered'    // Delivered to customer (final)
   | 'cancelled';   // Cancelled
 
-export type OrderType = 'table' | 'car' | 'manual';
+export type OrderType = 'table' | 'car' | 'external' | 'manual';
 
 export interface Order {
   id: string;
@@ -403,9 +403,8 @@ export interface Payment {
 
 export interface PushSubscription {
   id: string;
-  tenant_id: string | null;
+  restaurant_id: string | null;
   user_id: string | null;
-  order_id: string | null;
   endpoint: string;
   p256dh: string;
   auth_key: string;

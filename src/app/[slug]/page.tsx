@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { QrCode, MapPin, Phone } from 'lucide-react';
+import { QrCode, MapPin, Phone, Car, Package } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -21,12 +21,17 @@ export default async function RestaurantStorefrontPage({
 
   if (!restaurant) notFound();
 
-  const { data: tables } = await supabase
+  const { data: allTables } = await supabase
     .from('tables')
     .select('*')
     .eq('restaurant_id', restaurant.id)
     .eq('is_active', true)
     .order('sort_order');
+
+  const tables = (allTables ?? []);
+  const driveThru = tables.find(t => t.name_en === 'Drive Thru');
+  const externalPickup = tables.find(t => t.name_en === 'External Pickup');
+  const regularTables = tables.filter(t => t.name_en !== 'Drive Thru' && t.name_en !== 'External Pickup');
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -62,10 +67,42 @@ export default async function RestaurantStorefrontPage({
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              اختر طاولتك للطلب
-            </p>
-            {(tables ?? []).map((table) => (
+            {/* Non-dine-in options */}
+            {driveThru && (
+              <Link
+                href={`/${slug}/car`}
+                className="card-hover flex items-center justify-between py-4 px-5 block"
+              >
+                <div className="flex items-center gap-3">
+                  <Car size={20} className="text-primary" />
+                  <span className="font-medium text-foreground">طلب من السيارة</span>
+                </div>
+                <QrCode size={18} className="text-primary" />
+              </Link>
+            )}
+            {externalPickup && (
+              <Link
+                href={`/${slug}/external`}
+                className="card-hover flex items-center justify-between py-4 px-5 block"
+              >
+                <div className="flex items-center gap-3">
+                  <Package size={20} className="text-brand-400" />
+                  <span className="font-medium text-foreground">طلب من الخارج (Takeaway)</span>
+                </div>
+                <QrCode size={18} className="text-brand-400" />
+              </Link>
+            )}
+
+            {/* Divider if both non-dine-in and dine-in options exist */}
+            {regularTables.length > 0 && (driveThru || externalPickup) && (
+              <div className="flex items-center gap-2 py-1">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-xs text-muted-foreground">طلب داخل المطعم</span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
+            )}
+
+            {regularTables.map((table) => (
               <Link
                 key={table.id}
                 href={`/${slug}/t/${table.qr_token}`}
@@ -77,7 +114,7 @@ export default async function RestaurantStorefrontPage({
                 <QrCode size={18} className="text-primary" />
               </Link>
             ))}
-            {(!tables || tables.length === 0) && (
+            {regularTables.length === 0 && !driveThru && !externalPickup && (
               <div className="card text-center py-8 text-muted-foreground text-sm">
                 لا توجد طاولات متاحة
               </div>

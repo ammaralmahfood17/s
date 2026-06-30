@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { QrCode, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const supabase = createClient();
 
@@ -19,6 +19,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Show feedback toast when redirected from protected routes
+  useEffect(() => {
+    const reason = searchParams.get('reason');
+    if (reason === 'unauthenticated') toast.error('يرجى تسجيل الدخول أولاً');
+    if (reason === 'unauthorized') toast.error('ليس لديك صلاحية الوصول لهذا المطعم');
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,5 +148,17 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-muted-foreground">جاري التحميل...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

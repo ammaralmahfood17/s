@@ -24,6 +24,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     const reg = await navigator.serviceWorker.register('/sw.js');
     return reg;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('[Dokan:push] Service worker registration failed', err);
     return null;
   }
@@ -31,10 +32,11 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
 // ── Subscribe to push ──────────────────────────────────────
 export async function subscribeToPush(
-  orderId: string,
+  userId: string,
   restaurantId: string
 ): Promise<boolean> {
   if (!VAPID_PUBLIC_KEY) {
+    // eslint-disable-next-line no-console
     console.warn('[Dokan:push] VAPID_PUBLIC_KEY not set — push disabled');
     return false;
   }
@@ -56,15 +58,16 @@ export async function subscribeToPush(
     const supabase = createClient();
 
     await supabase.from('push_subscriptions').upsert({
-      order_id: orderId,
+      user_id: userId,
       restaurant_id: restaurantId,
       endpoint: sub.endpoint!,
       p256dh: (sub.keys as Record<string, string>)?.p256dh ?? '',
       auth_key: (sub.keys as Record<string, string>)?.auth ?? '',
-    }, { onConflict: 'order_id,endpoint' });
+    }, { onConflict: 'user_id,endpoint' });
 
     return true;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('[Dokan:push] Push subscription failed', err);
     return false;
   }

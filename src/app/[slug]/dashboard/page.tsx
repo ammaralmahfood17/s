@@ -121,6 +121,19 @@ export default async function DashboardPage({
     );
   }
 
+  // Fetch subscription for trial-expiry banner
+  const { data: subscription } = await supabase
+    .from('subscriptions')
+    .select('status, trial_ends_at, current_period_end')
+    .eq('restaurant_id', restaurant.id)
+    .maybeSingle();
+
+  const trialEnd = subscription?.trial_ends_at ? new Date(subscription.trial_ends_at) : null;
+  const now = new Date();
+  const daysLeft = trialEnd ? Math.ceil((trialEnd.getTime() - now.getTime()) / 86400000) : null;
+  const isTrialing = restaurant.subscription_status === 'trialing';
+  const isExpired = restaurant.subscription_status === 'past_due' || restaurant.subscription_status === 'cancelled';
+
   const [analytics, recentOrders] = await Promise.all([
     getAnalytics(restaurant.id),
     getRecentOrders(restaurant.id),
@@ -149,7 +162,7 @@ export default async function DashboardPage({
 
   const quickLinks = [
     {
-      href: `/${slug}/dashboard/orders`,
+      href: `/${slug}/dashboard/kitchen`,
       icon: ShoppingBag,
       label: 'الطلبات',
       desc: 'إدارة الطلبات الواردة',
@@ -194,6 +207,45 @@ export default async function DashboardPage({
         </div>
       </div>
 
+      {/* Trial & subscription alerts */}
+      {isExpired && (
+        <div className="flex items-center gap-3 bg-destructive/15 border border-destructive/40 rounded-xl px-4 py-3">
+          <AlertCircle size={18} className="text-destructive flex-shrink-0" />
+          <p className="text-sm text-destructive flex-1">
+            اشتراكك منتهٍ. تم إيقاف الطلبات. تواصل مع الإدارة للتجديد.
+          </p>
+        </div>
+      )}
+
+      {isTrialing && daysLeft !== null && daysLeft <= 7 && (
+        <div className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+          daysLeft <= 3
+            ? 'bg-destructive/15 border border-destructive/40'
+            : 'bg-warning/15 border border-warning/30'
+        }`}>
+          <AlertCircle size={18} className={`flex-shrink-0 ${
+            daysLeft <= 3 ? 'text-destructive' : 'text-warning'
+          }`} />
+          <p className={`text-sm flex-1 ${
+            daysLeft <= 3 ? 'text-destructive' : 'text-warning-foreground'
+          }`}>
+            {daysLeft <= 1
+              ? `آخر يوم في الفترة التجريبية! جدِّد اشتراكك للاستمرار.`
+              : `متبقي ${daysLeft} أيام في الفترة التجريبية.`
+            }
+          </p>
+        </div>
+      )}
+
+      {isTrialing && daysLeft !== null && daysLeft > 7 && (
+        <div className="flex items-center gap-3 bg-primary/5 border border-primary/20 rounded-xl px-4 py-3">
+          <Clock size={18} className="text-primary flex-shrink-0" />
+          <p className="text-sm text-muted-foreground flex-1">
+            الفترة التجريبية: متبقي {daysLeft} يوم
+          </p>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map((stat) => (
@@ -209,7 +261,7 @@ export default async function DashboardPage({
 
       {/* Active orders alert */}
       {analytics.ordersPending > 0 && (
-        <Link href={`/${slug}/dashboard/orders`}>
+        <Link href={`/${slug}/dashboard/kitchen`}>
           <div className="flex items-center gap-3 bg-warning/15 border-warning/30
                           rounded-xl px-4 py-3 hover:border-yellow-700 transition-colors">
             <AlertCircle size={18} className="text-yellow-400 flex-shrink-0" />
@@ -252,7 +304,7 @@ export default async function DashboardPage({
             <h2 className="section-title mb-0">
               آخر الطلبات
             </h2>
-            <Link href={`/${slug}/dashboard/orders`}
+            <Link href={`/${slug}/dashboard/kitchen`}
               className="text-xs text-primary hover:text-brand-300">
               عرض الكل
             </Link>

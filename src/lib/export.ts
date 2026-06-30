@@ -37,7 +37,7 @@ export async function exportOrdersCSV(
   dateFrom: string,
   dateTo: string,
   locale: 'en' | 'ar' = 'ar'
-): Promise<void> {
+): Promise<{ success: boolean; message?: string }> {
   const supabase = createClient();
 
   const { data: orders } = await supabase
@@ -57,8 +57,7 @@ export async function exportOrdersCSV(
     .order('created_at', { ascending: false });
 
   if (!orders || orders.length === 0) {
-    alert(locale === 'ar' ? 'لا توجد طلبات في هذه الفترة' : 'No orders in this period');
-    return;
+    return { success: false, message: locale === 'ar' ? 'لا توجد طلبات في هذه الفترة' : 'No orders in this period' };
   }
 
   // Flatten orders × items into rows
@@ -116,6 +115,7 @@ export async function exportOrdersCSV(
   const csv = toCSV(rows);
   const filename = `dokan-orders-${dateFrom}-to-${dateTo}.csv`;
   downloadCSV(csv, filename);
+  return { success: true };
 }
 
 // ── Export top items report ────────────────────────────────
@@ -123,7 +123,7 @@ export async function exportItemsReportCSV(
   restaurantId: string,
   dateFrom: string,
   dateTo: string
-): Promise<void> {
+): Promise<{ success: boolean; message?: string }> {
   const supabase = createClient();
 
   const { data: orderIds } = await supabase
@@ -135,8 +135,7 @@ export async function exportItemsReportCSV(
     .neq('status', 'cancelled');
 
   if (!orderIds?.length) {
-    alert('No data');
-    return;
+    return { success: false, message: 'No data' };
   }
 
   const { data: items } = await supabase
@@ -164,4 +163,5 @@ export async function exportItemsReportCSV(
     }));
 
   downloadCSV(toCSV(rows), `dokan-items-${dateFrom}-to-${dateTo}.csv`);
+  return { success: true };
 }

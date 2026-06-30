@@ -122,7 +122,8 @@ module.exports = {
         },
       },
       backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+        'gradient-brand': 'linear-gradient(135deg, #fbbf24 0%, #f43f5e 100%)',
+        'gradient-hero': 'linear-gradient(to right, #fcd34d, #fb7185, #d946ef)',
       },
     },
   },

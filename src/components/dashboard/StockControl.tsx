@@ -19,12 +19,13 @@ export function StockControl({ item, onUpdate }: Props) {
   const toggleSoldOut = async () => {
     const next = !item.sold_out;
     setLoading(true);
-    const { error } = await supabase
-      .from('items')
-      .update({ sold_out: next, is_available: !next })
-      .eq('id', item.id);
+    const res = await fetch('/api/app/stock', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item_id: item.id, sold_out: next, is_available: !next }),
+    });
 
-    if (error) {
+    if (!res.ok) {
       toast.error('حدث خطأ');
     } else {
       toast.success(next ? 'تم تحديد العنصر كنافذ المخزون' : 'تم إعادة تفعيل العنصر');
@@ -35,12 +36,13 @@ export function StockControl({ item, onUpdate }: Props) {
 
   const updateStock = async (count: number) => {
     setLoading(true);
-    const { error } = await supabase
-      .from('items')
-      .update({ stock_count: count, stock_enabled: true })
-      .eq('id', item.id);
+    const res = await fetch('/api/app/stock', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item_id: item.id, stock_count: count, stock_enabled: true }),
+    });
 
-    if (error) {
+    if (!res.ok) {
       toast.error('حدث خطأ');
     } else {
       toast.success('تم تحديث المخزون');
@@ -99,10 +101,11 @@ export function KitchenStockToggle({
     if (!confirm(`تحديد "${itemNameAr}" كنافذ المخزون؟`)) return;
 
     setLoading(true);
-    await supabase
-      .from('items')
-      .update({ sold_out: true, is_available: false })
-      .eq('id', itemId);
+    await fetch('/api/app/stock', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item_id: itemId, sold_out: true, is_available: false }),
+    });
     setLoading(false);
     toast.success('تم تحديد العنصر كنافذ المخزون');
   };

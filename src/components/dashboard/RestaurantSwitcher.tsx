@@ -85,8 +85,6 @@ export function RestaurantSwitcher({ currentRestaurantId, locale }: Props) {
               key={r.id}
               onClick={() => {
                 setOpen(false);
-                // Store preference in localStorage
-                localStorage.setItem('dokan_active_restaurant', r.id);
                 router.refresh();
               }}
               className={cn(

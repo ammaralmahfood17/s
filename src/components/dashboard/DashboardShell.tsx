@@ -8,7 +8,7 @@ import type { User } from '@supabase/supabase-js';
 import {
   LogOut, Menu, X,
   LayoutGrid, BarChart3, UtensilsCrossed,
-  ShoppingCart, ChefHat, Settings,
+  ShoppingCart, Settings,
   Grid3x3, FilePlus, Package, Star,
   Clock, Car,
 } from 'lucide-react';
@@ -30,8 +30,7 @@ interface Props {
 // Bottom nav icon map
 const BOTTOM_NAV_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   dashboard: LayoutGrid,
-  'dashboard/orders': ShoppingCart,
-  'dashboard/kitchen': ChefHat,
+  'dashboard/kitchen': ShoppingCart,
   'dashboard/menu': UtensilsCrossed,
   'dashboard/tables': Grid3x3,
   'dashboard/manual-order': FilePlus,
@@ -44,7 +43,6 @@ const BOTTOM_NAV_ICONS: Record<string, React.ComponentType<{ className?: string 
 
 // Bottom nav: top 5 most important items
 const BOTTOM_NAV_PRIORITY = [
-  'dashboard/orders',
   'dashboard/kitchen',
   'dashboard/menu',
   'dashboard',

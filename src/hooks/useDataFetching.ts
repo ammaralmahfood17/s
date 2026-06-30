@@ -23,7 +23,7 @@ export function useRestaurantBySlug(slug: string) {
         .from('restaurants')
         .select('*')
         .eq('slug', slug)
-        .single();
+        .maybeSingle();
       return data as Restaurant | null;
     },
     enabled: !!slug,
@@ -33,16 +33,12 @@ export function useRestaurantBySlug(slug: string) {
 
 // ── Resolve table by QR token ──────────────────────────────
 export function useTableByQrToken(qrToken: string) {
-  const supabase = createClient();
   return useQuery({
     queryKey: queryKeys.table(qrToken),
     queryFn: async () => {
-      const { data } = await supabase
-        .from('tables')
-        .select('id, name_en, name_ar, restaurant_id, is_active')
-        .eq('qr_token', qrToken)
-        .single();
-      return data as Pick<Table, 'id' | 'name_en' | 'name_ar' | 'restaurant_id' | 'is_active'> | null;
+      const res = await fetch(`/api/app/table?token=${encodeURIComponent(qrToken)}`);
+      if (!res.ok) return null;
+      return res.json() as Promise<Pick<Table, 'id' | 'name_en' | 'name_ar' | 'restaurant_id' | 'is_active'> | null>;
     },
     enabled: !!qrToken,
     staleTime: 10 * 60 * 1000,  // 10 min — tables rarely change
@@ -93,16 +89,12 @@ export function useMenu(restaurantId: string) {
 
 // ── Get user's restaurant ID for dashboard ─────────────────
 export function useMyRestaurant(userId: string | undefined) {
-  const supabase = createClient();
   return useQuery({
     queryKey: queryKeys.dashboard(userId ?? ''),
     queryFn: async () => {
-      const { data: r } = await supabase
-        .from('restaurants')
-        .select('id')
-        .eq('owner_id', userId)
-        .single();
-      return r as { id: string } | null;
+      const res = await fetch(`/api/app/restaurant?userId=${encodeURIComponent(userId ?? '')}`);
+      if (!res.ok) return null;
+      return res.json() as Promise<{ id: string } | null>;
     },
     enabled: !!userId,
     staleTime: 10 * 60 * 1000,

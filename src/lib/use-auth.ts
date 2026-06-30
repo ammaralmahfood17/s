@@ -52,10 +52,10 @@ export function useAuth(): UseAuthReturn {
   const loadUserData = useCallback(
     async (userId: string) => {
       const [profileRes, ownerRes, staffRes, adminRes] = await Promise.all([
-        supabase.from('profiles').select('*').eq('id', userId).single(),
+        supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
         supabase.from('restaurants').select('id').eq('owner_id', userId).limit(1),
         supabase.from('restaurant_staff').select('id').eq('user_id', userId).limit(1),
-        supabase.from('super_admins').select('id').eq('user_id', userId).single(),
+        supabase.from('super_admins').select('id').eq('user_id', userId).maybeSingle(),
       ]);
 
       if (profileRes.data) setProfile(profileRes.data as Profile);

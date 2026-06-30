@@ -10,14 +10,13 @@ import {
 } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type {
-  Restaurant, Category, Item, Variation, Addon, PlaceOrderPayload
+  Restaurant, Category, Item, Variation, Addon
 } from '@/types';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { OpeningHoursDisplay, parseHours, isOpenNow } from '@/components/shared/OpeningHours';
 import { PausedBanner } from '@/components/dashboard/PauseOrdering';
 import { ReviewsList, ReviewForm } from '@/components/shared/Reviews';
-import { isPushSupported, subscribeToPush } from '@/lib/push';
 
 // ── Item Detail Modal ──────────────────────────────────────
 function ItemModal({
@@ -285,14 +284,13 @@ function CartDrawer({
     if (items.length === 0) return;
     setPlacing(true);
 
-    const sessionToken = getOrCreateSessionToken();
-
-    const payload: PlaceOrderPayload = {
+    const payload = {
       restaurant_id: restaurantId,
       table_id: tableId,
+      order_type: 'table',
       customer_name: customerName || undefined,
       notes: orderNotes || undefined,
-      session_token: sessionToken,
+      session_token: getOrCreateSessionToken(),
       items: items.map(ci => ({
         item_id: ci.item.id,
         item_name_en: ci.item.name_en,
@@ -301,69 +299,36 @@ function CartDrawer({
         variation_name_en: ci.variation?.name_en,
         variation_name_ar: ci.variation?.name_ar,
         quantity: ci.quantity,
-        unit_price: ci.unitPrice,
         addons: ci.addons,
         notes: ci.notes || undefined,
-        line_total: ci.lineTotal,
+        // unit_price and line_total intentionally omitted —
+        // server recalculates from DB prices
       })),
+      idempotency_key: crypto.randomUUID(),
     };
 
-    // Insert order
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert({
-        restaurant_id: payload.restaurant_id,
-        table_id: payload.table_id,
-        order_number: '',  // auto-set by trigger
-        customer_name: payload.customer_name,
-        notes: payload.notes,
-        session_token: payload.session_token,
-        subtotal: total,
-        total,
-        payment_method: 'cashier',
-      })
-      .select()
-      .single();
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    if (orderError || !order) {
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || 'حدث خطأ. يرجى المحاولة مرة أخرى.');
+        setPlacing(false);
+        return;
+      }
+
+      clearCart();
+      setOpen(false);
+      onOrderPlaced(data.order_id, data.order_number);
+    } catch {
       toast.error('حدث خطأ. يرجى المحاولة مرة أخرى.');
-      setPlacing(false);
-      return;
     }
-
-    // Insert order items
-    const { error: itemsError } = await supabase.from('order_items').insert(
-      payload.items.map(oi => ({
-        order_id: order.id,
-        item_id: oi.item_id,
-        item_name_en: oi.item_name_en,
-        item_name_ar: oi.item_name_ar,
-        variation_id: oi.variation_id,
-        variation_name_en: oi.variation_name_en,
-        variation_name_ar: oi.variation_name_ar,
-        quantity: oi.quantity,
-        unit_price: oi.unit_price,
-        addons: oi.addons,
-        notes: oi.notes,
-        line_total: oi.line_total,
-      }))
-    );
-
-    if (itemsError) {
-      toast.error('حدث خطأ');
-      setPlacing(false);
-      return;
-    }
-
-    clearCart();
-    setOpen(false);
-    onOrderPlaced(order.id, order.order_number);
     setPlacing(false);
-
-    // Attempt push subscription silently — non-blocking, no error shown if unsupported
-    if (isPushSupported()) {
-      subscribeToPush(order.id, restaurantId).catch(() => {/* silent */});
-    }
   };
 
   if (count === 0) return null;

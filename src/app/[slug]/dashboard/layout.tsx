@@ -13,7 +13,7 @@ export default async function DashboardLayout({
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/login?redirectTo=/${slug}/dashboard`);
+  if (!user) redirect(`/login?redirectTo=/${slug}/dashboard&reason=unauthenticated`);
 
   // Fetch restaurant by slug
   const { data: restaurant } = await supabase
@@ -42,7 +42,7 @@ export default async function DashboardLayout({
 
   if (!isOwner && !isStaff) {
     // User doesn't have access to this restaurant's dashboard
-    redirect('/login');
+    redirect('/login?reason=unauthorized');
   }
 
   return (

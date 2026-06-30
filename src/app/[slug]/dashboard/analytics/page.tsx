@@ -84,9 +84,14 @@ export default function AnalyticsPage() {
     if(!restaurantId)return;
     setExporting(true);
     try{
-      if(type==='orders')await exportOrdersCSV(restaurantId,dateFrom,dateTo,'ar');
-      else await exportItemsReportCSV(restaurantId,dateFrom,dateTo);
-      toast.success('تم التصدير');
+      const result = type === 'orders'
+        ? await exportOrdersCSV(restaurantId, dateFrom, dateTo, 'ar')
+        : await exportItemsReportCSV(restaurantId, dateFrom, dateTo);
+      if (result.success) {
+        toast.success('تم التصدير');
+      } else {
+        toast.error(result.message || 'حدث خطأ');
+      }
     }catch{toast.error('حدث خطأ');}
     setExporting(false);
   };

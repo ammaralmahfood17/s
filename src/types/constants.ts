@@ -19,9 +19,10 @@ export const ORDER_STATUS_CONFIG: Record<
 };
 
 export const ORDER_TYPE_LABELS: Record<OrderType, { en: string; ar: string }> = {
-  table:   { en: 'Table Order',   ar: 'طلب طاولة' },
-  car:     { en: 'Car Order',     ar: 'طلب سيارة' },
-  manual:  { en: 'Manual Order',  ar: 'طلب يدوي' },
+  table:    { en: 'Table Order',     ar: 'طلب طاولة' },
+  car:      { en: 'Car Order',       ar: 'طلب سيارة' },
+  external: { en: 'External Order',  ar: 'طلب من الخارج' },
+  manual:   { en: 'Manual Order',    ar: 'طلب يدوي' },
 };
 
 export const GOVERNORATES: Record<GovernorateKey, { en: string; ar: string }> = {

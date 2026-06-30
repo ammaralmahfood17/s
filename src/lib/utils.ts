@@ -175,7 +175,8 @@ export async function tryCatch<T>(
   try {
     return await fn();
   } catch (err) {
-
+    // eslint-disable-next-line no-console
+    console.error(`[tryCatch:${label}]`, err);
     return fallback;
   }
 }

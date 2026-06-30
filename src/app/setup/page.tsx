@@ -85,13 +85,22 @@ export default function SetupPage() {
       .single();
 
     if (newRestaurant) {
-      await supabase.from('tables').insert({
-        restaurant_id: newRestaurant.id,
-        name_en: 'Drive Thru',
-        name_ar: 'طلب سيارات',
-        sort_order: 0,
-        is_active: true,
-      });
+      await supabase.from('tables').insert([
+        {
+          restaurant_id: newRestaurant.id,
+          name_en: 'Drive Thru',
+          name_ar: 'طلب سيارات',
+          sort_order: 0,
+          is_active: true,
+        },
+        {
+          restaurant_id: newRestaurant.id,
+          name_en: 'External Pickup',
+          name_ar: 'طلب من الخارج',
+          sort_order: 1,
+          is_active: true,
+        },
+      ]);
     }
 
     toast.success('تم إنشاء العربة بنجاح!');

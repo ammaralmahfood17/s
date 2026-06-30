@@ -5,25 +5,24 @@
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-cairo: 'Cairo', system-ui, sans-serif;
-  /* Safe area for iOS notch/home-bar */
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 
-  /* ── Dokan dark theme (default) ────────────────────────── */
-  --background: 40 11% 7%;        /* #0f0e0c — near black */
-  --foreground: 60 7% 98%;        /* #fafaf9 — off white */
-  --card: 45 8% 9%;               /* #1a1916 — dark surface */
-  --card-foreground: 60 7% 98%;   /* #fafaf9 */
-  --popover: 45 8% 9%;            /* #1a1916 */
-  --popover-foreground: 60 7% 98%;
+  /* ── TableTap-inspired dark theme ──────────────────────── */
+  --background: 0 0% 4%;          /* #0a0a0a — pure near-black */
+  --foreground: 0 0% 98%;         /* #fafafa — off white */
+  --card: 0 0% 7%;                /* #121212 — dark surface */
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 98%;
   --primary: 36 95% 50%;          /* #f59e0b — amber brand */
   --primary-foreground: 0 0% 0%;
-  --secondary: 40 6% 15%;         /* #2a2825 */
-  --secondary-foreground: 60 7% 98%;
-  --muted: 45 8% 12%;             /* #1f1e1b */
-  --muted-foreground: 30 5% 48%;  /* #827e7a */
+  --secondary: 0 0% 14%;          /* #242424 */
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 10%;              /* #1a1a1a */
+  --muted-foreground: 0 0% 50%;  /* #808080 */
   --accent: 36 95% 50%;           /* #f59e0b */
   --accent-foreground: 0 0% 0%;
   --destructive: 0 70% 55%;
@@ -32,36 +31,35 @@
   --success-foreground: 0 0% 100%;
   --warning: 38 80% 50%;
   --warning-foreground: 0 0% 100%;
-  --border: 40 6% 15%;            /* #2a2825 */
-  --input: 40 6% 15%;             /* #2a2825 */
-  --ring: 36 95% 50%;             /* #f59e0b */
+  --border: 0 0% 14%;             /* #242424 — white/8 equivalent */
+  --input: 0 0% 14%;
+  --ring: 36 95% 50%;
 
-  /* Sidebar (matches default dark) */
-  --sidebar: 40 11% 7%;           /* #0f0e0c */
-  --sidebar-foreground: 60 7% 98%;
+  /* Sidebar */
+  --sidebar: 0 0% 4%;            /* #0a0a0a */
+  --sidebar-foreground: 0 0% 98%;
   --sidebar-primary: 36 95% 50%;
   --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 45 8% 12%;    /* #1f1e1b */
-  --sidebar-accent-foreground: 60 7% 98%;
-  --sidebar-border: 40 6% 15%;    /* #2a2825 */
+  --sidebar-accent: 0 0% 10%;    /* #1a1a1a */
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 0 0% 14%;
   --sidebar-ring: 36 95% 50%;
 }
 
-/* ── Light theme (when .dark class is removed) ──────────── */
 html:not(.dark) {
-  --background: 0 0% 96%;       /* #f5f5f5 */
-  --foreground: 0 0% 9%;        /* #171717 */
+  --background: 0 0% 96%;
+  --foreground: 0 0% 9%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 9%;
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 9%;
-  --primary: 36 95% 40%;        /* #b45309 */
+  --primary: 36 95% 40%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 92%;        /* #ebebeb */
+  --secondary: 0 0% 92%;
   --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 92%;            /* #ebebeb */
-  --muted-foreground: 0 0% 45%; /* #737373 */
-  --accent: 36 95% 50%;         /* #f59e0b */
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 36 95% 50%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
@@ -69,11 +67,11 @@ html:not(.dark) {
   --success-foreground: 0 0% 100%;
   --warning: 38 92% 50%;
   --warning-foreground: 0 0% 100%;
-  --border: 0 0% 88%;           /* #e0e0e0 */
+  --border: 0 0% 88%;
   --input: 0 0% 88%;
   --ring: 36 95% 50%;
 
-  --sidebar: 0 0% 98%;          /* #fafafa */
+  --sidebar: 0 0% 98%;
   --sidebar-foreground: 0 0% 9%;
   --sidebar-primary: 36 95% 40%;
   --sidebar-primary-foreground: 0 0% 100%;
@@ -83,20 +81,19 @@ html:not(.dark) {
   --sidebar-ring: 36 95% 50%;
 }
 
-/* ── Force dark: .dark class (same as :root default) ────── */
 html.dark {
-  --background: 40 11% 7%;        /* #0f0e0c */
-  --foreground: 60 7% 98%;        /* #fafaf9 */
-  --card: 45 8% 9%;
-  --card-foreground: 60 7% 98%;
-  --popover: 45 8% 9%;
-  --popover-foreground: 60 7% 98%;
+  --background: 0 0% 4%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 98%;
   --primary: 36 95% 50%;
   --primary-foreground: 0 0% 0%;
-  --secondary: 40 6% 15%;
-  --secondary-foreground: 60 7% 98%;
-  --muted: 45 8% 12%;
-  --muted-foreground: 30 5% 48%;
+  --secondary: 0 0% 14%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 50%;
   --accent: 36 95% 50%;
   --accent-foreground: 0 0% 0%;
   --destructive: 0 70% 55%;
@@ -105,17 +102,17 @@ html.dark {
   --success-foreground: 0 0% 100%;
   --warning: 38 80% 50%;
   --warning-foreground: 0 0% 100%;
-  --border: 40 6% 15%;
-  --input: 40 6% 15%;
+  --border: 0 0% 14%;
+  --input: 0 0% 14%;
   --ring: 36 95% 50%;
 
-  --sidebar: 40 11% 7%;
-  --sidebar-foreground: 60 7% 98%;
+  --sidebar: 0 0% 4%;
+  --sidebar-foreground: 0 0% 98%;
   --sidebar-primary: 36 95% 50%;
   --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 45 8% 12%;
-  --sidebar-accent-foreground: 60 7% 98%;
-  --sidebar-border: 40 6% 15%;
+  --sidebar-accent: 0 0% 10%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 0 0% 14%;
   --sidebar-ring: 36 95% 50%;
 }
 
@@ -140,22 +137,18 @@ html.dark {
     font-family: var(--font-cairo), system-ui, sans-serif;
   }
 
-  /* Prevent zoom on input focus (iOS) — min font-size 16px */
   input, select, textarea {
     font-size: max(16px, 1em);
   }
 }
 
-/* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: hsl(var(--background)); }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.5); }
 
-/* ── Components (Dokan dark) ───────────────────────────── */
 @layer components {
 
-  /* Buttons — pill-shaped, per Sari3 */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
            bg-primary text-primary-foreground font-bold
@@ -196,14 +189,26 @@ html.dark {
            select-none touch-manipulation;
   }
 
-  /* Cards — rounded-2xl, with shadow-card */
-  .card { @apply bg-card border border-border rounded-2xl p-4; }
+  .btn-gradient {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gradient-to-r from-amber-400 to-rose-500
+           text-black font-bold
+           min-h-[44px] px-5 py-2.5 rounded-full
+           transition-all duration-150
+           active:scale-[0.97] hover:opacity-90
+           disabled:opacity-50 disabled:cursor-not-allowed
+           select-none touch-manipulation;
+  }
+
+  .card {
+    @apply bg-card border border-border rounded-2xl p-4;
+  }
+
   .card-hover {
-    @apply card hover:border-primary/40 active:border-primary/40 active:bg-accent/5
+    @apply card hover:border-amber-500/30 active:border-amber-500/30 active:bg-accent/5
            transition-all duration-150 cursor-pointer select-none touch-manipulation;
   }
 
-  /* Inputs — 44px min height, 16px font (no iOS zoom), rounded-xl */
   .input {
     @apply w-full bg-background border border-input
            text-foreground placeholder:text-muted-foreground
@@ -217,7 +222,6 @@ html.dark {
 
   .label { @apply block text-sm font-semibold text-muted-foreground mb-1.5; }
 
-  /* Status badges — pill-shaped */
   .badge { @apply inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full; }
   .badge-pending   { @apply bg-amber-950/60 text-[#fcd34d] border border-amber-800/50; }
   .badge-confirmed { @apply bg-blue-950/60 text-blue-400 border border-blue-800/50; }
@@ -226,7 +230,6 @@ html.dark {
   .badge-delivered { @apply bg-indigo-950/60 text-indigo-400 border border-indigo-800/50; }
   .badge-cancelled { @apply bg-red-950/60 text-red-400 border border-red-800/50; }
 
-  /* Sidebar nav links */
   .sidebar-link {
     @apply flex items-center gap-3 px-3 min-h-[44px] rounded-xl
            text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent
@@ -235,10 +238,9 @@ html.dark {
            select-none touch-manipulation;
   }
   .sidebar-link-active {
-    @apply sidebar-link bg-sidebar-accent text-sidebar-foreground border border-border;
+    @apply sidebar-link bg-sidebar-accent text-sidebar-foreground border border-sidebar-border;
   }
 
-  /* Kitchen card */
   .kitchen-card { @apply bg-card border-2 rounded-2xl p-4 transition-all duration-300; }
   .kitchen-card-pending   { @apply border-muted-foreground/20; }
   .kitchen-card-confirmed { @apply border-blue-500/40; }
@@ -252,27 +254,26 @@ html.dark {
   .stat-value   { @apply text-2xl font-black text-foreground; }
   .stat-label   { @apply text-sm text-muted-foreground; }
 
-  /* Brand gradient icon box */
   .brand-icon {
     @apply grid size-10 shrink-0 place-items-center rounded-xl
-           bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black;
+           bg-gradient-to-br from-amber-500 to-rose-600 text-white font-black;
   }
 
-  /* Empty state */
   .empty-state {
     @apply rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center text-sm text-muted-foreground;
   }
 
-  /* Badge highlight (for car orders, etc.) */
   .badge-highlight {
     @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold;
   }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-amber-300 via-rose-400 to-fuchsia-500 bg-clip-text text-transparent;
+  }
 }
 
-/* ── RTL ───────────────────────────────────────────────── */
 [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
 
-/* ── Animations ────────────────────────────────────────── */
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
@@ -289,26 +290,20 @@ html.dark {
 .animate-fade-in    { animation: fadeIn  0.2s  ease-out forwards; }
 .animate-pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
 
-/* ── iOS keyboard fix ──────────────────────────────────── */
 .keyboard-aware { height: 100dvh; }
 
-/* ── Safe area padding ─────────────────────────────────── */
 .safe-top    { padding-top:    max(env(safe-area-inset-top,    0px), 12px); }
 .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
 .safe-x      { padding-left:   env(safe-area-inset-left,  0px);
                padding-right:  env(safe-area-inset-right, 0px); }
 
-/* ── Bottom sheet ─────────────────────────────────────── */
 .bottom-sheet { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
 
-/* ── Customer menu: category scroll hide scrollbar ─────── */
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
-/* ── Admin tables ─────────────────────────────────────── */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-/* ── QR print ──────────────────────────────────────────── */
 @media print {
   body { background: white !important; color: black !important; }
   .no-print { display: none !important; }
@@ -321,7 +316,6 @@ html.dark {
   }
 }
 
-/* ── Focus visible ────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;

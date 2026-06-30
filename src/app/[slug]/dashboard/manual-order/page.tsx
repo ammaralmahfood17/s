@@ -90,33 +90,13 @@ export default function ManualOrderPage({
     if (!restaurant || cart.length === 0) return;
     setPlacing(true);
 
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert({
-        restaurant_id: restaurant.id,
-        table_id: null,
-        order_type: 'manual',
-        order_number: '',
-        customer_name: customerName || null,
-        notes: notes || null,
-        session_token: '',
-        subtotal: total,
-        total,
-        payment_method: 'cashier',
-        created_by_user_id: (await supabase.auth.getUser()).data.user?.id,
-      })
-      .select()
-      .single();
-
-    if (orderError || !order) {
-      toast.error('حدث خطأ في إنشاء الطلب');
-      setPlacing(false);
-      return;
-    }
-
-    const { error: itemsError } = await supabase.from('order_items').insert(
-      cart.map(c => ({
-        order_id: order.id,
+    const payload = {
+      restaurant_id: restaurant.id,
+      order_type: 'manual',
+      customer_name: customerName || null,
+      notes: notes || null,
+      session_token: null,
+      items: cart.map(c => ({
         item_id: c.item.id,
         item_name_en: c.item.name_en,
         item_name_ar: c.item.name_ar,
@@ -124,26 +104,34 @@ export default function ManualOrderPage({
         variation_name_en: c.variation?.name_en ?? null,
         variation_name_ar: c.variation?.name_ar ?? null,
         quantity: c.quantity,
-        unit_price: c.item.price + (c.variation?.price_modifier ?? 0),
         addons: [],
         notes: c.notes || null,
-        line_total: (c.item.price + (c.variation?.price_modifier ?? 0)) * c.quantity,
-        product_name_ar_snapshot: c.item.name_ar,
-        product_name_en_snapshot: c.item.name_en,
-        unit_price_snapshot: c.item.price + (c.variation?.price_modifier ?? 0),
-      }))
-    );
+      })),
+      idempotency_key: crypto.randomUUID(),
+    };
 
-    if (itemsError) {
-      toast.error('حدث خطأ في إضافة العناصر');
-      setPlacing(false);
-      return;
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || 'حدث خطأ في إنشاء الطلب');
+        setPlacing(false);
+        return;
+      }
+
+      toast.success(`تم إنشاء الطلب ${data.order_number} بنجاح`);
+      setCart([]);
+      setCustomerName('');
+      setNotes('');
+    } catch {
+      toast.error('حدث خطأ في إنشاء الطلب');
     }
-
-    toast.success(`تم إنشاء الطلب ${order.order_number} بنجاح`);
-    setCart([]);
-    setCustomerName('');
-    setNotes('');
     setPlacing(false);
   };
 

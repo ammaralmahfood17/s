@@ -105,43 +105,16 @@ function ItemModal({
       price: parseFloat(form.price),
     };
 
-    let itemId = item?.id;
+    const res = await fetch('/api/app/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item: payload, variations, addons }),
+    });
 
-    if (item) {
-      const { error } = await supabase.from('items').update(payload).eq('id', item.id);
-      if (error) { toast.error('Error'); setSaving(false); return; }
-    } else {
-      const { data, error } = await supabase.from('items').insert(payload).select().single();
-      if (error || !data) { toast.error('Error'); setSaving(false); return; }
-      itemId = data.id;
-    }
-
-    // Save variations
-    if (itemId && variations.length > 0) {
-      await supabase.from('variations').delete().eq('item_id', itemId);
-      await supabase.from('variations').insert(
-        variations.map((v, i) => ({
-          item_id: itemId,
-          name_en: v.name_en ?? '',
-          name_ar: v.name_ar ?? '',
-          price_modifier: v.price_modifier ?? 0,
-          sort_order: i,
-        }))
-      );
-    }
-
-    // Save addons
-    if (itemId && addons.length > 0) {
-      await supabase.from('addons').delete().eq('item_id', itemId);
-      await supabase.from('addons').insert(
-        addons.map((a, i) => ({
-          item_id: itemId,
-          name_en: a.name_en ?? '',
-          name_ar: a.name_ar ?? '',
-          price: a.price ?? 0,
-          sort_order: i,
-        }))
-      );
+    if (!res.ok) {
+      toast.error('حدث خطأ في الحفظ');
+      setSaving(false);
+      return;
     }
 
     toast.success('تم الحفظ');
@@ -482,7 +455,7 @@ export default function MenuPage() {
   const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const { data: r } = await supabase.from('restaurants').select('id').eq('owner_id', user.id).single();
+    const { data: r } = await supabase.from('restaurants').select('id').eq('owner_id', user.id).maybeSingle();
     if (!r) return;
     setRestaurantId(r.id);
 
@@ -507,30 +480,33 @@ export default function MenuPage() {
       toast.error('يرجى إدخال اسم الصنف بالعربي والإنجليزي');
       return;
     }
-    const { error } = await supabase.from('categories').insert({
-      restaurant_id: restaurantId,
-      name_en: nameEn,
-      name_ar: nameAr,
-      sort_order: categories.length,
+    const res = await fetch('/api/app/categories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ restaurant_id: restaurantId, name_en: nameEn, name_ar: nameAr, sort_order: categories.length }),
     });
-    if (!error) { toast.success('تم إضافة الصنف'); load(); }
+    if (res.ok) { toast.success('تم إضافة الصنف'); load(); }
   };
 
   const deleteCategory = async (id: string) => {
     if (!confirm('حذف الصنف وجميع عناصره؟')) return;
-    await supabase.from('categories').delete().eq('id', id);
+    await fetch(`/api/app/categories?id=${encodeURIComponent(id)}&restaurant_id=${encodeURIComponent(restaurantId ?? '')}`, { method: 'DELETE' });
     toast.success('تم الحذف');
     load();
   };
 
   const toggleItemAvailability = async (item: Item) => {
-    await supabase.from('items').update({ is_available: !item.is_available }).eq('id', item.id);
+    await fetch('/api/app/items', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, restaurant_id: restaurantId }),
+    });
     load();
   };
 
   const deleteItem = async (id: string) => {
     if (!confirm('حذف العنصر؟')) return;
-    await supabase.from('items').delete().eq('id', id);
+    await fetch(`/api/app/items?id=${encodeURIComponent(id)}&restaurant_id=${encodeURIComponent(restaurantId ?? '')}`, { method: 'DELETE' });
     toast.success('تم الحذف');
     load();
   };
