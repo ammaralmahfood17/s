@@ -69,9 +69,11 @@ function LoginForm() {
         // No restaurant yet — go to onboarding
         router.push('/setup');
       }
-    } else {
-      router.push('/');
     }
+    // If user data is not available, reload the page to ensure auth state is updated
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   return (
