@@ -60,7 +60,7 @@ const STATUS_COLORS: Record<string, string> = {
   confirmed: 'badge-confirmed',
   preparing: 'badge-preparing',
   ready:     'badge-ready',
-  completed: 'badge-completed',
+  delivered: 'badge-delivered',
   cancelled: 'badge-cancelled',
 };
 

@@ -143,7 +143,7 @@ begin
   returning counter into next_num;
   return 'D-' || lpad(next_num::text, 3, '0');
 end;
-$$ language plpgsql security definer;
+$$ language plpgsql security definer set search_path = '';
 
 -- ============================================================
 -- ORDERS
