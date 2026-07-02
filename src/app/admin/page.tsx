@@ -5,21 +5,33 @@ import {
   Store, CreditCard, TrendingUp, AlertCircle,
   UserCheck, Clock, CheckCircle, XCircle
 } from 'lucide-react';
+import { RevenueChart, SubscriptionPie } from '@/components/admin/AdminCharts';
 
 async function getAdminStats() {
   const supabase = createClient();
+
+  // Last 30 days range
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+  const firstOfMonth = new Date();
+  firstOfMonth.setDate(1);
+  firstOfMonth.setHours(0, 0, 0, 0);
 
   const [
     restaurants,
     subs,
     paymentsThisMonth,
+    payments30d,
     ordersToday,
     pastDue,
     trialing,
   ] = await Promise.all([
     supabase.from('restaurants').select('id, name_en, name_ar, is_open, subscription_status, created_at').order('created_at', { ascending: false }),
     supabase.from('subscriptions').select('id, status, current_period_end, restaurant_id'),
-    supabase.from('payments').select('amount_bhd').gte('paid_at', new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()),
+    supabase.from('payments').select('amount_bhd').gte('paid_at', firstOfMonth.toISOString()),
+    supabase.from('payments').select('amount_bhd, paid_at').gte('paid_at', thirtyDaysAgo.toISOString()).order('paid_at', { ascending: true }),
     supabase.from('orders').select('id', { count: 'exact' }).gte('created_at', new Date().toISOString().split('T')[0] + 'T00:00:00'),
     supabase.from('subscriptions').select('id', { count: 'exact' }).eq('status', 'past_due'),
     supabase.from('subscriptions').select('id', { count: 'exact' }).eq('status', 'trialing'),
@@ -28,6 +40,35 @@ async function getAdminStats() {
   const monthlyRevenue = (paymentsThisMonth.data ?? []).reduce(
     (s: number, p: { amount_bhd: number }) => s + Number(p.amount_bhd), 0
   );
+
+  // Build daily revenue map for last 30 days
+  const dailyMap = new Map<string, number>();
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(thirtyDaysAgo);
+    d.setDate(d.getDate() + i);
+    const key = d.toISOString().split('T')[0];
+    dailyMap.set(key, 0);
+  }
+  for (const p of (payments30d.data ?? []) as { amount_bhd: number; paid_at: string }[]) {
+    const key = new Date(p.paid_at).toISOString().split('T')[0];
+    if (dailyMap.has(key)) {
+      dailyMap.set(key, (dailyMap.get(key) ?? 0) + Number(p.amount_bhd));
+    }
+  }
+  const dailyRevenue = Array.from(dailyMap.entries()).map(([date, total]) => ({
+    date,
+    total: Math.round(total * 1000) / 1000,
+  }));
+
+  // Subscription breakdown
+  const subData = (subs.data ?? []) as { status: string }[];
+  const statusCounts = new Map<string, number>();
+  for (const s of subData) {
+    statusCounts.set(s.status, (statusCounts.get(s.status) ?? 0) + 1);
+  }
+  const subscriptionBreakdown = Array.from(statusCounts.entries())
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value);
 
   // Restaurants expiring in next 7 days
   const soon = new Date(); soon.setDate(soon.getDate() + 7);
@@ -44,6 +85,8 @@ async function getAdminStats() {
     ordersToday: ordersToday.count ?? 0,
     expiringSoon,
     recentRestaurants: (restaurants.data ?? []).slice(0, 8),
+    dailyRevenue,
+    subscriptionBreakdown,
   };
 }
 
@@ -125,6 +168,12 @@ export default async function AdminOverviewPage() {
             <div className={`stat-value ${s.color}`}>{s.value}</div>
           </div>
         ))}
+      </div>
+
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <RevenueChart data={stats.dailyRevenue} />
+        <SubscriptionPie data={stats.subscriptionBreakdown} />
       </div>
 
       {/* Quick actions */}
