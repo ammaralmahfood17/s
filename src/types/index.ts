@@ -192,7 +192,6 @@ export interface OrderItem {
   // PRD snapshots
   product_name_ar_snapshot: string | null;
   product_name_en_snapshot: string | null;
-  unit_price_snapshot: number | null;
 }
 
 // ── Extended types with relations ─────────────────────────────

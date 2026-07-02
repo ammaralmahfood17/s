@@ -1,50 +1,48 @@
-import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
-  TrendingUp, ShoppingBag, Clock, AlertCircle,
-  QrCode, UtensilsCrossed, Grid3x3, ArrowRight, Plus
+  TrendingUp,
+  ShoppingBag,
+  Clock,
+  QrCode,
+  Plus,
+  UtensilsCrossed,
+  Grid3x3,
+  AlertCircle,
+  ArrowRight,
 } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
 import { formatBHD, formatTime } from '@/lib/utils';
+import { ORDER_STATUS_CONFIG } from '@/types/constants';
 import type { Order } from '@/types';
+
+// ── Analytics helpers ──────────────────────────────────────────
 
 async function getAnalytics(restaurantId: string) {
   const supabase = createClient();
   const today = new Date().toISOString().split('T')[0];
 
-  const [ordersToday, ordersPending, revenueToday] = await Promise.all([
-    supabase
-      .from('orders')
-      .select('id', { count: 'exact' })
-      .eq('restaurant_id', restaurantId)
-      .gte('created_at', `${today}T00:00:00`)
-      .neq('status', 'cancelled'),
-    supabase
-      .from('orders')
-      .select('id', { count: 'exact' })
-      .eq('restaurant_id', restaurantId)
-      .in('status', ['pending', 'confirmed', 'preparing', 'ready']),
-    supabase
-      .from('orders')
-      .select('total')
-      .eq('restaurant_id', restaurantId)
-      .gte('created_at', `${today}T00:00:00`)
-      .neq('status', 'cancelled'),
-  ]);
+  const { data: todayOrders } = await supabase
+    .from('orders')
+    .select('status, total')
+    .eq('restaurant_id', restaurantId)
+    .gte('created_at', `${today}T00:00:00`);
 
-  const revenue = (revenueToday.data ?? []).reduce(
-    (sum: number, o: { total: number }) => sum + Number(o.total),
-    0
-  );
+  const revenueToday =
+    todayOrders
+      ?.filter((o) => o.status !== 'cancelled')
+      .reduce((sum, o) => sum + Number(o.total), 0) ?? 0;
 
-  return {
-    ordersToday: ordersToday.count ?? 0,
-    ordersPending: ordersPending.count ?? 0,
-    revenueToday: revenue,
-  };
+  const ordersToday = todayOrders?.length ?? 0;
+  const ordersPending =
+    todayOrders?.filter((o) =>
+      ['pending', 'confirmed', 'preparing'].includes(o.status)
+    ).length ?? 0;
+
+  return { revenueToday, ordersToday, ordersPending };
 }
 
-async function getRecentOrders(restaurantId: string): Promise<Order[]> {
+async function getRecentOrders(restaurantId: string) {
   const supabase = createClient();
   const { data } = await supabase
     .from('orders')
@@ -55,22 +53,14 @@ async function getRecentOrders(restaurantId: string): Promise<Order[]> {
   return (data as Order[]) ?? [];
 }
 
-const STATUS_COLORS: Record<string, string> = {
+// ── Status badge class map (uses CSS classes from globals.css) ─
+const STATUS_BADGE: Record<string, string> = {
   pending:   'badge-pending',
   confirmed: 'badge-confirmed',
   preparing: 'badge-preparing',
   ready:     'badge-ready',
   delivered: 'badge-delivered',
   cancelled: 'badge-cancelled',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  pending:   'في الانتظار',
-  confirmed: 'تم التأكيد',
-  preparing: 'يتم التحضير',
-  ready:     'جاهز',
-  delivered: 'تم التسليم',
-  cancelled: 'ملغى',
 };
 
 export default async function DashboardPage({
@@ -231,8 +221,7 @@ export default async function DashboardPage({
           }`}>
             {daysLeft <= 1
               ? `آخر يوم في الفترة التجريبية! جدِّد اشتراكك للاستمرار.`
-              : `متبقي ${daysLeft} أيام في الفترة التجريبية.`
-            }
+              : `متبقي ${daysLeft} أيام في الفترة التجريبية.`}
           </p>
         </div>
       )}
@@ -332,8 +321,13 @@ export default async function DashboardPage({
                       {formatBHD(order.total, 'ar')}
                     </div>
                   </div>
-                  <span className={`badge ${STATUS_COLORS[order.status]}`}>
-                    {STATUS_LABELS[order.status]}
+                  <span className={`badge ${STATUS_BADGE[order.status]}`}
+                        style={{
+                          backgroundColor: ORDER_STATUS_CONFIG[order.status]?.bg,
+                          color: ORDER_STATUS_CONFIG[order.status]?.color,
+                          borderColor: ORDER_STATUS_CONFIG[order.status]?.bg,
+                        }}>
+                    {ORDER_STATUS_CONFIG[order.status]?.ar ?? order.status}
                   </span>
                 </div>
               ))}

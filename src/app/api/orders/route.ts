@@ -203,7 +203,6 @@ export async function POST(request: NextRequest) {
         line_total: item.line_total,
         product_name_ar_snapshot: item.item_name_ar,
         product_name_en_snapshot: item.item_name_en,
-        unit_price_snapshot: item.unit_price,
       }))
     );
 
