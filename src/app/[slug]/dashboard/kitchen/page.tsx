@@ -365,7 +365,7 @@ export default function KitchenPage() {
   const isLoading = loading || (['delivered', 'cancelled'].includes(activeTab) && loadingHistory);
 
   return (
-    <div className="kitchen-theme min-h-screen bg-sidebar safe-top safe-bottom">
+    <div className="p-4 sm:p-6 max-w-7xl space-y-5 sm:space-y-6">
       <div className="flex items-center justify-between p-4 pb-2 sticky top-0 z-10
                       bg-sidebar/95 backdrop-blur-sm">
         <div className="flex items-center gap-2 min-w-0">

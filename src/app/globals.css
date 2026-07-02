@@ -44,35 +44,8 @@
   --sidebar-accent-foreground: 188 100% 17%;
   --sidebar-border: 0 0% 90%;
   --sidebar-ring: 188 100% 17%;
-
-  /* Kitchen dark-warm override */
-  --kitchen-bg: 30 10% 10%;
-  --kitchen-card: 30 8% 14%;
-  --kitchen-foreground: 40 15% 85%;
-  --kitchen-border: 30 8% 20%;
 }
 
-/* ── Kitchen dark-warm theme ─────────────────────────── */
-.kitchen-theme {
-  --background: var(--kitchen-bg);
-  --foreground: var(--kitchen-foreground);
-  --card: var(--kitchen-card);
-  --card-foreground: var(--kitchen-foreground);
-  --popover: var(--kitchen-card);
-  --popover-foreground: var(--kitchen-foreground);
-  --secondary: 30 5% 18%;
-  --secondary-foreground: var(--kitchen-foreground);
-  --muted: 30 5% 18%;
-  --muted-foreground: 38 5% 50%;
-  --border: var(--kitchen-border);
-  --input: var(--kitchen-border);
-  --sidebar: var(--kitchen-bg);
-  --sidebar-foreground: var(--kitchen-foreground);
-  --sidebar-accent: var(--kitchen-card);
-  --sidebar-accent-foreground: var(--kitchen-foreground);
-  --sidebar-border: var(--kitchen-border);
-  color-scheme: dark;
-}
 
 @layer base {
   *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
