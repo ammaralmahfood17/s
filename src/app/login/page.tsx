@@ -42,38 +42,47 @@ function LoginForm() {
 
     toast.success('مرحباً بعودتك!');
 
-    // Redirect based on role
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
+    try {
+      // Use the user from signInWithPassword response directly
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // Session not ready yet — reload to pick up the cookie
+        setTimeout(() => window.location.reload(), 1500);
+        return;
+      }
+
+      // Check if super admin (maybeSingle = won't throw if not found)
       const { data: admin } = await supabase
         .from('super_admins')
         .select('id')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (admin) {
         router.push('/admin');
         return;
       }
 
-      // Fetch the user's restaurant slug
+      // Fetch the user's restaurant slug (maybeSingle = won't throw if not found)
       const { data: restaurant } = await supabase
         .from('restaurants')
         .select('slug')
         .eq('owner_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (restaurant?.slug) {
         router.push(`/${restaurant.slug}/dashboard`);
       } else {
-        // No restaurant yet — go to onboarding
         router.push('/setup');
       }
+    } catch (err) {
+      console.error('Login redirect error:', err);
+      toast.error('حدث خطأ أثناء التوجيه، يرجى المحاولة مرة أخرى');
+      // Reload as fallback to let the auth state settle
+      setTimeout(() => window.location.reload(), 2000);
+    } finally {
+      setLoading(false);
     }
-    // If user data is not available, reload the page to ensure auth state is updated
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   };
 
   return (
