@@ -1,21 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
+  darkMode: 'class', // only when <html class="dark"> — never set, so always light
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
         brand: {
-          '50': '#fffbeb',
-          '100': '#fef3c7',
-          '200': '#fde68a',
-          '300': '#fcd34d',
-          '400': '#fbbf24',
-          '500': '#f59e0b',
-          '600': '#d97706',
-          '700': '#b45309',
-          '800': '#92400e',
-          '900': '#78350f',
+          '50': '#f6f8f0',
+          '100': '#e9eeda',
+          '200': '#d3ddb5',
+          '300': '#b5c986',
+          '400': '#97b561',
+          '500': '#7a9b46',
+          '600': '#5c7834',
+          '700': '#4a5d28',
+          '800': '#3a491d',
+          '900': '#2b3614',
         },
         // شفاف CSS Variables لتوافق shadcn
         background: 'hsl(var(--background))',
@@ -120,10 +120,6 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-      },
-      backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #fbbf24 0%, #f43f5e 100%)',
-        'gradient-hero': 'linear-gradient(to right, #fcd34d, #fb7185, #d946ef)',
       },
     },
   },

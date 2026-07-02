@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { QrCode, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
@@ -62,66 +62,72 @@ export default function RegisterPage() {
           <h1 className="text-2xl font-black text-foreground">إنشاء حساب</h1>
         </div>
 
-        <div className="card">
-          <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="label">الاسم الكامل</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="input"
-                placeholder="محمد أحمد"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label">البريد الإلكتروني</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label">كلمة المرور</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input pr-11"
-                  placeholder="••••••••"
+        <Card>
+          <CardContent className="pt-6">
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">الاسم الكامل</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="محمد أحمد"
                   required
-                  minLength={8}
+                  dir="auto"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-1.5">
-                8 أحرف على الأقل
-              </p>
-            </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
-            >
-              {loading ? 'جار التحميل...' : 'إنشاء حساب'}
-            </button>
-          </form>
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">البريد الإلكتروني</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  dir="ltr"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">كلمة المرور</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={8}
+                    dir="ltr"
+                    className="pr-11"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  8 أحرف على الأقل
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full"
+              >
+                {loading ? 'جار التحميل...' : 'إنشاء حساب'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           لديك حساب بالفعل؟{' '}

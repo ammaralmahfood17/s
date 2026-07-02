@@ -10,110 +10,68 @@
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 
-  /* ── TableTap-inspired dark theme ──────────────────────── */
-  --background: 0 0% 4%;          /* #0a0a0a — pure near-black */
-  --foreground: 0 0% 98%;         /* #fafafa — off white */
-  --card: 0 0% 7%;                /* #121212 — dark surface */
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 7%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 36 95% 50%;          /* #f59e0b — amber brand */
-  --primary-foreground: 0 0% 0%;
-  --secondary: 0 0% 14%;          /* #242424 */
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 10%;              /* #1a1a1a */
-  --muted-foreground: 0 0% 50%;  /* #808080 */
-  --accent: 36 95% 50%;           /* #f59e0b */
-  --accent-foreground: 0 0% 0%;
-  --destructive: 0 70% 55%;
+  /* ── Warm paper / light theme ───────────────────────────── */
+  --background: 40 27% 93%;          /* #f5f0e8 — warm beige/cream */
+  --foreground: 37 10% 16%;          /* #2d2a25 — warm dark text */
+  --card: 40 20% 97%;                /* #faf7f2 — slightly lighter */
+  --card-foreground: 37 10% 16%;
+  --popover: 40 20% 97%;
+  --popover-foreground: 37 10% 16%;
+  --primary: 82 45% 30%;             /* #5b6f2a — dark olive green */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 15% 85%;           /* #e3dbcf — warm light */
+  --secondary-foreground: 37 10% 16%;
+  --muted: 40 15% 85%;
+  --muted-foreground: 37 5% 45%;     /* #7a7469 */
+  --accent: 82 30% 92%;              /* #eaf0dd — very light green */
+  --accent-foreground: 82 45% 25%;
+  --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 100%;
-  --success: 142 50% 45%;
+  --success: 142 50% 40%;
   --success-foreground: 0 0% 100%;
   --warning: 38 80% 50%;
   --warning-foreground: 0 0% 100%;
-  --border: 0 0% 14%;             /* #242424 — white/8 equivalent */
-  --input: 0 0% 14%;
-  --ring: 36 95% 50%;
+  --border: 40 15% 80%;              /* #d9d3c8 — subtle warm border */
+  --input: 40 15% 80%;
+  --ring: 82 45% 30%;
 
   /* Sidebar */
-  --sidebar: 0 0% 4%;            /* #0a0a0a */
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 36 95% 50%;
-  --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 0 0% 10%;    /* #1a1a1a */
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 0 0% 14%;
-  --sidebar-ring: 36 95% 50%;
-}
-
-html:not(.dark) {
-  --background: 0 0% 96%;
-  --foreground: 0 0% 9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 9%;
-  --primary: 36 95% 40%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 92%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 92%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 36 95% 50%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --success: 142 71% 45%;
-  --success-foreground: 0 0% 100%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 100%;
-  --border: 0 0% 88%;
-  --input: 0 0% 88%;
-  --ring: 36 95% 50%;
-
-  --sidebar: 0 0% 98%;
-  --sidebar-foreground: 0 0% 9%;
-  --sidebar-primary: 36 95% 40%;
+  --sidebar: 40 20% 97%;
+  --sidebar-foreground: 37 10% 16%;
+  --sidebar-primary: 82 45% 30%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 92%;
-  --sidebar-accent-foreground: 0 0% 9%;
-  --sidebar-border: 0 0% 88%;
-  --sidebar-ring: 36 95% 50%;
+  --sidebar-accent: 40 15% 85%;
+  --sidebar-accent-foreground: 37 10% 16%;
+  --sidebar-border: 40 15% 80%;
+  --sidebar-ring: 82 45% 30%;
+
+  /* Kitchen dark-warm override — applied via .kitchen-theme on the wrapper */
+  --kitchen-bg: 30 10% 10%;         /* #1c1a17 — warm dark */
+  --kitchen-card: 30 8% 14%;        /* #26221d */
+  --kitchen-foreground: 40 15% 85%;
+  --kitchen-border: 30 8% 20%;
 }
 
-html.dark {
-  --background: 0 0% 4%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 7%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 7%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 36 95% 50%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 0 0% 14%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 10%;
-  --muted-foreground: 0 0% 50%;
-  --accent: 36 95% 50%;
-  --accent-foreground: 0 0% 0%;
-  --destructive: 0 70% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --success: 142 50% 45%;
-  --success-foreground: 0 0% 100%;
-  --warning: 38 80% 50%;
-  --warning-foreground: 0 0% 100%;
-  --border: 0 0% 14%;
-  --input: 0 0% 14%;
-  --ring: 36 95% 50%;
-
-  --sidebar: 0 0% 4%;
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 36 95% 50%;
-  --sidebar-primary-foreground: 0 0% 0%;
-  --sidebar-accent: 0 0% 10%;
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 0 0% 14%;
-  --sidebar-ring: 36 95% 50%;
+/* ── Kitchen dark-warm theme ─────────────────────────── */
+.kitchen-theme {
+  --background: var(--kitchen-bg);
+  --foreground: var(--kitchen-foreground);
+  --card: var(--kitchen-card);
+  --card-foreground: var(--kitchen-foreground);
+  --popover: var(--kitchen-card);
+  --popover-foreground: var(--kitchen-foreground);
+  --secondary: 30 5% 18%;
+  --secondary-foreground: var(--kitchen-foreground);
+  --muted: 30 5% 18%;
+  --muted-foreground: 38 5% 50%;
+  --border: var(--kitchen-border);
+  --input: var(--kitchen-border);
+  --sidebar: var(--kitchen-bg);
+  --sidebar-foreground: var(--kitchen-foreground);
+  --sidebar-accent: var(--kitchen-card);
+  --sidebar-accent-foreground: var(--kitchen-foreground);
+  --sidebar-border: var(--kitchen-border);
+  color-scheme: dark;
 }
 
 @layer base {
@@ -122,10 +80,8 @@ html.dark {
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    color-scheme: dark;
+    color-scheme: light;
   }
-
-  html:not(.dark) { color-scheme: light; }
 
   body {
     @apply bg-background text-foreground;
@@ -189,23 +145,12 @@ html.dark {
            select-none touch-manipulation;
   }
 
-  .btn-gradient {
-    @apply inline-flex items-center justify-center gap-2
-           bg-gradient-to-r from-amber-400 to-rose-500
-           text-black font-bold
-           min-h-[44px] px-5 py-2.5 rounded-full
-           transition-all duration-150
-           active:scale-[0.97] hover:opacity-90
-           disabled:opacity-50 disabled:cursor-not-allowed
-           select-none touch-manipulation;
-  }
-
   .card {
     @apply bg-card border border-border rounded-2xl p-4;
   }
 
   .card-hover {
-    @apply card hover:border-amber-500/30 active:border-amber-500/30 active:bg-accent/5
+    @apply card hover:border-primary/20 active:border-primary/20 active:bg-accent/5
            transition-all duration-150 cursor-pointer select-none touch-manipulation;
   }
 
@@ -223,12 +168,14 @@ html.dark {
   .label { @apply block text-sm font-semibold text-muted-foreground mb-1.5; }
 
   .badge { @apply inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full; }
-  .badge-pending   { @apply bg-amber-950/60 text-[#fcd34d] border border-amber-800/50; }
-  .badge-confirmed { @apply bg-blue-950/60 text-blue-400 border border-blue-800/50; }
-  .badge-preparing { @apply bg-amber-950/60 text-[#fcd34d] border border-amber-800/50; }
-  .badge-ready     { @apply bg-emerald-950/60 text-emerald-400 border border-emerald-800/50; }
-  .badge-delivered { @apply bg-indigo-950/60 text-indigo-400 border border-indigo-800/50; }
-  .badge-cancelled { @apply bg-red-950/60 text-red-400 border border-red-800/50; }
+
+  /* Badges — light bg + colored text (for warm paper bg) */
+  .badge-pending   { @apply bg-amber-100 text-amber-800 border border-amber-200; }
+  .badge-confirmed { @apply bg-blue-100 text-blue-800 border border-blue-200; }
+  .badge-preparing { @apply bg-amber-100 text-amber-800 border border-amber-200; }
+  .badge-ready     { @apply bg-emerald-100 text-emerald-800 border border-emerald-200; }
+  .badge-delivered { @apply bg-indigo-100 text-indigo-800 border border-indigo-200; }
+  .badge-cancelled { @apply bg-red-100 text-red-800 border border-red-200; }
 
   .sidebar-link {
     @apply flex items-center gap-3 px-3 min-h-[44px] rounded-xl
@@ -256,7 +203,7 @@ html.dark {
 
   .brand-icon {
     @apply grid size-10 shrink-0 place-items-center rounded-xl
-           bg-gradient-to-br from-amber-500 to-rose-600 text-white font-black;
+           bg-primary text-primary-foreground font-black;
   }
 
   .empty-state {
@@ -265,10 +212,6 @@ html.dark {
 
   .badge-highlight {
     @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold;
-  }
-
-  .gradient-text {
-    @apply bg-gradient-to-r from-amber-300 via-rose-400 to-fuchsia-500 bg-clip-text text-transparent;
   }
 }
 

@@ -1,112 +1,109 @@
 'use client';
 
 import * as React from 'react';
-import { Menu, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { CommandMenu } from '@/components/shared/CommandMenu';
-import { Toaster } from '@/components/shared/Toaster';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { UnifiedShell } from '@/components/ui/unified-shell';
+import { UtensilsCrossed, Car, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
 
 interface AppShellProps {
   children: React.ReactNode;
-  sidebar: React.ReactNode;
-  basePath?: string;
-  /** Optional top bar content (mobile) */
-  topBarContent?: React.ReactNode;
+  /** Current restaurant slug */
+  slug: string;
+  /** Restaurant name in Arabic */
+  restaurantName?: string;
+  /** The current order type: table / car / external */
+  orderType: 'table' | 'car' | 'external';
+  /** Table name (for table ordering) */
+  tableName?: string;
+  /** Whether the sidebar should show categories (for menu filtering) */
+  categories?: { id: string; name_ar: string }[];
+  /** Active category ID (for highlighting) */
+  activeCategory?: string;
+  /** Callback when a category is selected */
+  onCategoryClick?: (id: string) => void;
 }
 
-export function AppShell({ children, sidebar, basePath = '', topBarContent }: AppShellProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
-
+export function AppShell({
+  children,
+  slug,
+  restaurantName,
+  orderType,
+  tableName,
+  categories,
+  activeCategory,
+  onCategoryClick,
+}: AppShellProps) {
   return (
-    <div className="min-h-screen bg-background flex" dir="rtl">
-      {/* ── Desktop Sidebar ─────────────────────────────────── */}
-      <aside
-        className={cn(
-          'hidden lg:flex flex-col flex-shrink-0 bg-background border-e border-border transition-all duration-300',
-          sidebarCollapsed ? 'w-16' : 'w-56',
-        )}
-      >
-        {/* Collapse toggle */}
-        <button
-          onClick={() => setSidebarCollapsed((v) => !v)}
-          className="flex items-center justify-center h-12 border-b border-border text-muted-foreground hover:text-foreground transition-colors"
-          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <Menu size={18} className={cn('transition-transform', sidebarCollapsed && 'rotate-180')} />
-        </button>
-
-        <div className={cn('flex-1 overflow-y-auto', sidebarCollapsed ? 'px-2 py-3' : '')}>
-          {sidebarCollapsed ? (
-            <div className="flex flex-col items-center gap-2">{sidebar}</div>
-          ) : (
-            sidebar
-          )}
-        </div>
-      </aside>
-
-      {/* ── Mobile Sidebar (Sheet) ──────────────────────────── */}
-      <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
-        <SheetTrigger asChild>
-          <button
-            className="lg:hidden fixed top-3 right-3 z-40 w-11 h-11 flex items-center justify-center
-                       text-muted-foreground active:text-foreground touch-manipulation"
-            aria-label="Open menu"
-          >
-            <Menu size={22} />
-          </button>
-        </SheetTrigger>
-        <SheetContent side="right" className="w-64 max-w-[80vw] bg-background border-e border-border p-0">
-          <VisuallyHidden>
-            <SheetTitle>القائمة — Menu</SheetTitle>
-          </VisuallyHidden>
-          <div className="flex flex-col h-full safe-top safe-bottom">
-            <div className="flex items-center justify-between px-4 h-12 border-b border-border">
-              <span className="text-sm font-bold text-foreground">دكان</span>
-              <button
-                onClick={() => setMobileSidebarOpen(false)}
-                className="w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground"
-              >
-                <X size={20} />
-              </button>
+    <UnifiedShell
+      side="right"
+      collapsible={false}
+      sidebarHeader={
+        <div className="flex items-center gap-2 px-2 py-1">
+          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+            <UtensilsCrossed size={16} className="text-primary" />
+          </div>
+          <div>
+            <div className="font-bold text-foreground text-sm leading-none">
+              {restaurantName || 'دكان'}
             </div>
-            <div className="flex-1 overflow-y-auto" onClick={() => setMobileSidebarOpen(false)}>
-              {sidebar}
+            <div className="text-xs text-muted-foreground mt-0.5">
+              {orderType === 'table' && (tableName ? `طاولة ${tableName}` : 'قائمة الطعام')}
+              {orderType === 'car' && 'طلب سيارة'}
+              {orderType === 'external' && 'طلب خارجي'}
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
-
-      {/* ── Main Content Area ───────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile top bar */}
-        <header className="lg:hidden flex items-center gap-3 px-4 h-14
-                           border-b border-border bg-background/95 backdrop-blur-sm
-                           sticky top-0 z-30 safe-top">
-          <button
-            onClick={() => setMobileSidebarOpen(true)}
-            className="w-11 h-11 -ms-2 flex items-center justify-center text-muted-foreground
-                       active:text-foreground touch-manipulation flex-shrink-0"
-            aria-label="Open menu"
+        </div>
+      }
+      sidebar={
+        <div className="flex flex-col gap-2 p-3">
+          {/* Quick links */}
+          <Link
+            href={`/${slug}/car`}
+            className="sidebar-link"
           >
-            <Menu size={22} />
-          </button>
-          {topBarContent}
-        </header>
+            <Car className="size-4 shrink-0" />
+            <span>طلب سيارة</span>
+          </Link>
+          <Link
+            href={`/${slug}/external`}
+            className="sidebar-link"
+          >
+            <ShoppingBag className="size-4 shrink-0" />
+            <span>طلب خارجي</span>
+          </Link>
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
-      </div>
-
-      {/* ── Global Command Palette (Ctrl+K / ⌘+K) ──────────── */}
-      <CommandMenu basePath={basePath} />
-
-      {/* ── Sonner Toaster ──────────────────────────────────── */}
-      <Toaster />
-    </div>
+          {/* Categories */}
+          {categories && categories.length > 0 && (
+            <>
+              <div className="border-t border-border my-2" />
+              <p className="px-3 py-1 text-[11px] font-bold uppercase text-muted-foreground tracking-wider">
+                الأقسام
+              </p>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => onCategoryClick?.(cat.id)}
+                  className={`sidebar-link text-right ${
+                    activeCategory === cat.id ? 'sidebar-link-active' : ''
+                  }`}
+                >
+                  <span>{cat.name_ar}</span>
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+      }
+      headerContent={
+        <span className="truncate font-bold">
+          {restaurantName || 'دكان'}
+          {tableName && <span className="text-muted-foreground"> — {tableName}</span>}
+        </span>
+      }
+      shortcutHint={null}
+      basePath={`/${slug}`}
+    >
+      {children}
+    </UnifiedShell>
   );
 }

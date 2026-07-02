@@ -27,10 +27,10 @@ export function downloadInvoice(data: InvoiceData) {
   const doc = new jsPDF();
   const pageW = doc.internal.pageSize.getWidth();
 
-  // Colors (Dokan dark theme)
-  const bg = '#0f0e0c';
-  const amber = '#f59e0b';
-  const white = '#fafaf9';
+  // Colors (Dokan warm theme)
+  const bg = '#faf7f2';
+  const primary = '#5b6f2a';  // dark olive green
+  const white = '#2d2a25';
   const gray = '#a8a29e';
 
   // ── Background ──
