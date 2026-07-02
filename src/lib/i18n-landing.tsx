@@ -95,7 +95,7 @@ export function LanguageToggle({ className }: { className?: string }) {
       type="button"
       onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
       className={
-        'inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 transition hover:bg-white/10 ' +
+        'inline-flex items-center gap-1.5 rounded-full border border-[#004956]/15 bg-white/60 px-3 py-1.5 text-xs font-semibold text-[#004956] transition hover:bg-white ' +
         (className ?? '')
       }
       aria-label="Switch language"

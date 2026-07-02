@@ -3,7 +3,7 @@
 import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { QrCode, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
@@ -142,7 +142,8 @@ function LoginForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full"
+              className="w-full rounded-full text-white"
+              style={{ backgroundColor: '#004956' }}
             >
               {loading ? 'جار التحميل...' : 'تسجيل الدخول'}
             </Button>

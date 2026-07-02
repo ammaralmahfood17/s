@@ -74,10 +74,15 @@ export default function DashboardBottomNav({ slug, restaurant, role }: Props) {
             key={item!.url}
             href={`/${slug}/${item!.url}`}
             className={cn(
-              'flex flex-col items-center gap-0.5 py-2 text-[11px] font-bold transition-colors touch-manipulation',
-              active ? 'text-primary' : 'text-muted-foreground'
+              'relative flex flex-col items-center gap-0.5 py-2 text-[11px] font-bold transition-colors touch-manipulation',
+              active
+                ? 'text-[#004956]'
+                : 'text-muted-foreground'
             )}
           >
+            {active && (
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[#004956]" />
+            )}
             <Icon className="size-5" />
             <span className="truncate max-w-full px-1">{item!.titleAr}</span>
           </Link>

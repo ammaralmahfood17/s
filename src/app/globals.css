@@ -10,44 +10,44 @@
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 
-  /* ── Warm paper / light theme ───────────────────────────── */
-  --background: 40 27% 93%;          /* #f5f0e8 — warm beige/cream */
-  --foreground: 37 10% 16%;          /* #2d2a25 — warm dark text */
-  --card: 40 20% 97%;                /* #faf7f2 — slightly lighter */
-  --card-foreground: 37 10% 16%;
-  --popover: 40 20% 97%;
-  --popover-foreground: 37 10% 16%;
-  --primary: 82 45% 30%;             /* #5b6f2a — dark olive green */
+  /* ── Salla-inspired light theme ────────────────────────── */
+  --background: 0 0% 100%;             /* #FFFFFF — أبيض نقي */
+  --foreground: 0 0% 10%;              /* #1A1A1A — نص داكن */
+  --card: 0 0% 98%;                    /* #FAFAFA */
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 188 100% 17%;             /* #004956 — Salla Teal */
   --primary-foreground: 0 0% 100%;
-  --secondary: 40 15% 85%;           /* #e3dbcf — warm light */
-  --secondary-foreground: 37 10% 16%;
-  --muted: 40 15% 85%;
-  --muted-foreground: 37 5% 45%;     /* #7a7469 */
-  --accent: 82 30% 92%;              /* #eaf0dd — very light green */
-  --accent-foreground: 82 45% 25%;
+  --secondary: 168 70% 89%;            /* #CFF7EE — Salla light */
+  --secondary-foreground: 188 100% 17%;
+  --muted: 0 0% 96%;                   /* #F5F5F5 */
+  --muted-foreground: 0 0% 45%;        /* #737373 */
+  --accent: 168 60% 92%;              /* #DCF7F0 */
+  --accent-foreground: 188 100% 17%;
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 100%;
   --success: 142 50% 40%;
   --success-foreground: 0 0% 100%;
   --warning: 38 80% 50%;
   --warning-foreground: 0 0% 100%;
-  --border: 40 15% 80%;              /* #d9d3c8 — subtle warm border */
-  --input: 40 15% 80%;
-  --ring: 82 45% 30%;
+  --border: 0 0% 90%;                  /* #E5E5E5 */
+  --input: 0 0% 90%;
+  --ring: 188 100% 17%;                /* #004956 */
 
   /* Sidebar */
-  --sidebar: 40 20% 97%;
-  --sidebar-foreground: 37 10% 16%;
-  --sidebar-primary: 82 45% 30%;
+  --sidebar: 0 0% 100%;               /* أبيض */
+  --sidebar-foreground: 0 0% 10%;
+  --sidebar-primary: 188 100% 17%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 40 15% 85%;
-  --sidebar-accent-foreground: 37 10% 16%;
-  --sidebar-border: 40 15% 80%;
-  --sidebar-ring: 82 45% 30%;
+  --sidebar-accent: 168 70% 89%;      /* #CFF7EE */
+  --sidebar-accent-foreground: 188 100% 17%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-ring: 188 100% 17%;
 
-  /* Kitchen dark-warm override — applied via .kitchen-theme on the wrapper */
-  --kitchen-bg: 30 10% 10%;         /* #1c1a17 — warm dark */
-  --kitchen-card: 30 8% 14%;        /* #26221d */
+  /* Kitchen dark-warm override */
+  --kitchen-bg: 30 10% 10%;
+  --kitchen-card: 30 8% 14%;
   --kitchen-foreground: 40 15% 85%;
   --kitchen-border: 30 8% 20%;
 }
@@ -108,7 +108,7 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
            bg-primary text-primary-foreground font-bold
-           min-h-[44px] px-5 py-2.5 rounded-full
+           min-h-[44px] px-5 py-2.5 rounded-xl
            transition-all duration-150
            active:scale-[0.97]
            disabled:opacity-50 disabled:cursor-not-allowed
@@ -119,7 +119,7 @@
     @apply inline-flex items-center justify-center gap-2
            bg-secondary text-secondary-foreground font-semibold
            border border-border
-           min-h-[44px] px-5 py-2.5 rounded-full
+           min-h-[44px] px-5 py-2.5 rounded-xl
            transition-all duration-150
            active:scale-[0.97]
            disabled:opacity-50 disabled:cursor-not-allowed
@@ -130,7 +130,7 @@
     @apply inline-flex items-center justify-center gap-2
            hover:bg-muted active:bg-accent/10
            text-muted-foreground hover:text-foreground
-           min-h-[44px] min-w-[44px] px-3 py-2 rounded-full
+           min-h-[44px] min-w-[44px] px-3 py-2 rounded-xl
            transition-all duration-150
            select-none touch-manipulation;
   }
@@ -140,7 +140,7 @@
            bg-destructive/10 hover:bg-destructive/20 active:bg-destructive/30
            text-destructive font-semibold
            border border-destructive/30
-           min-h-[44px] px-4 py-2 rounded-full
+           min-h-[44px] px-4 py-2 rounded-xl
            transition-all duration-150
            select-none touch-manipulation;
   }
@@ -169,13 +169,13 @@
 
   .badge { @apply inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full; }
 
-  /* Badges — light bg + colored text (for warm paper bg) */
-  .badge-pending   { @apply bg-amber-100 text-amber-800 border border-amber-200; }
-  .badge-confirmed { @apply bg-blue-100 text-blue-800 border border-blue-200; }
-  .badge-preparing { @apply bg-amber-100 text-amber-800 border border-amber-200; }
-  .badge-ready     { @apply bg-emerald-100 text-emerald-800 border border-emerald-200; }
-  .badge-delivered { @apply bg-indigo-100 text-indigo-800 border border-indigo-200; }
-  .badge-cancelled { @apply bg-red-100 text-red-800 border border-red-200; }
+  /* Badges — Salla-inspired soft colors */
+  .badge-pending   { @apply bg-amber-50 text-amber-700 border border-amber-200; }
+  .badge-confirmed { @apply bg-blue-50 text-blue-700 border border-blue-200; }
+  .badge-preparing { @apply bg-orange-50 text-orange-700 border border-orange-200; }
+  .badge-ready     { @apply bg-emerald-50 text-emerald-700 border border-emerald-200; }
+  .badge-delivered { @apply bg-[#CFF7EE] text-[#004956] border border-[#BAF3E6]; }
+  .badge-cancelled { @apply bg-red-50 text-red-700 border border-red-200; }
 
   .sidebar-link {
     @apply flex items-center gap-3 px-3 min-h-[44px] rounded-xl
@@ -229,9 +229,14 @@
   0%   { transform: scale(0.8); opacity: 1; }
   100% { transform: scale(1.6); opacity: 0; }
 }
-.animate-slide-up   { animation: slideUp 0.25s ease-out forwards; }
-.animate-fade-in    { animation: fadeIn  0.2s  ease-out forwards; }
-.animate-pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
+@keyframes scroll-logos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-slide-up    { animation: slideUp 0.25s ease-out forwards; }
+.animate-fade-in     { animation: fadeIn  0.2s  ease-out forwards; }
+.animate-pulse-ring  { animation: pulse-ring 1.5s ease-out infinite; }
+.animate-scroll      { animation: scroll-logos 30s linear infinite; }
 
 .keyboard-aware { height: 100dvh; }
 

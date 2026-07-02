@@ -121,7 +121,8 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full"
+                className="w-full text-white"
+                style={{ backgroundColor: '#004956' }}
               >
                 {loading ? 'جار التحميل...' : 'إنشاء حساب'}
               </Button>

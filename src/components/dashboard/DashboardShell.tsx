@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import type { Restaurant } from '@/types';
 import type { User } from '@supabase/supabase-js';
-import { LogOut, Shield } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { UnifiedShell } from '@/components/ui/unified-shell';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardBottomNav from '@/components/dashboard/DashboardBottomNav';
@@ -35,12 +35,12 @@ export default function DashboardShell({ user, restaurant, children, role }: Pro
     <UnifiedShell
       sidebarHeader={
         <div className="flex items-center gap-2 px-2 py-1">
-          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-            <Shield size={16} className="text-primary" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#CFF7EE' }}>
+            <span className="text-sm font-black" style={{ color: '#004956' }}>د</span>
           </div>
           <div className="group-data-[collapsible=icon]:hidden">
-            <div className="font-bold text-foreground text-sm leading-none">دكان</div>
-            <div className="text-xs text-muted-foreground mt-0.5">لوحة التحكم</div>
+            <div className="font-bold text-sm leading-none" style={{ color: '#004956' }}>دكان</div>
+            <div className="text-xs mt-0.5" style={{ color: '#004956/60' }}>لوحة التحكم</div>
           </div>
         </div>
       }

@@ -8,7 +8,7 @@ import QueryProvider from '@/components/shared/QueryProvider';
 const cairo = Cairo({
   subsets: ['arabic'],
   variable: '--font-cairo',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: '#f5f0e8',
+  themeColor: '#CFF7EE',
 };
 
 export default function RootLayout({
